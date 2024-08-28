@@ -35,11 +35,12 @@ jobs:
       # Set NX_BASE based on the context
       - name: Set NX_BASE
         run: |
-          if [ "${{ github.event_name }}" = "pull_request" ]; then
+          if [ "${{ github.ref }}" = "refs/heads/master" ]; then
+            echo "NX_BASE=HEAD^" >> $GITHUB_ENV
+          elif [ "${{ github.event_name }}" = "pull_request" ]; then
             echo "NX_BASE=${{ github.event.pull_request.base.ref }}" >> $GITHUB_ENV
           else
-            DEFAULT_BRANCH=$(git remote show origin | sed -n '/HEAD branch/s/.*: //p')
-            echo "NX_BASE=$(git merge-base origin/${{ github.ref_name }} origin/${DEFAULT_BRANCH})" >> $GITHUB_ENV
+            echo "NX_BASE=$(git merge-base origin/${{ github.ref_name }} origin/develop)" >> $GITHUB_ENV
           fi
           echo "NX_HEAD=HEAD" >> $GITHUB_ENV
 
