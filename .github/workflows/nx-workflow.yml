@@ -29,22 +29,10 @@ jobs:
           node-version: 20
           cache: "npm"
 
-      - run: npm ci --legacy-peer-deps
+      - run: npm ci
       - uses: nrwl/nx-set-shas@v4
-
-      # Set NX_BASE based on the context
-      - name: Set NX_BASE
-        run: |
-          if [ "${{ github.ref }}" = "refs/heads/master" ]; then
-            echo "NX_BASE=HEAD^" >> $GITHUB_ENV
-          elif [ "${{ github.event_name }}" = "pull_request" ]; then
-            echo "NX_BASE=${{ github.event.pull_request.base.ref }}" >> $GITHUB_ENV
-          else
-            echo "NX_BASE=$(git merge-base origin/${{ github.ref_name }} origin/develop)" >> $GITHUB_ENV
-          fi
-          echo "NX_HEAD=HEAD" >> $GITHUB_ENV
 
       # Prepend any command with "nx-cloud record --" to record its logs to Nx Cloud
       # - run: npx nx-cloud record -- echo Hello World
       # Nx Affected runs only tasks affected by the changes in this PR/commit. Learn more: https://nx.dev/ci/features/affected
-      - run: npx nx affected -t lint test build --base=$NX_BASE --head=$NX_HEAD
+      - run: npx nx affected -t lint test build
