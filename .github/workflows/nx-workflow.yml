@@ -38,4 +38,4 @@ jobs:
       - run: npx nx affected -t lint test build
         env:
           NX_BASE: ${{ github.base_ref }}
-          NX_HEAD: ${{ github.head_ref }}
+          NX_HEAD: HEAD
