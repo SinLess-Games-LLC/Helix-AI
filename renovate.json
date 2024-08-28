@@ -1,0 +1,76 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "milestone": 1,
+  "extends": [
+    "config:base",
+    "docker:enableMajor",
+    ":disableRateLimiting",
+    ":dependencyDashboard",
+    ":semanticCommits",
+    ":automergeBranch"
+  ],
+  "dependencyDashboard": true,
+  "dependencyDashboardTitle": "Renovate Dashboard 🤖",
+  "suppressNotifications": [
+    "prEditedNotification",
+    "prIgnoreNotification"
+  ],
+  "rebaseWhen": "conflicted",
+  "baseBranches": [
+    "develop"
+  ],
+  "labels": [
+    "renovate",
+    "dependencies"
+  ],
+  "automerge": true,
+  "commitMessage": "chore(deps): update {{depName}} to v{{newVersion}}",
+  "packageRules": [
+    {
+      "groupName": "JavaScript Dependencies",
+      "managers": ["npm"],
+      "enabled": true
+    },
+    {
+      "groupName": "Python Dependencies",
+      "managers": ["poetry"],
+      "enabled": true
+    },
+    {
+      "groupName": "Go Dependencies",
+      "managers": ["gomod"],
+      "enabled": true
+    },
+    {
+      "groupName": "Infrastructure as Code - Containers",
+      "managers": ["dockerfile", "docker-compose", "devcontainer"],
+      "enabled": true
+    },
+    {
+      "groupName": "Infrastructure as Code - Kubernetes",
+      "managers": ["helmv3", "helm-requirements", "helm-values", "kubernetes", "kustomize"],
+      "enabled": true
+    },
+    {
+      "groupName": "Infrastructure as Code - Terraform and Ansible",
+      "managers": ["terraform", "terraform-version", "ansible", "ansible-galaxy"],
+      "enabled": true
+    },
+    {
+      "groupName": "Infrastructure as Code - Miscellaneous",
+      "managers": ["argocd", "asdf", "pre-commit"],
+      "enabled": true
+    },
+    {
+      "groupName": "General Dependency Updates",
+      "matchUpdateTypes": [
+        "minor",
+        "patch",
+        "pin",
+        "digest"
+      ],
+      "automerge": true
+    }
+  ],
+  "customManagers": []
+}

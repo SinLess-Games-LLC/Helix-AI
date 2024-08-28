@@ -1,0 +1,363 @@
+name: "helix-ai"
+
+secrets:
+  ca.crt:
+    file: "../.data/certs/certificate_authority/certificate_authority.crt"
+  elastic.crt:
+    file: "../.data/certs/certificates/elastic/elastic.crt"
+  elastic.key:
+    file: "../.data/certs/certificates/elastic/elastic.key"
+  elastic.p12:
+    file: "../.data/certs/certificates/elastic/elastic.p12"
+  prometheus.crt:
+    file: "../.data/certs/certificates/prometheus/prometheus.crt"
+  prometheus.key:
+    file: "../.data/certs/certificates/prometheus/prometheus.key"
+  prometheus.p12:
+    file: "../.data/certs/certificates/prometheus/prometheus.p12"
+  fluentd.crt:
+    file: "../.data/certs/certificates/fluentd/fluentd.crt"
+  fluentd.key:
+    file: "../.data/certs/certificates/fluentd/fluentd.key"
+  fluentd.p12:
+    file: "../.data/certs/certificates/fluentd/fluentd.p12"
+  grafana.crt:
+    file: "../.data/certs/certificates/grafana/grafana.crt"
+  grafana.key:
+    file: "../.data/certs/certificates/grafana/grafana.key"
+  grafana.p12:
+    file: "../.data/certs/certificates/grafana/grafana.p12"
+  vault.crt:
+    file: "../.data/certs/certificates/vault/vault.crt"
+  vault.key:
+    file: "../.data/certs/certificates/vault/vault.key"
+  vault.p12:
+    file: "../.data/certs/certificates/vault/vault.p12"
+  consul.crt:
+    file: "../.data/certs/certificates/consul/consul.crt"
+  consul.key:
+    file: "../.data/certs/certificates/consul/consul.key"
+  consul.p12:
+    file: "../.data/certs/certificates/consul/consul.p12"
+  kafka.crt:
+    file: "../.data/certs/certificates/kafka/kafka.crt"
+  kafka.key:
+    file: "../.data/certs/certificates/kafka/kafka.key"
+  kafka.p12:
+    file: "../.data/certs/certificates/kafka/kafka.p12"
+  kibana.crt:
+    file: "../.data/certs/certificates/kibana/kibana.crt"
+  kibana.key:
+    file: "../.data/certs/certificates/kibana/kibana.key"
+  kibana.p12:
+    file: "../.data/certs/certificates/kibana/kibana.p12"
+  zookeeper.crt:
+    file: "../.data/certs/certificates/zookeeper/zookeeper.crt"
+  zookeeper.key:
+    file: "../.data/certs/certificates/zookeeper/zookeeper.key"
+  zookeeper.p12:
+    file: "../.data/certs/certificates/zookeeper/zookeeper.p12"
+
+# Ports Used:
+# - Database Layer: 3306 (mapped to 3310)
+# - Logging and Monitoring Layer: 24224 (TCP/UDP), 9090, 3000, 9200, 9300, 5601 (mapped to 8880)
+# - Service Discovery: 8300, 8500, 8600
+# - API Gateway: 8080
+# - Cache Layer: 6379, 8001
+# - Event Bus: 2181 (mapped to 2480), 9092, 9093, 9094
+# - Security and Secret Management: 8200
+# - CD (Continuous Deployment) layer: (No ports currently defined)
+# - Services Layer: 2333 (mapped to 2533)
+#
+# Ports in order of port number (ascending):
+# - 2181 (mapped to 2480), 2333 (mapped to 2533), 3306 (mapped to 3310),
+#   5601 (mapped to 8880), 6379, 8001, 8080, 8200, 8300, 8500, 8600,
+#   9090, 9092, 9093, 9094, 9200, 9300, 24224 (TCP/UDP)
+#
+# Number of ports: 19
+
+services:
+  # dev-container:
+  #   extends:
+  #     file: ./Dev-Container/dev-container.yaml
+  #     service: dev-container
+  #   depends_on:
+  #     redis:
+  #       condition: service_healthy
+  #     mysql:
+  #       condition: service_healthy
+  #     consul-server-1:
+  #       condition: service_healthy
+  #     vault:
+  #       condition: service_healthy
+  #     zookeeper:
+  #       condition: service_healthy
+  #     lavalink:
+  #       condition: service_started
+  #     krakend:
+  #       condition: service_started
+  #     fluentd:
+  #       condition: service_started
+
+  helix-bootstrap: &helix-bootstrap
+    extends:
+      file: ./Ecosystem/Setup/bootstrap.yaml
+      service: helix-bootstrap
+  #
+  # Database Layer
+  #
+  mysql: &mysql # port: 3308
+    extends:
+      file: ./Ecosystem/Database/mysql.yaml
+      service: mysql
+    ports:
+      - "3310:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  vault-mysql: &vault-mysql # port: 3311
+    extends:
+      file: ./Ecosystem/Database/mysql.yaml
+      service: vault-mysql
+    ports:
+      - "3311:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  #
+  # Logging and Monitoring Layer
+  #
+  fluentd: &fluentd # port: 24224
+    extends:
+      file: ./Ecosystem/Logging-Monitoring/logging-monitoring.layer.yaml
+      service: fluentd
+    depends_on:
+      helix-bootstrap:
+        condition: service_completed_successfully
+      elastic:
+        condition: service_healthy
+      prometheus:
+        condition: service_healthy
+    ports:
+      - "25224:24224"
+      - "25224:24224/udp" # For fluentd to receive logs
+
+  prometheus: &prometheus # port: 9090
+    extends:
+      file: ./Ecosystem/Logging-Monitoring/logging-monitoring.layer.yaml
+      service: prometheus
+    ports:
+      - "9090:9090"
+    depends_on:
+      helix-bootstrap:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD", "wget", "http://localhost:9090"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+
+  grafana: &grafana # port: 3000
+    extends:
+      file: ./Ecosystem/Logging-Monitoring/logging-monitoring.layer.yaml
+      service: grafana
+    ports:
+      - "3000:3000"
+    depends_on:
+      prometheus:
+        condition: service_healthy
+
+  elastic: &elastic # ports: 9200, 9300
+    extends:
+      file: ./Ecosystem/Logging-Monitoring/logging-monitoring.layer.yaml
+      service: elastic
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    depends_on:
+      helix-bootstrap:
+        condition: service_completed_successfully
+    healthcheck:
+      test: curl -u elastic:admin -s https://elastic:9200 >/dev/null; if [ $$? -eq 0 ]; then echo 1; else echo 0; fi
+      interval: 30s
+      timeout: 10s
+      retries: 30
+
+  kibana: &kibana # port: 5601
+    extends:
+      file: ./Ecosystem/Logging-Monitoring/logging-monitoring.layer.yaml
+      service: kibana
+    depends_on:
+      elastic:
+        condition: service_healthy
+    ports:
+      - "8880:5601"
+
+  #
+  # Service Discovery
+  #
+  consul-server-1: &consul-server-1 # ports: 8300, 8500, 8600
+    extends:
+      file: ./Ecosystem/Service-Discovery/service-discovery.layer.yaml
+      service: consul-server-1
+    depends_on:
+      helix-bootstrap:
+        condition: service_completed_successfully
+      vault:
+        condition: service_healthy
+    ports:
+      - "8300:8300"
+      - "8500:8500"
+      - "8600:8600"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8500/v1/status/leader"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+
+  consul-server-2: &consul-server-2
+    extends:
+      file: ./Ecosystem/Service-Discovery/service-discovery.layer.yaml
+      service: consul-server-2
+    depends_on:
+      helix-bootstrap:
+        condition: service_completed_successfully
+      vault:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8500/v1/status/leader"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+
+  consul-server-3: &consul-server-3
+    extends:
+      file: ./Ecosystem/Service-Discovery/service-discovery.layer.yaml
+      service: consul-server-3
+    depends_on:
+      helix-bootstrap:
+        condition: service_completed_successfully
+      vault:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8500/v1/status/leader"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+
+  #
+  # Security and Secret management
+  #
+  vault: &vault # port: 8200
+    extends:
+      file: ./Ecosystem/Security-Management/security-secret-management.layer.yaml
+      service: vault
+    depends_on:
+      helix-bootstrap:
+        condition: service_completed_successfully
+      vault-mysql:
+        condition: service_healthy
+    ports:
+      - "8200:8200"
+    healthcheck:
+      test: ["CMD", "vault", "status"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  #
+  # Event Bus
+  #
+  zookeeper:
+    extends:
+      file: ./Ecosystem/Event-Bus/event-bus.layer.yaml
+      service: zookeeper
+    depends_on:
+      helix-bootstrap:
+        condition: service_completed_successfully
+    ports:
+      - "2480:2181"
+    healthcheck:
+      test: ["CMD", "echo", "ruok", "|", "nc", "localhost", "2181"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  kafka-1:
+    extends:
+      file: ./Ecosystem/Event-Bus/event-bus.layer.yaml
+      service: kafka-1
+    depends_on:
+      zookeeper:
+        condition: service_healthy
+    ports:
+      - "9092:9092"
+
+  kafka-2:
+    extends:
+      file: ./Ecosystem/Event-Bus/event-bus.layer.yaml
+      service: kafka-2
+    depends_on:
+      zookeeper:
+        condition: service_healthy
+    ports:
+      - "9093:9093"
+
+  kafka-3:
+    extends:
+      file: ./Ecosystem/Event-Bus/event-bus.layer.yaml
+      service: kafka-3
+    depends_on:
+      zookeeper:
+        condition: service_healthy
+    ports:
+      - "9094:9094"
+
+  #
+  # API Gateway
+  #
+  krakend: &krakend # port: 8080
+    extends:
+      file: ./Ecosystem/API-Gateway/api-gateway.layer.yaml
+      service: krakend
+    ports:
+      - "8080:8080"
+    depends_on:
+      consul-server-1:
+        condition: service_healthy
+
+  #
+  # Cache Layer
+  #
+  redis: &redis # port: 6379
+    extends:
+      file: ./Ecosystem/Cache/cache.layer.yaml
+      service: redis
+    ports:
+      - "6379:6379"
+      - "8001:8001"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  #
+  # CD (Continuous Deployment) layer
+  #
+
+  #
+  # Services
+  #
+  lavalink: &lavalink
+    extends:
+      file: Services/lavalink.yaml
+      service: lavalink
+    ports:
+      - "2533:2333"

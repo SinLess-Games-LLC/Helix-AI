@@ -1,0 +1,18 @@
+services:
+  mysql:
+    image: mysql:latest
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: helix
+      MYSQL_USER: helix
+      MYSQL_PASSWORD: helix
+
+  vault-mysql:
+    image: mysql:latest
+    container_name: vault-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: vault
+      MYSQL_USER: vault
+      MYSQL_PASSWORD: vault

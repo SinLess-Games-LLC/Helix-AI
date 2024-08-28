@@ -1,0 +1,8 @@
+{
+  "html.format.wrapLineLength": 80,
+  "editor.wordWrap": "on",
+  "markdownlint.config": {
+    "MD033": false,
+    "MD041": false
+  }
+}

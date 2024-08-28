@@ -1,0 +1,55 @@
+# This file is used to define the labels for the PRs based on the changed files in the PR
+
+#
+# Area specific labels'
+#
+area/docs:
+  - changed-files:
+      - any-glob-to-any-file: [docs/**/*]
+
+area/apps:
+  - changed-files:
+      - any-glob-to-any-file: [apps/**/*]
+
+area/frontend:
+  - changed-files:
+      - any-glob-to-any-file: [apps/frontend/**/*]
+
+area/libs:
+  - changed-files:
+      - any-glob-to-any-file: [libs/**/*]
+
+area/.github:
+  - changed-files:
+      - any-glob-to-any-file: [.github/**/*]
+
+area/workflows:
+  - changed-files:
+      - any-glob-to-any-file: [.github/workflows/**/*]
+
+area/package.json:
+  - changed-files:
+      - any-glob-to-any-file: [package.json, "**/package.json"]
+
+area/requirments.txt:
+  - changed-files:
+      - any-glob-to-any-file: [requirments.txt, "**/requirments.txt"]
+
+#
+# Language specific labels
+#
+language/typescript:
+  - changed-files:
+      - any-glob-to-any-file: ["**/*.ts". "**/*.tsx"]
+
+language/javascript:
+  - changed-files:
+      - any-glob-to-any-file: ["**/*.js", "**/*.jsx"]
+
+language/go:
+  - changed-files:
+      - any-glob-to-any-file: ["**/*.go"]
+
+language/python:
+  - changed-files:
+      - any-glob-to-any-file: ["**/*.py"]

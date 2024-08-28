@@ -1,0 +1,64 @@
+services:
+  #
+  # Logging
+  #
+  fluentd:
+    build:
+      context: ./fluentd
+    image: sinless777/helix-fluentd
+    container_name: fluentd
+
+  #
+  # Monitoring
+  #
+  prometheus:
+    image: prom/prometheus
+    hostname: prometheus
+    container_name: prometheus
+    volumes:
+      - ./prometheus/prometheus.yaml:/etc/prometheus/prometheus.yaml
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yaml"
+
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_USERS_ALLOW_SIGN_UP=false
+    volumes:
+      - "../../../.data/grafana:/var/lib/grafana"
+    depends_on:
+      - prometheus
+
+  #
+  # Log Analysis
+  #
+  elastic:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.14.0
+    hostname: elastic
+    container_name: elastic
+    environment:
+      - discovery.type=single-node
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - ELASTIC_PASSWORD=admin
+      - xpack.security.enabled=true
+      - path.data=/usr/share/elasticsearch/data
+      - bootstrap.memory_lock=true
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    mem_limit: 1g
+    volumes:
+      - ./elastic/config.yaml:/usr/share/elasticsearch/config/elasticsearch.yaml
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.14.0
+    container_name: kibana
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elastic:9200
+    depends_on:
+      - elastic

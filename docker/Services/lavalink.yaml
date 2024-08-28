@@ -1,0 +1,21 @@
+services:
+  lavalink: &lavalink
+    image: ghcr.io/lavalink-devs/lavalink:4
+    container_name: lavalink
+    restart: unless-stopped
+    environment:
+      _JAVA_OPTIONS: -Xmx1G # set Java options here
+      SERVER_PORT: 2333 # set lavalink server port
+    volumes:
+      - ./lavalink/application.yaml:/opt/Lavalink/application.yml # mount application.yml from the same directory or use environment variables
+      - ./lavalink/plugins/:/opt/Lavalink/plugins/ # persist plugins between restarts, make sure to set the correct permissions (user: 322, group: 322)
+    expose:
+      - 2333 # lavalink exposes port 2333 to connect to for other containers (this is for documentation purposes only)
+    deploy:
+      replicas: 1
+
+  nginx-lb:
+    image: nginx
+    restart: unless-stopped
+    volumes:
+      - ./lavalink/nginx.conf:/etc/nginx/nginx.conf:ro

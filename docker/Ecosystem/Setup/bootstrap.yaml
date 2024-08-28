@@ -1,0 +1,20 @@
+services:
+  helix-bootstrap:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    image: sinless777/helix-bootstrap
+    container_name: bootstrap
+    hostname: bootstrap
+    volumes:
+      - "../.data/certs:/certs/"
+      - "./config.yaml:/config/config.yaml"
+      - "./setup/scripts:/home/docker/config/"
+      - "./consul/generated:/consul/generated"
+    command: >
+      /bin/bash -c "ls && /app/security/certs.sh && /app/consul/consul.sh"
+    healthcheck:
+      test: ["CMD", "stat", "/certs/success"]
+      interval: 30s
+      timeout: 10s
+      retries: 5

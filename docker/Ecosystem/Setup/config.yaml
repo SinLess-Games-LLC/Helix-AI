@@ -1,0 +1,12 @@
+instances:
+  - name: fluentd
+  - name: prometheus
+  - name: grafana
+  - name: elastic
+  - name: kibana
+  - name: helix-dc-1
+  - name: consul
+  - name: vault
+  - name: zookeeper
+  - name: kafka
+  - name: krakend

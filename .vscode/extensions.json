@@ -1,0 +1,16 @@
+{
+  "recommendations": [
+    "nrwl.angular-console",
+    "esbenp.prettier-vscode",
+    "firsttris.vscode-jest-runner",
+    "imgildev.vscode-nestjs-mikroorm-snippets",
+    "dbaeumer.vscode-eslint",
+    "golang.go",
+    "esbenp.prettier-vscode",
+    "bodil.prettier-toml",
+    "firsttris.vscode-jest-runner",
+    "EditorConfig.EditorConfig",
+    "ms-azuretools.vscode-docker",
+    "G-Fidalgo.cypress-runner"
+  ]
+}

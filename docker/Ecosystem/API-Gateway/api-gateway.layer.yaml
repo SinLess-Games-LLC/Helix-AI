@@ -1,0 +1,6 @@
+services:
+  krakend:
+    image: devopsfaith/krakend
+    container_name: krakend
+    volumes:
+      - ./krakend:/etc/krakend

@@ -1,0 +1,120 @@
+# Area Labels
+- name: area/apps
+  description: The app area of the project
+  color: 0e8a16
+- name: area/docs
+  description: The documentation area of the project
+  color: 0e8a16
+- name: area/frontend
+  description: The frontend area of the project
+  color: 0e8a16
+- name: area/libs
+  description: The libs area of the project
+  color: 0e8a16
+- name: area/.github
+  description: The .github area of the project
+  color: 0e8a16
+- name: area/workflows
+  description: The workflows area of the project
+  color: 0e8a16
+- name: area/package.json
+  description: The package.json area of the project
+  color: 0e8a16
+- name: area/requirments.txt
+  description: The requirments.txt area of the project
+  color: 0e8a16
+
+# Renovate
+- name: renovate/container
+  description: Renovate container updates
+  color: "027fa0"
+
+# Semantic Type
+- name: type/patch
+  color: "ffec19"
+- name: type/minor
+  color: "ff9800"
+- name: type/major
+  color: "f6412d"
+- name: type/break
+  color: "f6412d"
+
+# Lifecycle
+- name: bug
+  description: Something isn't working
+  color: "d73a4a"
+- name: feature
+  description: New feature or request
+  color: "a2eeef"
+- name: enhancement
+  description: New feature or request
+  color: "a2eeef"
+- name: question
+  description: Further information is requested
+  color: "d876e3"
+- name: fixed
+  description: Issue has been fixed
+  color: "0e8a16"
+- name: duplicate
+  description: This issue or pull request already exists
+  color: "cfd3d7"
+- name: wontfix
+  description: This will not be worked on
+  color: "cfd3d7"
+- name: invalid
+  description: This does not seem right
+  color: "cfd3d7"
+- name: automated
+  description: Automated issue or pull request
+  color: "cfd3d7"
+- name: dependencies
+  description: Issue or pull request related to dependencies
+  color: "cfd3d7"
+
+# Release Labels
+- name: release/patch
+  description: Patch release
+  color: "ffec19"
+- name: release/minor
+  description: Minor release
+  color: "ff9800"
+- name: release/major
+  description: Major release
+  color: "f6412d"
+- name: release/break
+  description: Breaking changes
+  color: "f6412d"
+- name: release/alpha
+  description: Alpha release
+  color: "f6412d"
+- name: release/beta
+  description: Beta release
+  color: "f6412d"
+
+# Languages
+- name: language/javascript
+  description: JavaScript
+  color: "f1e05a"
+- name: language/typescript
+  description: TypeScript
+  color: "2b7489"
+- name: language/python
+  description: Python
+  color: "3572A5"
+- name: language/go
+  description: Go
+  color: "00ADD8"
+
+# Priority
+- name: priority/low
+  description: Low priority
+  color: "cfd3d7"
+- name: priority/medium
+  description: Medium priority
+  color: "cfd3d7"
+- name: priority/high
+  description: High priority
+  color: "cfd3d7"
+- name: priority/critical
+  description: Critical priority
+  color: "cfd3d7"
