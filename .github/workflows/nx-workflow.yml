@@ -38,7 +38,7 @@ jobs:
           if [ "${{ github.event_name }}" = "pull_request" ]; then
             echo "NX_BASE=${{ github.event.pull_request.base.ref }}" >> $GITHUB_ENV
           else
-            echo "NX_BASE=${{ github.ref_name }}" >> $GITHUB_ENV
+            echo "NX_BASE=$(git merge-base origin/${{ github.ref_name }} origin/develop)" >> $GITHUB_ENV
           fi
           echo "NX_HEAD=HEAD" >> $GITHUB_ENV
 
