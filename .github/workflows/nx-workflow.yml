@@ -10,6 +10,11 @@ permissions:
   actions: read
   contents: read
 
+env:
+  NX_CLOUD_TOKEN: ${{ secrets.NX_CLOUD_TOKEN }}
+  NX_BASE: master
+  NX_HEAD: ${{ github.sha }}
+
 jobs:
   main:
     runs-on: ubuntu-latest
