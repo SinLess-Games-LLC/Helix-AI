@@ -38,5 +38,5 @@ jobs:
       - run: npx nx affected -t lint test build --base=$NX_BASE --head=$NX_HEAD
         env:
           ## Current branch of the workflow run
-          NX_BASE: ${{ github.event.before }}
+          NX_BASE: ${{ github.ref_name }}
           NX_HEAD: HEAD
