@@ -5,6 +5,8 @@ on:
   push:
     paths:
       - ".github/labels.yaml" # Only triggers when labels.yaml is changed
+  schedule:
+    - cron: "0 0 * * *" # Runs at midnight every day
 
 jobs:
   sync-labels:

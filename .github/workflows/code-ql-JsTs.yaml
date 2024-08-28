@@ -2,10 +2,10 @@ name: "CodeQL"
 
 on:
   push:
-    branches: ["master", "develop"]
+    branches: ["develop"]
   pull_request:
     # The branches below must be a subset of the branches above
-    branches: ["master", "develop"]
+    branches: ["develop"]
   schedule:
     - cron: "0 3 * * *" # Runs at 03:00 every day
 
@@ -34,11 +34,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        languages:
-          - "javascript-typescript"
         include:
           - language: "javascript-typescript"
-            config: ".github/codeql/javascript-typescript.yaml"
             build-mode: "none"
 
     steps:
@@ -48,7 +45,7 @@ jobs:
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v3
         with:
-          languages: ${{ matrix.languages }}
+          languages: ${{ matrix.language }}
           build-mode: ${{ matrix.build-mode }}
           # If you wish to specify custom queries, you can do so here or in a config file.
           # By default, queries listed here will override any specified in a config file.
