@@ -10,9 +10,6 @@ permissions:
   actions: read
   contents: read
 
-env:
-  NX_BASE: master
-
 jobs:
   main:
     runs-on: ubuntu-latest
@@ -38,4 +35,7 @@ jobs:
       # Prepend any command with "nx-cloud record --" to record its logs to Nx Cloud
       # - run: npx nx-cloud record -- echo Hello World
       # Nx Affected runs only tasks affected by the changes in this PR/commit. Learn more: https://nx.dev/ci/features/affected
-      - run: npx nx affected -t lint test build --base=master --head=HEAD
+      - run: npx nx affected -t lint test build
+        env:
+          NX_BASE: ${{ github.base_ref }}
+          NX_HEAD: ${{ github.head_ref }}
