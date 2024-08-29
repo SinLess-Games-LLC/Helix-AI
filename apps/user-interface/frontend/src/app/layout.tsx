@@ -1,7 +1,7 @@
 import './global.css';
 import  { BackgroundImage, BackgroundImageProps } from '@helix/ui';
-import { SystemColors } from "@helix/core"
-import chalk from 'chalk';
+import { SystemColors } from '@helix/core';
+import("chalk")
 
 
 export const metadata = {

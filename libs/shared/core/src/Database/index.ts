@@ -1,3 +1,4 @@
+// Import all entities and export them in two different ways
 import {
   Microservice,
   News,
@@ -19,9 +20,12 @@ import {
   BaseEntity,
 } from './entities'
 
-export { MikroORMConfig } from './mikro-orm.config'
-export type { DatabaseOptions } from './mikro-orm.config'
 
+/**
+ * Entities export
+ *
+ * @description Export all entities
+ */
 export const entities = [
   Microservice,
   News,
@@ -43,10 +47,6 @@ export const entities = [
   BaseEntity,
 ]
 
-/**
- *  Entities
- */
-
 export {
   Microservice,
   News,
@@ -66,6 +66,15 @@ export {
   Image,
   Health,
 } from './entities'
+
+
+// Import MikroORMConfig and DatabaseOptions from mikro-orm.config
+import { MikroORMConfig } from './mikro-orm.config'
+import type { DatabaseOptions } from './mikro-orm.config'
+
+export { MikroORMConfig, DatabaseOptions }
+
+
 
 /**
  * Interfaces

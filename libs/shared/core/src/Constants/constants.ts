@@ -28,7 +28,7 @@ export const CloudflareStatusUrl =
  */
 export const HelixColors = {
   primary: {
-    hex: 'F7068D',
+    hex: '#F7068D',
     rgb: 'rgb(247,6,141',
   },
   secondary: {
@@ -36,7 +36,7 @@ export const HelixColors = {
     rgb: 'rgb(21,64,209)',
   },
   tertiary: {
-    hex: '3D3D3D',
+    hex: '#3D3D3D',
     rgb: 'rgb(61,61,61)',
   },
   success: {

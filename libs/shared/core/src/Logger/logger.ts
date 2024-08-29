@@ -1,4 +1,5 @@
 import chalk from 'chalk'
+import('chalk')
 import { FluentClient } from '@fluent-org/logger'
 
 export interface FluentdOptions {
