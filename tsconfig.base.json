@@ -19,6 +19,8 @@
     "baseUrl": ".",
     "paths": {
       "@helix/core": ["libs/shared/core/src/index.ts"],
+      "@helix/database": ["libs/shared/database/src/index.ts"],
+      "@helix/logger": ["libs/shared/logger/src/index.ts"],
       "@helix/ui": ["libs/shared/ui/src/index.ts"]
     }
   },

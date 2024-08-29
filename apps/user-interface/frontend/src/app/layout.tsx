@@ -1,7 +1,6 @@
 import './global.css';
 import  { BackgroundImage, BackgroundImageProps } from '@helix/ui';
 import { SystemColors } from '@helix/core';
-import("chalk")
 
 
 export const metadata = {
@@ -10,7 +9,7 @@ export const metadata = {
 };
 
 const backgroundImageProps: BackgroundImageProps = {
-  imageUrl: '/aimages/background.jpg',
+  imageUrl: '/images/Background.png',
   altText: 'background',
 };
 

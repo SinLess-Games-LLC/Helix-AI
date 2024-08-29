@@ -15,7 +15,10 @@
     "paths": {
       "@helix/core": [
         "dist/libs/shared/core"
-      ]
+      ],
+      "@helix/database": [
+        "dist/libs/shared/database"
+      ],
     }
   }
 }
