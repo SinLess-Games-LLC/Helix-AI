@@ -11,7 +11,16 @@
   "scripts": {
     "docker-compose:restart": "npm run docker-compose:down && npm run docker-compose:up",
     "docker-compose:up": "docker-compose -f ./docker/docker-compose.yaml up -d",
-    "docker-compose:down": "docker-compose -f ./docker/docker-compose.yaml down"
+    "docker-compose:down": "docker-compose -f ./docker/docker-compose.yaml down",
+    "setup": "npm run setup:npm && npm run setup:python && npm run setup:docker",
+    "setup:npm": "npm install",
+    "setup:python": "npx nx run @nxlv/python:install",
+    "setup:docker": "docker-compose -f ./docker/docker-compose.yaml up -d",
+    "teardown": "npm run teardown:npm && npm run teardown:python && npm run teardown:docker",
+    "teardown:npm": "rm -rf node_modules",
+    "teardown:python": "rm -rf ./apps/ai/helix/.venv",
+    "teardown:docker": "docker-compose -f ./docker/docker-compose.yaml down",
+    "update": "npm update && "
   },
   "private": true,
   "devDependencies": {
