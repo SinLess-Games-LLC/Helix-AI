@@ -1,4 +1,4 @@
-import { MikroORMConfig, DatabaseOptions } from '@helix/core'
+import { MikroORMConfig, DatabaseOptions } from '@helix/database'
 
 const options: DatabaseOptions = {}
 

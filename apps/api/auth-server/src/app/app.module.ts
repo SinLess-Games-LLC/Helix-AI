@@ -13,7 +13,7 @@ import { EntityGenerator } from '@mikro-orm/entity-generator';
 import { SeedManager } from '@mikro-orm/seeder';
 
 // Helix Library Imports
-import { entities } from '@helix/core';
+import { entities } from '@helix/database';
 
 @Module({
   imports: [

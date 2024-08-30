@@ -11,5 +11,5 @@
     "types": ["node"],
   },
   "exclude": ["jest.config.ts", "src/**/*.spec.ts", "src/**/*.test.ts"],
-  "include": ["src/**/*.ts"]
+  "include": ["src/**/*.ts", "src/Colors/colors.ts", "src/Colors/colors.spec.ts", "src/Colors/colors.type.d.ts", "src/Colors/colors.type.ts"]
 }

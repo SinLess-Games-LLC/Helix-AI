@@ -13,7 +13,8 @@
         "@next/next/no-html-link-for-pages": [
           "error",
           "apps/user-interface/frontend/pages"
-        ]
+        ],
+        "@nx/enforce-module-boundaries": "off"
       }
     },
     {

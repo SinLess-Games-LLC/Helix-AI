@@ -1,0 +1,33 @@
+{
+  "name": "@helix/logger",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/shared/logger/src",
+  "projectType": "library",
+  "release": {
+    "version": {
+      "generatorOptions": {
+        "packageRoot": "dist/{projectRoot}",
+        "currentVersionResolver": "git-tag"
+      }
+    }
+  },
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/@helix/logger",
+        "tsConfig": "libs/shared/logger/tsconfig.lib.json",
+        "packageJson": "libs/shared/logger/package.json",
+        "main": "libs/shared/logger/src/index.ts",
+        "assets": ["libs/shared/logger/*.md"]
+      }
+    },
+    "nx-release-publish": {
+      "options": {
+        "packageRoot": "dist/{projectRoot}"
+      }
+    }
+  }
+}

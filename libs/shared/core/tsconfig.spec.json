@@ -13,5 +13,5 @@
     "src/**/*.test.ts",
     "src/**/*.spec.ts",
     "src/**/*.d.ts"
-  ]
+, "src/Colors/colors.spec.ts", "src/Colors/colors.type.d.ts"  ]
 }

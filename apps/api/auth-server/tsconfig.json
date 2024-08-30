@@ -12,10 +12,5 @@
   ],
   "compilerOptions": {
     "esModuleInterop": true,
-    "paths": {
-      "@helix/core": [
-        "dist/libs/shared/core"
-      ]
-    }
   }
 }
