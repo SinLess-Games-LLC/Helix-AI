@@ -1,6 +1,8 @@
 export type errCodes = {
   System: {
-    api: null
+    api: {
+      AUTH_SERVER_DOWN: number
+    }
     database: null
     gateway: null
     dashboard: null

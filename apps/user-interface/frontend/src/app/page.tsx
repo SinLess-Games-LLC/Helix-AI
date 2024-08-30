@@ -1,15 +1,36 @@
+'use client'
 import styles from './page.module.scss';
+import { Header, HeaderProps } from "@helix/ui"
+import { useState } from 'react';
 
 export default function Index() {
-  /*
-   * Replace the elements below with your own.
-   *
-   * Note: The corresponding styles are in the ./index.scss file.
-   */
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  const toggleMenu = () => {
+    setMenuOpen(!menuOpen);
+  };
+
+  const pages = [
+    { name: "Home", url: "/" },
+    { name: "About", url: "/About" },
+    { name: "Contact", url: "/Contact" },
+  ]
+
+  const headerProps: HeaderProps = {
+    logo: "/images/Favicon-01.png",
+    title: "Helix AI",
+    version: "1.0.0",
+    style: {
+      backgroundColor: "rgba(246, 6, 111, .5)"
+    },
+    pages: pages,
+    menuOpen: menuOpen,
+    toggleMenu: toggleMenu
+  }
   return (
     <div className={styles.page}>
-      <h1>Welcome to page!</h1>
-      <p>Find me in ./apps/user-interface/frontend/src/app/page.tsx</p>
+      <Header {...headerProps} />
+
     </div>
   );
 }

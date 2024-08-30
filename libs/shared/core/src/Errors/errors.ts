@@ -4,7 +4,9 @@ export const ErrorCodes: errCodes = {
   // S-xxx
   System: {
     // S-1xx
-    api: null,
+    api: {
+      AUTH_SERVER_DOWN: 100,
+    },
     // S-2xx
     database: null,
     // S-3xx

@@ -18,7 +18,6 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const colors = SystemColors
   return (
     <html lang="en">
       <body>

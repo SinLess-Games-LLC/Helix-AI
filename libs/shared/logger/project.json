@@ -17,7 +17,7 @@
       "executor": "@nx/js:tsc",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": "dist/libs/shared/logger",
+        "outputPath": "dist/libs/@helix/logger",
         "tsConfig": "libs/shared/logger/tsconfig.lib.json",
         "packageJson": "libs/shared/logger/package.json",
         "main": "libs/shared/logger/src/index.ts",

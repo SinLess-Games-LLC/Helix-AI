@@ -3,14 +3,12 @@ export interface Page {
   url: string;
 }
 
-export interface PageList {
-  pages: Page[];
-}
-
 export interface HeaderProps {
   logo: string; // URL or path to the logo image
   title: string;
   version: string;
-  pages: Page[];
+  pages: Page[]; // Changed from PageList to an array of Page
   style?: React.CSSProperties; // Optional custom styling
+  menuOpen: boolean;
+  toggleMenu: () => void;
 }

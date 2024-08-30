@@ -9,7 +9,7 @@ export interface BackgroundImageProps {
 
 export const BackgroundImage: React.FC<BackgroundImageProps> = ({ imageUrl, altText, style, children }) => {
   return (
-    <div style={{ position: 'relative', ...style }}>
+    <div style={{ position: 'static', minHeight: '100vh', minWidth: '100vw', ...style }}>
       <div
         aria-label={altText}
         style={{
@@ -21,6 +21,7 @@ export const BackgroundImage: React.FC<BackgroundImageProps> = ({ imageUrl, altT
           backgroundImage: `url(${imageUrl})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
           zIndex: -1,
         }}
       />

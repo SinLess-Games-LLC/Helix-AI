@@ -12,8 +12,6 @@
     "isolatedModules": true,
     "incremental": true,
     "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
-    "rootDir": "../../../",
     "plugins": [
       {
         "name": "next"
@@ -23,14 +21,6 @@
       "jest",
       "node"
     ],
-    "paths": {
-      "@helix/core": [
-        "dist/libs/shared/core"
-      ],
-      "@helix/ui": [
-        "dist/libs/shared/ui"
-      ],
-    }
   },
   "include": [
     "**/*.ts",
@@ -39,7 +29,6 @@
     "**/*.jsx",
     "../../../apps/user-interface/frontend/.next/types/**/*.ts",
     "../../../dist/apps/user-interface/frontend/.next/types/**/*.ts",
-    "../../../libs/shared/ui",
     "next-env.d.ts",
     ".next/types/**/*.ts"
   ],

@@ -9,9 +9,22 @@
     "docs/**/*"
   ],
   "scripts": {
+    "build": " nx run-many --target=build --all",
+    "build:frontend": "nx run frontend:build:development",
+    "build:auth-server":  "nx run auth-server:build:development",
+    "serve": "npm run serve:frontend:dev && npm run serve:auth-server",
+    "serve:frontend:dev": "nx run frontend:dev --port 3001",
+    "serve:auth-server": "nx run auth-server:serve",
     "docker-compose:restart": "npm run docker-compose:down && npm run docker-compose:up",
-    "docker-compose:up": "docker-compose -f ./docker/docker-compose.yaml up -d",
-    "docker-compose:down": "docker-compose -f ./docker/docker-compose.yaml down"
+    "setup": "npm run setup:npm && npm run setup:python && npm run setup:docker",
+    "setup:npm": "npm install",
+    "setup:python": "nx run @nxlv/python:install",
+    "setup:docker": "docker-compose -f ./docker/docker-compose.yaml up -d",
+    "teardown": "npm run teardown:npm && npm run teardown:python && npm run teardown:docker",
+    "teardown:npm": "rm -rf node_modules",
+    "teardown:python": "rm -rf ./apps/ai/helix/.venv",
+    "teardown:docker": "docker-compose -f ./docker/docker-compose.yaml down",
+    "update": "npm update"
   },
   "private": true,
   "devDependencies": {

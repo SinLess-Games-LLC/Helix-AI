@@ -17,7 +17,7 @@
       "executor": "@nx/js:tsc",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": "dist/libs/shared/database",
+        "outputPath": "dist/libs/@helix/database",
         "tsConfig": "libs/shared/database/tsconfig.lib.json",
         "packageJson": "libs/shared/database/package.json",
         "main": "libs/shared/database/src/index.ts",
