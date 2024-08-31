@@ -1,5 +1,5 @@
 import { Entity, Property, OneToOne, OneToMany, Cascade } from '@mikro-orm/core'
-import { v4 as uuidv4 } from 'uuid'
+import { uuid as uuidv4 } from 'uuidv4'
 import { UserProfile } from './user-profile.entity'
 import { UserSetting } from './user-setting.entity'
 import { Role } from '../../enums'
