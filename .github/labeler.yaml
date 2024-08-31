@@ -29,27 +29,27 @@ area/workflows:
 
 area/package.json:
   - changed-files:
-      - any-glob-to-any-file: [package.json, "**/package.json"]
+      - any-glob-to-any-file: [package.json, '**/package.json']
 
 area/requirments.txt:
   - changed-files:
-      - any-glob-to-any-file: [requirments.txt, "**/requirments.txt"]
+      - any-glob-to-any-file: [requirments.txt, '**/requirments.txt']
 
 #
 # Language specific labels
 #
 language/typescript:
   - changed-files:
-      - any-glob-to-any-file: ["**/*.ts", "**/*.tsx"]
+      - any-glob-to-any-file: ['**/*.ts', '**/*.tsx']
 
 language/javascript:
   - changed-files:
-      - any-glob-to-any-file: ["**/*.js", "**/*.jsx"]
+      - any-glob-to-any-file: ['**/*.js', '**/*.jsx']
 
 language/go:
   - changed-files:
-      - any-glob-to-any-file: ["**/*.go"]
+      - any-glob-to-any-file: ['**/*.go']
 
 language/python:
   - changed-files:
-      - any-glob-to-any-file: ["**/*.py"]
+      - any-glob-to-any-file: ['**/*.py']

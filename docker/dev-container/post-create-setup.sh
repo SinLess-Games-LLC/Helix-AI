@@ -117,63 +117,7 @@ else
     fi
 fi
 
-# Check if there's a new version of pnpm available
-check_and_update_pnpm() {
-    current_version=$(pnpm --version)
-    latest_version=$(pnpm info pnpm version)
-
-    if [ "$current_version" != "$latest_version" ]; then
-        print_info "New version of pnpm available: $latest_version (current: $current_version)"
-        print_info "Updating pnpm..."
-        
-        if pnpm install pnpm; then
-            print_success "Successfully updated pnpm to version $latest_version."
-        else
-            print_error "Failed to update pnpm." 10
-        fi
-    else
-        print_info "You already have the latest version of pnpm ($current_version)."
-    fi
-}
-
-check_and_update_pnpm
-
-# Check if node_modules directory exists and ensure integrity
-check_and_install() {
-    if [ -d "node_modules" ]; then
-        print_info "node_modules directory exists. Checking integrity..."
-        if pnpm install --frozen-lockfile --fix-lockfile; then
-            print_success "node_modules integrity verified."
-        else
-            print_warning "Integrity check failed. Fixing node_modules..."
-            
-            # Remove the existing node_modules directory and reinstall
-            print_info "Removing existing node_modules directory..."
-            rm -rf node_modules
-            if [ $? -ne 0 ]; then
-                print_error "Failed to remove node_modules directory." 11
-            fi
-
-            # Reinstall dependencies
-            print_info "Reinstalling dependencies..."
-            if pnpm install; then
-                print_success "node_modules reinstalled successfully."
-            else
-                print_error "Failed to reinstall node_modules." 12
-            fi
-        fi
-    else
-        print_info "node_modules directory does not exist. Running pnpm install..."
-        if pnpm install; then
-            print_success "node_modules installed successfully."
-        else
-            print_error "Failed to install node_modules." 13
-        fi
-    fi
-}
-
-# Install node_modules
-check_and_install
+npm install
 
 # Change permissions for node_modules
 change_permissions "node_modules" "755"
