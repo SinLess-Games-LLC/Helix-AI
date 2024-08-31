@@ -3,15 +3,15 @@ name: Create Pull Request
 on:
   # Schedule to run daily at 2am
   schedule:
-    - cron: "0 2 * * *"
+    - cron: '0 2 * * *'
 
   # Trigger the workflow on push to the specified branches
   push:
     branches:
-      - "feature/*"
-      - "bugfix/*"
-      - "hotfix/*"
-      - "release/*"
+      - 'feature/*'
+      - 'bugfix/*'
+      - 'hotfix/*'
+      - 'release/*'
 
   # Allow manual triggering of the workflow
   workflow_dispatch:
@@ -36,8 +36,8 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "22"
-          cache: "pnpm"
+          node-version: '22'
+          cache: 'pnpm'
 
       - name: Install dependencies
         run: |
@@ -56,9 +56,9 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           branch: ${{ github.ref_name }} # Use the current branch
           base: develop # Assuming you want to merge into develop
-          title: "🤖⚙️ Automated PR: Update from ${{ github.ref_name }} ⚙️🤖" # Use emojis to make it fun! 🚀
-          body: "This is an automated PR created for the branch ${{ github.ref_name }}."
-          labels: "automated, dependencies"
+          title: '🤖⚙️ Automated PR: Update from ${{ github.ref_name }} ⚙️🤖' # Use emojis to make it fun! 🚀
+          body: 'This is an automated PR created for the branch ${{ github.ref_name }}.'
+          labels: 'automated, dependencies'
 
       - name: Notify if commitlint failed
         if: failure() && steps.create_pr.outcome == 'skipped'

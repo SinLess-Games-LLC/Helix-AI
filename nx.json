@@ -1,104 +1,104 @@
 {
-  "$schema": "./node_modules/nx/schemas/nx-schema.json",
-  "namedInputs": {
-    "default": ["{projectRoot}/**/*", "sharedGlobals"],
-    "production": [
-      "default",
-      "!{projectRoot}/cypress/**/*",
-      "!{projectRoot}/**/*.cy.[jt]s?(x)",
-      "!{projectRoot}/cypress.config.[jt]s",
-      "!{projectRoot}/.eslintrc.json",
-      "!{projectRoot}/eslint.config.js",
-      "!{projectRoot}/**/?(*.)+(spec|test).[jt]s?(x)?(.snap)",
-      "!{projectRoot}/tsconfig.spec.json",
-      "!{projectRoot}/jest.config.[jt]s",
-      "!{projectRoot}/src/test-setup.[jt]s",
-      "!{projectRoot}/test-setup.[jt]s"
-    ],
-    "sharedGlobals": [
-      "{workspaceRoot}/.github/workflows/ci.yml",
-      "{workspaceRoot}/go.work"
-    ]
-  },
-  "nxCloudAccessToken": "ZmIzNmUxYmYtZTM5MC00ZjhhLTlhMDktYTU0ZDE5MjNmZmNhfHJlYWQtd3JpdGU=",
-  "plugins": [
-    "@nx-go/nx-go",
-    "@nxlv/python",
-    {
-      "plugin": "@nx/cypress/plugin",
-      "options": {
-        "targetName": "e2e",
-        "openTargetName": "open-cypress",
-        "componentTestingTargetName": "component-test",
-        "ciTargetName": "e2e-ci"
-      }
+    "$schema": "./node_modules/nx/schemas/nx-schema.json",
+    "namedInputs": {
+      "default": ["{projectRoot}/**/*", "sharedGlobals"],
+      "production": [
+        "default",
+        "!{projectRoot}/cypress/**/*",
+        "!{projectRoot}/**/*.cy.[jt]s?(x)",
+        "!{projectRoot}/cypress.config.[jt]s",
+        "!{projectRoot}/.eslintrc.json",
+        "!{projectRoot}/eslint.config.js",
+        "!{projectRoot}/**/?(*.)+(spec|test).[jt]s?(x)?(.snap)",
+        "!{projectRoot}/tsconfig.spec.json",
+        "!{projectRoot}/jest.config.[jt]s",
+        "!{projectRoot}/src/test-setup.[jt]s",
+        "!{projectRoot}/test-setup.[jt]s"
+      ],
+      "sharedGlobals": [
+        "{workspaceRoot}/.github/workflows/ci.yml",
+        "{workspaceRoot}/go.work"
+      ]
     },
-    {
-      "plugin": "@nx/eslint/plugin",
-      "options": {
-        "targetName": "lint"
-      }
-    },
-    {
-      "plugin": "@nx/jest/plugin",
-      "options": {
-        "targetName": "test"
+    "nxCloudAccessToken": "ZmIzNmUxYmYtZTM5MC00ZjhhLTlhMDktYTU0ZDE5MjNmZmNhfHJlYWQtd3JpdGU=",
+    "plugins": [
+      "@nx-go/nx-go",
+      "@nxlv/python",
+      {
+        "plugin": "@nx/cypress/plugin",
+        "options": {
+          "targetName": "e2e",
+          "openTargetName": "open-cypress",
+          "componentTestingTargetName": "component-test",
+          "ciTargetName": "e2e-ci"
+        }
       },
-      "exclude": ["apps/auth-server-e2e/**/*"]
-    },
-    {
-      "plugin": "@nx/next/plugin",
-      "options": {
-        "startTargetName": "start",
-        "buildTargetName": "build",
-        "devTargetName": "dev",
-        "serveStaticTargetName": "serve-static"
+      {
+        "plugin": "@nx/eslint/plugin",
+        "options": {
+          "targetName": "lint"
+        }
+      },
+      {
+        "plugin": "@nx/jest/plugin",
+        "options": {
+          "targetName": "test"
+        },
+      "exclude": ["apps/auth-server-e2e/**/*", "apps/api/discord-bot-e2e/**/*"]
+      },
+      {
+        "plugin": "@nx/next/plugin",
+        "options": {
+          "startTargetName": "start",
+          "buildTargetName": "build",
+          "devTargetName": "dev",
+          "serveStaticTargetName": "serve-static"
+        }
+      },
+      {
+        "plugin": "@nx/webpack/plugin",
+        "options": {
+          "buildTargetName": "build",
+          "serveTargetName": "serve",
+          "previewTargetName": "preview"
+        }
+      },
+      {
+        "plugin": "@nx/rollup/plugin",
+        "options": {
+          "buildTargetName": "build"
+        }
+      }
+    ],
+    "targetDefaults": {
+      "@nx/js:tsc": {
+        "cache": true,
+        "dependsOn": ["^build"],
+        "inputs": ["production", "^production"]
+      },
+      "e2e-ci--**/*": {
+        "dependsOn": ["^build"]
+      },
+      "build-custom-server": {
+        "cache": true
       }
     },
-    {
-      "plugin": "@nx/webpack/plugin",
-      "options": {
-        "buildTargetName": "build",
-        "serveTargetName": "serve",
-        "previewTargetName": "preview"
+    "release": {
+      "version": {
+        "preVersionCommand": "npx nx run-many -t build"
       }
     },
-    {
-      "plugin": "@nx/rollup/plugin",
-      "options": {
-        "buildTargetName": "build"
+    "generators": {
+      "@nx/next": {
+        "application": {
+          "style": "scss",
+          "linter": "eslint"
+        }
+      },
+      "@nx/react": {
+        "library": {
+          "unitTestRunner": "jest"
+        }
       }
     }
-  ],
-  "targetDefaults": {
-    "@nx/js:tsc": {
-      "cache": true,
-      "dependsOn": ["^build"],
-      "inputs": ["production", "^production"]
-    },
-    "e2e-ci--**/*": {
-      "dependsOn": ["^build"]
-    },
-    "build-custom-server": {
-      "cache": true
-    }
-  },
-  "release": {
-    "version": {
-      "preVersionCommand": "npx nx run-many -t build"
-    }
-  },
-  "generators": {
-    "@nx/next": {
-      "application": {
-        "style": "scss",
-        "linter": "eslint"
-      }
-    },
-    "@nx/react": {
-      "library": {
-        "unitTestRunner": "jest"
-      }
-    }
-  }
 }

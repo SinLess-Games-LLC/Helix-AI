@@ -1,0 +1,26 @@
+{
+  "name": "discord-bot",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/api/discord-bot/src",
+  "projectType": "application",
+  "tags": [],
+  "targets": {
+    "serve": {
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "dependsOn": ["build"],
+      "options": {
+        "buildTarget": "discord-bot:build",
+        "runBuildTargetDependencies": false
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "discord-bot:build:development"
+        },
+        "production": {
+          "buildTarget": "discord-bot:build:production"
+        }
+      }
+    }
+  }
+}

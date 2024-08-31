@@ -4,9 +4,9 @@ on:
   workflow_dispatch: # Allows manual triggering of the workflow
   push:
     paths:
-      - ".github/labels.yaml" # Only triggers when labels.yaml is changed
+      - '.github/labels.yaml' # Only triggers when labels.yaml is changed
   schedule:
-    - cron: "0 0 * * *" # Runs at midnight every day
+    - cron: '0 0 * * *' # Runs at midnight every day
 
 jobs:
   sync-labels:
@@ -20,7 +20,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4 # Ensure Node.js is set up, required by many GitHub Actions
         with:
-          node-version: "16" # Set a specific Node.js version for consistency
+          node-version: '16' # Set a specific Node.js version for consistency
 
       - name: Cache Node.js Modules
         uses: actions/cache@v4
