@@ -5,12 +5,14 @@
     "module": "commonjs",
     "types": ["jest", "node"],
     "declaration": true,
-    "composite": true,
+    "composite": true
   },
   "include": [
     "jest.config.ts",
     "src/**/*.test.ts",
     "src/**/*.spec.ts",
-    "src/**/*.d.ts"
+    "src/**/*.d.ts",
+    "src/**/*.mock.ts",
+    "src/Logger/logger.ts"
   ]
 }

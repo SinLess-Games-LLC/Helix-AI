@@ -30,28 +30,27 @@
 
 #### Status
 
-![GitHub](https://img.shields.io/github/license/SinLess-Games-LLC/Helix-Ai?style=for-the-badge)
-![GitHub package.json version (branch)](https://img.shields.io/github/package-json/v/SinLess-Games-LLC/Helix-Ai/master?style=for-the-badge)
-![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/SinLess-Games-LLC/Helix-Ai/ci.yaml?style=for-the-badge&label=Nx%20Pipeline%20Status)
-![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/SinLess-Games-LLC/Helix-Ai/labeler.yml?style=for-the-badge&label=Label%20PR%20workflow)
-![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/SinLess-Games-LLC/Helix-Ai/code-ql.yaml?style=for-the-badge&label=CodeQL%20pipeline)
+![GitHub](https://img.shields.io/github/license/SinLess-Games-LLC/Helix-AI?style=for-the-badge)
+![GitHub package.json version (branch)](https://img.shields.io/github/package-json/v/SinLess-Games-LLC/Helix-AI/master?style=for-the-badge)
+![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/SinLess-Games-LLC/Helix-AI/nx-workflow.yml?style=for-the-badge&label=Nx%20Pipeline%20Status)
+![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/SinLess-Games-LLC/Helix-AI/labeler.yaml?style=for-the-badge&label=Label%20PR%20workflow)
 
 #### Forks and Stars
 
-![GitHub forks](https://img.shields.io/github/forks/SinLess-Games-LLC/Helix-Ai?style=for-the-badge)
-![GitHub Repo stars](https://img.shields.io/github/stars/Sinless-Games-LLC/Helix-Ai?style=for-the-badge)
+![GitHub forks](https://img.shields.io/github/forks/SinLess-Games-LLC/Helix-AI?style=for-the-badge)
+![GitHub Repo stars](https://img.shields.io/github/stars/Sinless-Games-LLC/Helix-AI?style=for-the-badge)
 
 #### Issues and Pull Requests
 
-![GitHub issues](https://img.shields.io/github/issues/SinLess-Games-LLC/Helix-Ai?style=for-the-badge)
-![GitHub pull requests](https://img.shields.io/github/issues-pr/SinLess-Games-LLC/Helix-Ai?style=for-the-badge)
+![GitHub issues](https://img.shields.io/github/issues/SinLess-Games-LLC/Helix-AI?style=for-the-badge)
+![GitHub pull requests](https://img.shields.io/github/issues-pr/SinLess-Games-LLC/Helix-AI?style=for-the-badge)
 
 #### Contributors and Commits
 
-![GitHub contributors](https://img.shields.io/github/contributors/SinLess-Games-LLC/Helix-Ai?style=for-the-badge)
-![GitHub last commit](https://img.shields.io/github/last-commit/SinLess-Games-LLC/Helix-Ai?style=for-the-badge)
-![GitHub commit activity](https://img.shields.io/github/commit-activity/m/SinLess-Games-LLC/Helix-Ai?style=for-the-badge)
-![GitHub repo size](https://img.shields.io/github/repo-size/SinLess-Games-LLC/Helix-Ai?style=for-the-badge)
+![GitHub contributors](https://img.shields.io/github/contributors/SinLess-Games-LLC/Helix-AI?style=for-the-badge)
+![GitHub last commit](https://img.shields.io/github/last-commit/SinLess-Games-LLC/Helix-AI?style=for-the-badge)
+![GitHub commit activity](https://img.shields.io/github/commit-activity/m/SinLess-Games-LLC/Helix-AI?style=for-the-badge)
+![GitHub repo size](https://img.shields.io/github/repo-size/SinLess-Games-LLC/Helix-AI?style=for-the-badge)
 
 ---
 

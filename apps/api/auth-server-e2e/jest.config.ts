@@ -16,4 +16,9 @@ export default {
   },
   moduleFileExtensions: ['ts', 'js', 'html'],
   coverageDirectory: '../../../coverage/auth-server-e2e',
-};
+
+  /**
+   * @todo: Remove `passWithNoTests` when tests are added
+   */
+  passWithNoTests: true,
+}

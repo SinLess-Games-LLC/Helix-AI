@@ -1,4 +1,11 @@
 {
   "name": "@helix/database",
-  "version": "0.0.1"
+  "version": "0.0.1",
+  "dependencies": {
+    "@mikro-orm/core": "^6.3.6",
+    "@mikro-orm/reflection": "^6.3.6",
+    "slugify": "^1.6.6",
+    "tslib": "^2.3.0",
+    "uuidv4": "^6.2.13"
+  }
 }

@@ -3,6 +3,9 @@
  * @enum Country
  * @description
  * A country is a nation with its own government, occupying a particular territory.
+ *
+ * It should have a total of 19 countries, not including the PreferNotToSay option.
+ * TOTAL:  197
  */
 export enum Country {
   Afghanistan,

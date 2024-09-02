@@ -1,6 +1,6 @@
-const { withNx } = require('@nx/rollup/with-nx');
-const url = require('@rollup/plugin-url');
-const svg = require('@svgr/rollup');
+const { withNx } = require('@nx/rollup/with-nx')
+const url = require('@rollup/plugin-url')
+const svg = require('@svgr/rollup')
 
 module.exports = withNx(
   {
@@ -24,5 +24,5 @@ module.exports = withNx(
         limit: 10000, // 10kB
       }),
     ],
-  }
-);
+  },
+)

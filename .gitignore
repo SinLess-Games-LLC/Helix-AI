@@ -54,3 +54,15 @@ out
 
 # Caches
 .cache
+
+# Ignore all __pycache__ folders
+**/__pycache__
+
+# Ignore all .pytest_cache folders
+**/.pytest_cache
+
+# ignore reports folder
+reports/**/*.*
+
+# Ignore .husky/_ folder
+.husky/_

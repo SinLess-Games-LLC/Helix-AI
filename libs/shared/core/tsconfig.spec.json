@@ -6,12 +6,14 @@
     "module": "commonjs",
     "types": ["jest", "node"],
     "composite": true,
-    "declaration": true,
+    "declaration": true
   },
   "include": [
     "jest.config.ts",
     "src/**/*.test.ts",
     "src/**/*.spec.ts",
-    "src/**/*.d.ts"
-, "src/Colors/colors.spec.ts", "src/Colors/colors.type.d.ts"  ]
+    "src/**/*.d.ts",
+    "src/**/*.mock.ts",
+    "src/**/*.ts"
+  ]
 }

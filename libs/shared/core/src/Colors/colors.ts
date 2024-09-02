@@ -133,8 +133,7 @@ export const SystemColors = {
       rgba: 'rgba(220, 20, 60, 1)',
     },
   },
-};
-
+}
 
 export const BotColors: botColors = {
   bot: {
@@ -153,4 +152,4 @@ export const BotColors: botColors = {
     info: { hex: '#0000FF', rgb: 'rgb(0, 0, 255)' },
     success: { hex: '#00ff00', rgb: 'rgb(0, 255, 0)' },
   },
-};
+}

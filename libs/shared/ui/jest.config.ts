@@ -8,4 +8,8 @@ export default {
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
   coverageDirectory: '../../../coverage/libs/shared/ui',
-};
+  /**
+   * @todo: Remove `passWithNoTests` when tests are added
+   */
+  passWithNoTests: true,
+}

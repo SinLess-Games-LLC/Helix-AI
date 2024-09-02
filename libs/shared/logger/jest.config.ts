@@ -8,4 +8,8 @@ export default {
   },
   moduleFileExtensions: ['ts', 'js', 'html'],
   coverageDirectory: '../../../coverage/libs/shared/logger',
-};
+  /**
+   * @todo: Remove `passWithNoTests` when tests are added
+   */
+  passWithNoTests: true,
+}
