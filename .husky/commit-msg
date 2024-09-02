@@ -2,22 +2,22 @@
 
 printf '######################################'
 printf '\n Run commit_msg \n'
-printf '######################################'
+printf '######################################\n\n'
 
 #
 # Run lint-staged with husky
 printf '######################################'
-printf 'Running lint-staged'
+printf 'Running lint-staged \n'
 lint-staged
-printf 'Completed lint-staged'
+printf 'Completed lint-staged \n'
 
 #
 # run Commitlint with husky
-printf 'Running commitlint'
+printf 'Running commitlint \n'
 npx --no-install commitlint --edit $1
-printf 'Completed commitlint '
-printf '######################################'
+printf 'Completed commitlint \n'
+printf '######################################/n/n'
 
 printf '######################################'
-printf 'Completed commit_msg \n'
+printf '\n Completed commit_msg \n'
 printf '######################################'

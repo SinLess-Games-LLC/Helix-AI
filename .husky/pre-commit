@@ -2,14 +2,14 @@
 
 printf '######################################'
 printf "\nRunning precommmit hook\n"
-printf '######################################'
+printf '######################################\n\n'
 
 # Install dependencies
-printf '######################################'
-printf "Installing dependencies"
+printf '######################################\n'
+printf "Installing dependencies\n"
 
 npm install
-printf '######################################'
+printf '######################################\n\n'
 
 printf '######################################'
 printf "\n\nCompleted Precommit\n\n"
