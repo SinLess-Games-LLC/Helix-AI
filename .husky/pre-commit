@@ -1,0 +1,8 @@
+#!/bin/zsh
+
+printf "\n\nRunning precommmit hook\n\n"
+
+# Install dependencies
+npm install
+
+printf "\n\nCompleted Precommit\n\n"

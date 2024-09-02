@@ -16,54 +16,54 @@ rule_files:
 
 scrape_configs:
   # Scrape Prometheus itself
-  - job_name: "prometheus"
+  - job_name: 'prometheus'
     static_configs:
-      - targets: ["localhost:9090"]
+      - targets: ['localhost:9090']
 
   # Scrape Node Exporter (if you use it)
-  - job_name: "node_exporter"
+  - job_name: 'node_exporter'
     static_configs:
-      - targets: ["node-exporter:9100"]
+      - targets: ['node-exporter:9100']
 
   # Scrape Consul servers
-  - job_name: "consul"
-    metrics_path: "/v1/agent/metrics"
-    scheme: "http"
+  - job_name: 'consul'
+    metrics_path: '/v1/agent/metrics'
+    scheme: 'http'
     static_configs:
       - targets:
-          - "consul-server-1:8500"
-          - "consul-server-2:8500"
-          - "consul-server-3:8500"
+          - 'consul-server-1:8500'
+          - 'consul-server-2:8500'
+          - 'consul-server-3:8500'
 
   # Scrape Redis
-  - job_name: "redis"
-    metrics_path: "/metrics"
+  - job_name: 'redis'
+    metrics_path: '/metrics'
     static_configs:
-      - targets: ["redis:6379"]
+      - targets: ['redis:6379']
 
   # Scrape Fluentd
-  - job_name: "fluentd"
-    metrics_path: "/api/plugins/prometheus"
+  - job_name: 'fluentd'
+    metrics_path: '/api/plugins/prometheus'
     static_configs:
-      - targets: ["fluentd:25224"]
+      - targets: ['fluentd:25224']
 
   # Scrape Kafka Brokers
-  - job_name: "kafka"
-    metrics_path: "/metrics"
+  - job_name: 'kafka'
+    metrics_path: '/metrics'
     static_configs:
       - targets:
-          - "kafka-1:9092"
-          - "kafka-2:9093"
-          - "kafka-3:9094"
+          - 'kafka-1:9092'
+          - 'kafka-2:9093'
+          - 'kafka-3:9094'
 
   # Scrape Elasticsearch
-  - job_name: "elasticsearch"
-    metrics_path: "/_prometheus/metrics"
+  - job_name: 'elasticsearch'
+    metrics_path: '/_prometheus/metrics'
     static_configs:
-      - targets: ["elastic:9200"]
+      - targets: ['elastic:9200']
 
   # Scrape Grafana
-  - job_name: "grafana"
-    metrics_path: "/metrics"
+  - job_name: 'grafana'
+    metrics_path: '/metrics'
     static_configs:
-      - targets: ["grafana:3000"]
+      - targets: ['grafana:3000']

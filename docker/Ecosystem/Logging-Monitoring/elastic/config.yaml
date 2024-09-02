@@ -1,8 +1,8 @@
 # GENERAL SETTINS
 
-cluster.name:    "HelixAI"
-node.name:       "helix-elasticsearch"
-node.attr.zone:  "zone1"
+cluster.name: 'HelixAI'
+node.name: 'helix-elasticsearch'
+node.attr.zone: 'zone1'
 
 node.data: true
 node.master: true

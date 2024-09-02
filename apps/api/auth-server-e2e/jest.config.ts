@@ -21,4 +21,4 @@ export default {
    * @todo: Remove `passWithNoTests` when tests are added
    */
   passWithNoTests: true,
-};
+}

@@ -11,18 +11,10 @@
   ],
   "dependencyDashboard": true,
   "dependencyDashboardTitle": "Renovate Dashboard 🤖",
-  "suppressNotifications": [
-    "prEditedNotification",
-    "prIgnoreNotification"
-  ],
+  "suppressNotifications": ["prEditedNotification", "prIgnoreNotification"],
   "rebaseWhen": "conflicted",
-  "baseBranches": [
-    "develop"
-  ],
-  "labels": [
-    "renovate",
-    "dependencies"
-  ],
+  "baseBranches": ["develop"],
+  "labels": ["renovate", "dependencies"],
   "automerge": true,
   "commitMessage": "chore(deps): update {{depName}} to v{{newVersion}}",
   "packageRules": [
@@ -48,12 +40,23 @@
     },
     {
       "groupName": "Infrastructure as Code - Kubernetes",
-      "managers": ["helmv3", "helm-requirements", "helm-values", "kubernetes", "kustomize"],
+      "managers": [
+        "helmv3",
+        "helm-requirements",
+        "helm-values",
+        "kubernetes",
+        "kustomize"
+      ],
       "enabled": true
     },
     {
       "groupName": "Infrastructure as Code - Terraform and Ansible",
-      "managers": ["terraform", "terraform-version", "ansible", "ansible-galaxy"],
+      "managers": [
+        "terraform",
+        "terraform-version",
+        "ansible",
+        "ansible-galaxy"
+      ],
       "enabled": true
     },
     {
@@ -63,12 +66,7 @@
     },
     {
       "groupName": "General Dependency Updates",
-      "matchUpdateTypes": [
-        "minor",
-        "patch",
-        "pin",
-        "digest"
-      ],
+      "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
       "automerge": true
     }
   ],

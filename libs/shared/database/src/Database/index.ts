@@ -20,7 +20,6 @@ import {
   BaseEntity,
 } from './entities'
 
-
 /**
  * Entities export
  *
@@ -67,14 +66,11 @@ export {
   Health,
 } from './entities'
 
-
 // Import MikroORMConfig and DatabaseOptions from mikro-orm.config
 import { MikroORMConfig } from './mikro-orm.config'
 import type { DatabaseOptions } from './mikro-orm.config'
 
 export { MikroORMConfig, DatabaseOptions }
-
-
 
 /**
  * Interfaces

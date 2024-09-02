@@ -80,11 +80,13 @@ Follow the [Conventional Commits](https://www.conventionalcommits.org/) specific
 ### Pull Requests
 
 1. **Create a pull request:**
+
    - Ensure your branch is up to date with `develop`.
    - Open a pull request with a clear title and description.
    - Link to any relevant issues.
 
 2. **Code review:**
+
    - Your pull request will be reviewed by a maintainer.
    - Address any feedback or requested changes.
 

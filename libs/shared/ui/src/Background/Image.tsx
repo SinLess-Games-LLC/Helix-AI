@@ -1,15 +1,27 @@
-import React from 'react';
+import React from 'react'
 
 export interface BackgroundImageProps {
-  imageUrl: string;
-  altText: string;
-  style?: React.CSSProperties;
-  children?: React.ReactNode;
+  imageUrl: string
+  altText: string
+  style?: React.CSSProperties
+  children?: React.ReactNode
 }
 
-export const BackgroundImage: React.FC<BackgroundImageProps> = ({ imageUrl, altText, style, children }) => {
+export const BackgroundImage: React.FC<BackgroundImageProps> = ({
+  imageUrl,
+  altText,
+  style,
+  children,
+}) => {
   return (
-    <div style={{ position: 'static', minHeight: '100vh', minWidth: '100vw', ...style }}>
+    <div
+      style={{
+        position: 'static',
+        minHeight: '100vh',
+        minWidth: '100vw',
+        ...style,
+      }}
+    >
       <div
         aria-label={altText}
         style={{
@@ -27,7 +39,7 @@ export const BackgroundImage: React.FC<BackgroundImageProps> = ({ imageUrl, altT
       />
       {children}
     </div>
-  );
-};
+  )
+}
 
-export default BackgroundImage;
+export default BackgroundImage

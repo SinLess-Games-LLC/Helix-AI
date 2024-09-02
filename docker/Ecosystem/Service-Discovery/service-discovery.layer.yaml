@@ -6,7 +6,7 @@ services:
     restart: always
     volumes:
       - ./consul/config/server-1:/consul/config
-    command: "agent -bootstrap-expect=3"
+    command: 'agent -bootstrap-expect=3'
 
   consul-server-2: &consul-server-2
     image: hashicorp/consul:1.17.1
@@ -15,7 +15,7 @@ services:
     restart: always
     volumes:
       - ./consul/config/server-2:/consul/config
-    command: "agent -bootstrap-expect=3"
+    command: 'agent -bootstrap-expect=3'
 
   consul-server-3: &consul-server-3
     image: hashicorp/consul:1.17.1
@@ -24,4 +24,4 @@ services:
     restart: always
     volumes:
       - ./consul/config/server-3:/consul/config
-    command: "agent -bootstrap-expect=3"
+    command: 'agent -bootstrap-expect=3'

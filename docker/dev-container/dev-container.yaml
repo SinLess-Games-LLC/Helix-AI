@@ -6,8 +6,8 @@ services:
     image: sinless777/dev-container-node-python-go
     container_name: dev-container
     volumes:
-      - "../../:/workspace"
-      - "./post-create-setup.sh:/home/node/post-create-setup.sh"
+      - '../../:/workspace'
+      - './post-create-setup.sh:/home/node/post-create-setup.sh'
     command: tail -f /dev/null
     dns:
       - 1.1.1.1

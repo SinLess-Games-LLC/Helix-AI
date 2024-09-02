@@ -1,0 +1,17 @@
+#!/bin/zsh
+
+printf 'Run commit_msg \n'
+
+#
+# Run lint-staged with husky
+printf 'Running lint-staged \n'
+lint-staged
+printf 'Completed lint-staged \n'
+
+#
+# run Commitlint with husky
+printf 'Running commitlint \n'
+npx --no-install commitlint --edit $1
+printf 'Completed commitlint \n'
+
+printf 'Completed commit_msg \n'

@@ -13,7 +13,7 @@ lavalink:
   #  defaultPluginRepository: "https://maven.lavalink.dev/releases" # optional, defaults to the Lavalink release repository
   #  defaultPluginSnapshotRepository: "https://maven.lavalink.dev/snapshots" # optional, defaults to the Lavalink snapshot repository
   server:
-    password: "74f57d6cb9964384de92d6a9892e196afcbeb00daf06f14dd6e69746b338d3df"
+    password: '74f57d6cb9964384de92d6a9892e196afcbeb00daf06f14dd6e69746b338d3df'
     sources:
       youtube: true
       bandcamp: true
@@ -67,8 +67,8 @@ metrics:
     endpoint: /metrics
 
 sentry:
-  dsn: ""
-  environment: ""
+  dsn: ''
+  environment: ''
 #  tags:
 #    some_key: some_value
 #    another_key: another_value

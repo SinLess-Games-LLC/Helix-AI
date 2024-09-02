@@ -15,9 +15,13 @@
     "incremental": true,
     "experimentalDecorators": true,
     "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-
+    "allowSyntheticDefaultImports": true
   },
   "exclude": ["jest.config.ts", "src/**/*.spec.ts", "src/**/*.test.ts"],
-  "include": ["src/**/*.ts", "../../../libs/shared/core/src/index.ts", "../../../libs/shared/database/src/index.ts", "../../../libs/shared/logger/src/index.ts"]
+  "include": [
+    "src/**/*.ts",
+    "../../../libs/shared/core/src/index.ts",
+    "../../../libs/shared/database/src/index.ts",
+    "../../../libs/shared/logger/src/index.ts"
+  ]
 }

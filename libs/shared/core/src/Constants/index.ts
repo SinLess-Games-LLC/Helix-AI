@@ -1,3 +1,15 @@
-import { DiscordStatusSummaryUrl, DiscordStatusUrl, CloudflareStatusSummaryUrl, CloudflareStatusUrl, HelixColors, } from './constants';
+import {
+  DiscordStatusSummaryUrl,
+  DiscordStatusUrl,
+  CloudflareStatusSummaryUrl,
+  CloudflareStatusUrl,
+  HelixColors,
+} from './constants'
 
-export { DiscordStatusSummaryUrl, DiscordStatusUrl, CloudflareStatusSummaryUrl, CloudflareStatusUrl, HelixColors };
+export {
+  DiscordStatusSummaryUrl,
+  DiscordStatusUrl,
+  CloudflareStatusSummaryUrl,
+  CloudflareStatusUrl,
+  HelixColors,
+}
