@@ -3,7 +3,7 @@
 ############################################################################################################
 
 # Use a lightweight Python image
-FROM python:3.13.0b4-bullseye AS builder
+FROM python:3.13.0rc1-bullseye AS builder
 
 # Install build dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -30,7 +30,7 @@ RUN chmod 755 /app/consul/*.sh /app/security/*.sh /app/vault/*.sh && \
 # Runtime stage
 ############################################################################################################
 
-FROM python:3.13.0b4-bullseye
+FROM python:3.13.0rc1-bullseye
 
 # Copy the built files from the builder stage
 COPY --from=builder /app /app
