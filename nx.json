@@ -1,6 +1,5 @@
 {
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
-  "defaultBase": "develop",
   "useDaemonProcess": false,
   "namedInputs": {
     "default": ["{projectRoot}/**/*", "sharedGlobals"],
