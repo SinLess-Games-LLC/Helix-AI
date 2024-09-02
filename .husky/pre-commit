@@ -1,8 +1,16 @@
 #!/bin/zsh
 
-printf "\n\nRunning precommmit hook\n\n"
+printf '######################################'
+printf "\nRunning precommmit hook\n"
+printf '######################################'
 
 # Install dependencies
-npm install
+printf '######################################'
+printf "Installing dependencies"
 
+npm install
+printf '######################################'
+
+printf '######################################'
 printf "\n\nCompleted Precommit\n\n"
+printf '######################################'
