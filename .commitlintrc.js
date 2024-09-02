@@ -35,6 +35,7 @@ async function getConfig() {
           'dependencies',
           'performance',
           'accessibility',
+          'workflow',
           ...(await getProjects(
             './apps/**/*',
             ({ name, projectType }) =>
