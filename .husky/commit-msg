@@ -1,12 +1,12 @@
 #!/bin/zsh
 
-printf '######################################'
+printf '\n\n######################################'
 printf '\n Run commit_msg \n'
 printf '######################################\n\n'
 
 #
 # Run lint-staged with husky
-printf '######################################'
+printf '######################################\n'
 printf 'Running lint-staged \n'
 lint-staged
 printf 'Completed lint-staged \n'
@@ -16,8 +16,8 @@ printf 'Completed lint-staged \n'
 printf 'Running commitlint \n'
 npx --no-install commitlint --edit $1
 printf 'Completed commitlint \n'
-printf '######################################/n/n'
+printf '######################################\n\n'
 
-printf '######################################'
+printf '\n\n######################################'
 printf '\n Completed commit_msg \n'
-printf '######################################'
+printf '######################################\n\n'
