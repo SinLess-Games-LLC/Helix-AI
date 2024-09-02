@@ -41,4 +41,4 @@ jobs:
           echo "HEAD: ${{ steps.setSHAs.outputs.head }}"
 
       - run: npx nx-cloud record -- nx run-many -t format:check --all --base=${{ steps.setSHAs.outputs.base }} --head=${{ steps.setSHAs.outputs.head }}
-      - run: npx nx run-many -t lint test --all --base=${{ steps.setSHAs.outputs.base }} --head=${{ steps.setSHAs.outputs.head }}
+      - run: npx nx run-many -t lint test --all
