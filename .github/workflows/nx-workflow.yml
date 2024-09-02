@@ -35,7 +35,7 @@ jobs:
           python-version: '3.12'
 
       - run: npm install
-      - run: npx nx run heix:install
+      - run: npx nx run helix:install
 
       - name: Derive appropriate SHAs for base and head for `nx affected` commands
         id: setSHAs
