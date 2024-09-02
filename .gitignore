@@ -54,3 +54,9 @@ out
 
 # Caches
 .cache
+
+# Ignore all __pycache__ folders
+**/__pycache__
+
+# Ignore all .pytest_cache folders
+**/.pytest_cache
