@@ -38,6 +38,8 @@ jobs:
       - name: Derive appropriate SHAs for base and head for `nx affected` commands
         id: setSHAs
         uses: nrwl/nx-set-shas@v4
+        with:
+          main-branch-name: "master"
 
       - run: |
           echo "BASE: ${{ steps.setSHAs.outputs.base }}"
