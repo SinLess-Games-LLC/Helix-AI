@@ -28,7 +28,14 @@ jobs:
           node-version: 22
           cache: 'npm'
 
+      # Setup python 3.12
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+
       - run: npm install
+      - run: npx nx run @nxlv/python:install
 
       - name: Derive appropriate SHAs for base and head for `nx affected` commands
         id: setSHAs
@@ -40,5 +47,5 @@ jobs:
           echo "BASE: ${{ steps.setSHAs.outputs.base }}"
           echo "HEAD: ${{ steps.setSHAs.outputs.head }}"
 
-      - run: npx nx-cloud record -- nx run-many -t format:check --all --base=${{ steps.setSHAs.outputs.base }} --head=${{ steps.setSHAs.outputs.head }}
+      - run: npx nx-cloud record -- nx run-many -t format:check --all
       - run: npx nx run-many -t lint test --all
