@@ -16,16 +16,17 @@ env:
 
 jobs:
   main:
-    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12"]
+        poetry-version: ["1.8.3"]
+        os: [ubuntu-22.04, macos-latest, ubuntu-24.04]
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-
-      # This enables task distribution via Nx Cloud
-      # Run this command as early as possible, before dependencies are installed
-      # Learn more at https://nx.dev/ci/reference/nx-cloud-cli#npx-nxcloud-startcirun
-      # - run: npx nx-cloud start-ci-run --distribute-on="3 linux-medium-js" --stop-agents-after="build"
 
       # Cache node_modules
       - uses: actions/setup-node@v4
@@ -33,7 +34,16 @@ jobs:
           node-version: 22
           cache: 'npm'
 
+      - uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Run image
+        uses: abatilo/actions-poetry@v2
+        with:
+          poetry-version: ${{ matrix.poetry-version }}
+
       - run: npm install
+      - run: npx nx run helix:install
 
       - name: Derive appropriate SHAs for base and head for `nx affected` commands
         id: setSHAs
@@ -45,5 +55,5 @@ jobs:
           echo "BASE: ${{ steps.setSHAs.outputs.base }}"
           echo "HEAD: ${{ steps.setSHAs.outputs.head }}"
 
-      - run: npx nx-cloud record -- nx format:check --base=${{ steps.setSHAs.outputs.base }} --head=${{ steps.setSHAs.outputs.head }}
-      - run: npx nx affected -t lint test --base=${{ steps.setSHAs.outputs.base }} --head=${{ steps.setSHAs.outputs.head }}
+      - run: npx nx-cloud record -- nx run-many -t format:check --all
+      - run: npx nx run-many -t lint test --all
