@@ -1,12 +1,15 @@
 {
-  "helix-application_version": "1.0.0",
-  "user-interface_versions": {
-    "helix-website-front": "0.0.1"
+  "helixApplicationVersion": "1.0.0",
+  // User interface versions
+  "userInterfaceVersions": {
+    "helixWebsiteFront": "0.0.1"
   },
-  "helix-api_versions": {
-    "helix-website-back": "1.0.0"
+  // Helix API versions
+  "helixApiVersions": {
+    "helixWebsiteBack": "1.0.0"
   },
-  "example-group_versions": {
+  // Example of a group of versions
+  "exampleGroupVersions": {
     "example": "0.0.0"
   }
 }
