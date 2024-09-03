@@ -30,6 +30,7 @@ export default function Index() {
   return (
     <div className={styles.page}>
       <Header {...headerProps} />
+      <br/>
     </div>
   )
 }
