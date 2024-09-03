@@ -2,13 +2,18 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "milestone": 1,
   "extends": [
-    "config:base",
+    "config:recommended",
     "docker:enableMajor",
     ":disableRateLimiting",
     ":dependencyDashboard",
     ":semanticCommits",
-    ":automergeBranch"
+    ":automergeBranch",
+    "docker:pinDigests",
+    "helpers:pinGitHubActionDigests",
+    ":pinDevDependencies",
+    "config:best-practices"
   ],
+  "configMigration": true,
   "dependencyDashboard": true,
   "dependencyDashboardTitle": "Renovate Dashboard 🤖",
   "suppressNotifications": ["prEditedNotification", "prIgnoreNotification"],
@@ -16,31 +21,30 @@
   "baseBranches": ["develop"],
   "labels": ["renovate", "dependencies"],
   "automerge": true,
-  "commitMessage": "chore(deps): update {{depName}} to v{{newVersion}}",
   "packageRules": [
     {
       "groupName": "JavaScript Dependencies",
-      "managers": ["npm"],
+      "matchManagers": ["npm", "nvm"],
       "enabled": true
     },
     {
       "groupName": "Python Dependencies",
-      "managers": ["poetry"],
+      "matchManagers": ["poetry"],
       "enabled": true
     },
     {
       "groupName": "Go Dependencies",
-      "managers": ["gomod"],
+      "matchManagers": ["gomod"],
       "enabled": true
     },
     {
-      "groupName": "Infrastructure as Code - Containers",
-      "managers": ["dockerfile", "docker-compose", "devcontainer"],
+      "groupName": "Containers",
+      "matchManagers": ["dockerfile", "docker-compose", "devcontainer"],
       "enabled": true
     },
     {
-      "groupName": "Infrastructure as Code - Kubernetes",
-      "managers": [
+      "groupName": "Kubernetes",
+      "matchManagers": [
         "helmv3",
         "helm-requirements",
         "helm-values",
@@ -50,24 +54,24 @@
       "enabled": true
     },
     {
-      "groupName": "Infrastructure as Code - Terraform and Ansible",
-      "managers": [
-        "terraform",
-        "terraform-version",
-        "ansible",
-        "ansible-galaxy"
-      ],
+      "groupName": "Infrastructure as Code",
+      "matchManagers": ["terraform", "ansible", "ansible-galaxy"],
       "enabled": true
     },
     {
-      "groupName": "Infrastructure as Code - Miscellaneous",
-      "managers": ["argocd", "asdf", "pre-commit"],
-      "enabled": true
+      "groupName": "CD - Continous Delivery",
+      "enabled": true,
+      "matchManagers": ["argocd", "flux"]
     },
     {
-      "groupName": "General Dependency Updates",
-      "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
-      "automerge": true
+      "groupName": "CI - Continous Integration",
+      "enabled": true,
+      "matchManagers": ["github-actions", "jenkins"]
+    },
+    {
+      "groupName": "miscellaneous",
+      "enabled": true,
+      "matchManagers": ["asdf", "git-submodules", "pre-commit"]
     }
   ],
   "customManagers": []

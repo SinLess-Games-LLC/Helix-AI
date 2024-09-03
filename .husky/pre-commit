@@ -11,6 +11,11 @@ printf "Installing dependencies\n"
 npm install
 printf '######################################\n\n'
 
+printf '######################################\n'
+printf "\nValidateing renovate.json\n"
+npx --yes --package renovate -- renovate-config-validator --strict
+printf '######################################\n\n'
+
 printf '######################################'
 printf "\n\nCompleted Precommit\n\n"
 printf '######################################\n\n'
