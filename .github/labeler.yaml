@@ -35,6 +35,22 @@ area/requirments.txt:
   - changed-files:
       - any-glob-to-any-file: [requirments.txt, '**/requirments.txt']
 
+area/frontend:
+  - changed-files:
+      - any-glob-to-any-file: [apps/user-interface/frontend/**/*]
+
+area/auth-server:
+  - changed-files:
+      - any-glob-to-any-file: [apps/api/auth-server/**/*]
+
+area/discord-bot:
+  - changed-files:
+      - any-glob-to-any-file: [apps/api/discord-bot/**/*]
+
+area/ai:
+  - changed-files:
+      - any-glob-to-any-file: [apps/ai/**/*]
+
 #
 # Language specific labels
 #
