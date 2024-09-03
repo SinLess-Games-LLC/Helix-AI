@@ -23,6 +23,18 @@
 - name: area/requirments.txt
   description: The requirments.txt area of the project
   color: 0e8a16
+- name: area/frontend
+  description: The frontend area of the project
+  color: 0e8a16
+- name: area/auth-server
+  description: The auth-server area of the project
+  color: 0e8a16
+- name: area/discord-bot
+  description: The discord-bot area of the project
+  color: 0e8a16
+- name: area/ai
+  description: The ai area of the project
+  color: 0e8a16
 
 # Renovate
 - name: renovate/container
