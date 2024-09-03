@@ -1,0 +1,12 @@
+{
+  "helix-application_version": "1.0.0",
+  "user-interface_versions": {
+    "helix-website-front": "0.0.1"
+  },
+  "helix-api_versions": {
+    "helix-website-back": "1.0.0"
+  },
+  "example-group_versions": {
+    "example": "0.0.0"
+  }
+}
