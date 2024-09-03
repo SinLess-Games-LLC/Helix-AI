@@ -13,7 +13,6 @@
     ":pinDevDependencies",
     "config:best-practices"
   ],
-  "configMigration": true,
   "dependencyDashboard": true,
   "dependencyDashboardTitle": "Renovate Dashboard 🤖",
   "suppressNotifications": ["prEditedNotification", "prIgnoreNotification"],
