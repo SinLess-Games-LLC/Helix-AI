@@ -41,30 +41,30 @@ export const StatusUrls = {
 export const HelixColors = {
   primary: {
     hex: '#F7068D',
-    rgb: 'rgb(247,6,141)',
+    rgb: '247,6,141',
   },
   secondary: {
     hex: '#1540D1',
-    rgb: 'rgb(21,64,209)',
+    rgb: '21,64,209',
   },
   tertiary: {
     hex: '#3D3D3D',
-    rgb: 'rgb(61,61,61)',
+    rgb: '61,61,61',
   },
   success: {
     hex: '#28a745',
-    rgb: 'rgb(40,167,69)',
+    rgb: '40,167,69',
   },
   error: {
     hex: '#FF4C4C',
-    rgb: 'rgb(255,76,76)',
+    rgb: '255,76,76',
   },
   warning: {
     hex: '#FFA500',
-    rgb: 'rgb(255,165,0)',
+    rgb: '255,165,0',
   },
   info: {
     hex: '#1E90FF',
-    rgb: 'rgb(30,144,255)',
+    rgb: '30,144,255',
   },
 }

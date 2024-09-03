@@ -1,6 +1,9 @@
 import './global.css'
 import { BackgroundImage, BackgroundImageProps } from '@helix/ui'
+import { AppRouterCacheProvider } from '@mui/material-nextjs/v13-appRouter'
 import { SystemColors } from '@helix/core'
+import { ThemeProvider } from '@mui/material/styles'
+import theme from '../theme'
 
 export const metadata = {
   title: 'Helix AI',
@@ -22,8 +25,15 @@ export default function RootLayout({
   console.log(color)
   return (
     <html lang="en">
+      <head></head>
       <body>
-        <BackgroundImage {...backgroundImageProps}>{children}</BackgroundImage>
+        <AppRouterCacheProvider options={{ key: 'css' }}>
+          <ThemeProvider theme={theme}>
+            <BackgroundImage {...backgroundImageProps}>
+              {children}
+            </BackgroundImage>
+          </ThemeProvider>
+        </AppRouterCacheProvider>
       </body>
     </html>
   )

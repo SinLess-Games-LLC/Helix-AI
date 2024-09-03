@@ -3,20 +3,8 @@ import { SystemColors, BotColors } from './Colors'
 export { SystemColors, BotColors }
 
 // import and export the Constants
-import {
-  DiscordStatusSummaryUrl,
-  DiscordStatusUrl,
-  CloudflareStatusSummaryUrl,
-  CloudflareStatusUrl,
-  HelixColors,
-} from './Constants'
-export {
-  DiscordStatusSummaryUrl,
-  DiscordStatusUrl,
-  CloudflareStatusSummaryUrl,
-  CloudflareStatusUrl,
-  HelixColors,
-}
+import { StatusUrls, HelixColors } from './Constants'
+export { StatusUrls, HelixColors }
 
 // import and export the Errors
 import { ErrorCodes } from './Errors'

@@ -3,12 +3,19 @@ export interface Page {
   url: string
 }
 
+export interface Setting {
+  name: string
+  url?: string
+  action?: () => void
+}
+
 export interface HeaderProps {
-  logo: string // URL or path to the logo image
+  logo_url: string
   title: string
   version: string
-  pages: Page[] // Changed from PageList to an array of Page
-  style?: React.CSSProperties // Optional custom styling
+  style: React.CSSProperties
+  pages: Page[]
+  settings: Setting[]
   menuOpen: boolean
   toggleMenu: () => void
 }
