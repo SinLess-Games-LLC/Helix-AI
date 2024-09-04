@@ -56,6 +56,7 @@ export function Header(props: HeaderProps) {
               color: 'inherit',
               textDecoration: 'none',
               paddingRight: '1.5rem',
+              fontFamily: "'Pinyon Script', cursive",
             }}
           >
             {props.title}
@@ -127,6 +128,7 @@ export function Header(props: HeaderProps) {
               letterSpacing: '.3rem',
               color: 'inherit',
               textDecoration: 'none',
+              fontFamily: "'Pinyon Script', cursive",
             }}
           >
             {props.title}

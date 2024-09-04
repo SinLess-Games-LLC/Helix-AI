@@ -5,7 +5,7 @@ export async function GET() {
   const repoOwner = 'SinLess-Games-LLC'
   const repoName = 'Helix-AI'
   const branch = 'master'
-  const filePath = 'package.json'
+  const filePath = 'versions.config.json5'
 
   try {
     const url = `https://raw.githubusercontent.com/${repoOwner}/${repoName}/${branch}/${filePath}`
@@ -19,7 +19,7 @@ export async function GET() {
     }
 
     const packageJson = await response.json()
-    const version = packageJson.version
+    const version = packageJson.helixApplicationVersion
 
     if (!version) {
       return NextResponse.json(

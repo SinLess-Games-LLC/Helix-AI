@@ -68,3 +68,47 @@ export const HelixColors = {
     rgb: '30,144,255',
   },
 }
+
+/**
+ * @name DiscordColorPalette
+ *
+ * @description This object contains the blue, gray1, gray2, gray3, and gray4 colors used in the Discord color palette.
+ *
+ * @property blue - The blue color of the Discord color palette.
+ * @property blue.hex - The hex value of the blue color.
+ * @property blue.rgb - The RGB value of the blue color.
+ * @property gray1 - The gray1 color of the Discord color palette.
+ * @property gray1.hex - The hex value of the gray1 color.
+ * @property gray1.rgb - The RGB value of the gray1 color.
+ * @property gray2 - The gray2 color of the Discord color palette.
+ * @property gray2.hex - The hex value of the gray2 color.
+ * @property gray2.rgb - The RGB value of the gray2 color.
+ * @property gray3 - The gray3 color of the Discord color palette.
+ * @property gray3.hex - The hex value of the gray3 color.
+ * @property gray3.rgb - The RGB value of the gray3 color.
+ * @property gray4 - The gray4 color of the Discord color palette.
+ * @property gray4.hex - The hex value of the gray4 color.
+ * @property gray4.rgb - The RGB value of the gray4 color.
+ */
+export const DiscordColorPalette = {
+  blue: {
+    hex: '#7289da',
+    rgb: '114,137,218',
+  },
+  gray1: {
+    hex: '#424549',
+    rgb: '66,69,73',
+  },
+  gray2: {
+    hex: '#36393e',
+    rgb: '54,57,62',
+  },
+  gray3: {
+    hex: '#282b30',
+    rgb: '40,43,48',
+  },
+  gray4: {
+    hex: '#1e2124',
+    rgb: '30,33,36',
+  },
+}

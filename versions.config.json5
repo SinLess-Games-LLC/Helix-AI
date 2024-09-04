@@ -1,0 +1,12 @@
+{
+  "helixApplicationVersion": "1.0.0",
+  "userInterfaceVersions": {
+    "helixWebsiteFront": "0.0.1"
+  },
+  "helixApiVersions": {
+    "helixWebsiteBack": "1.0.0"
+  },
+  "exampleGroupVersions": {
+    "example": "0.0.0"
+  }
+}

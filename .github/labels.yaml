@@ -1,40 +1,39 @@
-# Area Labels
+# Area specific labels
 - name: area/apps
-  description: The app area of the project
-  color: 0e8a16
-- name: area/docs
-  description: The documentation area of the project
-  color: 0e8a16
-- name: area/frontend
-  description: The frontend area of the project
-  color: 0e8a16
+  description: Application specific changes
+  color: 'f1e05a'
 - name: area/libs
-  description: The libs area of the project
-  color: 0e8a16
+  description: Library specific changes
+  color: '2b7489'
+- name: area/docker
+  description: Docker specific changes
+  color: '3572A5'
 - name: area/.github
-  description: The .github area of the project
-  color: 0e8a16
+  description: GitHub specific changes
+  color: '00ADD8'
 - name: area/workflows
-  description: The workflows area of the project
-  color: 0e8a16
+  description: Workflow specific changes
+  color: 'f1e05a'
 - name: area/package.json
-  description: The package.json area of the project
-  color: 0e8a16
+  description: Package.json specific changes
+  color: '2b7489'
 - name: area/requirments.txt
-  description: The requirments.txt area of the project
-  color: 0e8a16
-- name: area/frontend
-  description: The frontend area of the project
-  color: 0e8a16
-- name: area/auth-server
-  description: The auth-server area of the project
-  color: 0e8a16
-- name: area/discord-bot
-  description: The discord-bot area of the project
-  color: 0e8a16
-- name: area/ai
-  description: The ai area of the project
-  color: 0e8a16
+  description: Requirments.txt specific changes
+  color: '3572A5'
+
+# Applications
+- name: app/frontend
+  description: Frontend application
+  color: 'f1e05a'
+- name: app/auth-server
+  description: Auth server application
+  color: '2b7489'
+- name: app/discord-bot
+  description: Discord bot application
+  color: '3572A5'
+- name: app/helix
+  description: Helix AI application
+  color: '00ADD8'
 
 # Renovate
 - name: renovate/container

@@ -1,4 +1,4 @@
-import './global.css'
+import './global.scss'
 import { BackgroundImage, BackgroundImageProps } from '@helix/ui'
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v13-appRouter'
 import { SystemColors } from '@helix/core'
@@ -25,7 +25,9 @@ export default function RootLayout({
   console.log(color)
   return (
     <html lang="en">
-      <head></head>
+      <head>
+        <meta name="google-adsense-account" content="ca-pub-9610840170359196" />
+      </head>
       <body>
         <AppRouterCacheProvider options={{ key: 'css' }}>
           <ThemeProvider theme={theme}>
