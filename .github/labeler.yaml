@@ -11,14 +11,19 @@ area/apps:
   - changed-files:
       - any-glob-to-any-file: [apps/**/*]
 
-area/frontend:
+area/ai:
   - changed-files:
-      - any-glob-to-any-file: [apps/frontend/**/*]
+      - any-glob-to-any-file: [apps/ai/**/*]
 
 area/libs:
   - changed-files:
       - any-glob-to-any-file: [libs/**/*]
 
+area/docker:
+  - changed-files:
+      - any-glob-to-any-file: [docker/**/*]
+
+# GitHub Actions
 area/.github:
   - changed-files:
       - any-glob-to-any-file: [.github/**/*]
@@ -27,6 +32,7 @@ area/workflows:
   - changed-files:
       - any-glob-to-any-file: [.github/workflows/**/*]
 
+# Dependencies
 area/package.json:
   - changed-files:
       - any-glob-to-any-file: [package.json, '**/package.json']
@@ -35,21 +41,24 @@ area/requirments.txt:
   - changed-files:
       - any-glob-to-any-file: [requirments.txt, '**/requirments.txt']
 
-area/frontend:
+# Applications
+app/frontend:
   - changed-files:
       - any-glob-to-any-file: [apps/user-interface/frontend/**/*]
 
-area/auth-server:
+app/auth-server:
   - changed-files:
       - any-glob-to-any-file: [apps/api/auth-server/**/*]
 
-area/discord-bot:
+app/discord-bot:
   - changed-files:
       - any-glob-to-any-file: [apps/api/discord-bot/**/*]
 
-area/ai:
+app/helix:
   - changed-files:
-      - any-glob-to-any-file: [apps/ai/**/*]
+      - any-glob-to-any-file: [apps/ai/helix/**/*]
+
+
 
 #
 # Language specific labels
