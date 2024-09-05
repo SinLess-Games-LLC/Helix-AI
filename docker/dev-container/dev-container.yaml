@@ -8,7 +8,15 @@ services:
     volumes:
       - '../../:/workspace'
       - './post-create-setup.sh:/home/node/post-create-setup.sh'
-    command: tail -f /dev/null
+      - nx-daemon-socket:/tmp/nx-daemon
+    environment:
+      NX_DAEMON_SOCKET_PATH: '../../tmp/nx-daemon'
+    command: |
+      npm install -g nx && \
+      nx daemon start && \
+      tail -f /dev/null
     dns:
       - 1.1.1.1
       - 8.8.8.8
+
+

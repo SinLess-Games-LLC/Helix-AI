@@ -16,7 +16,7 @@ export const BackgroundImage: React.FC<BackgroundImageProps> = ({
   return (
     <div
       style={{
-        position: 'static',
+        position: 'fixed',
         minHeight: '100vh',
         minWidth: '100vw',
         ...style,

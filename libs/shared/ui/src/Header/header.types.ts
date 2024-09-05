@@ -13,7 +13,7 @@ export interface HeaderProps {
   logo_url: string
   title: string
   version: string
-  style: React.CSSProperties
+  backgroundColor: string
   pages: Page[]
   settings: Setting[]
   menuOpen: boolean

@@ -58,6 +58,13 @@ secrets:
   zookeeper.p12:
     file: '../.data/certs/certificates/zookeeper/zookeeper.p12'
 
+#
+# Volumes
+#
+volumes:
+  nx-daemon-socket:
+    driver: local
+
 # Ports Used:
 # - Database Layer: 3306 (mapped to 3310)
 # - Logging and Monitoring Layer: 24224 (TCP/UDP), 9090, 3000, 9200, 9300, 5601 (mapped to 8880)

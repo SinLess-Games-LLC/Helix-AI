@@ -4,6 +4,7 @@ import { AppRouterCacheProvider } from '@mui/material-nextjs/v13-appRouter'
 import { SystemColors } from '@helix/core'
 import { ThemeProvider } from '@mui/material/styles'
 import theme from '../theme'
+import { Box } from '@mui/material'
 
 export const metadata = {
   title: 'Helix AI',
@@ -29,13 +30,17 @@ export default function RootLayout({
         <meta name="google-adsense-account" content="ca-pub-9610840170359196" />
       </head>
       <body>
-        <AppRouterCacheProvider options={{ key: 'css' }}>
-          <ThemeProvider theme={theme}>
-            <BackgroundImage {...backgroundImageProps}>
-              {children}
-            </BackgroundImage>
-          </ThemeProvider>
-        </AppRouterCacheProvider>
+        <Box>
+          <AppRouterCacheProvider options={{ key: 'css' }}>
+            <ThemeProvider theme={theme}>
+              <BackgroundImage {...backgroundImageProps}>
+                <br />
+                <br />
+                {children}
+              </BackgroundImage>
+            </ThemeProvider>
+          </AppRouterCacheProvider>
+        </Box>
       </body>
     </html>
   )

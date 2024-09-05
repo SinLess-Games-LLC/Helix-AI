@@ -47,9 +47,7 @@ export default function Index() {
     logo_url: '/images/Favicon-01.png',
     title: 'Helix AI',
     version: version,
-    style: {
-      backgroundColor: 'rgba(246, 6, 111, .5)',
-    },
+    backgroundColor: `rgb(${HelixColors.primary.rgb})`,
     pages: pages,
     settings: settings,
     menuOpen: menuOpen,
@@ -57,7 +55,15 @@ export default function Index() {
   }
 
   return (
-    <Box>
+    <Box
+      sx={{
+        overflow: 'auto',
+        minHeight: '100vh',
+        maxHeight: '50rem',
+        margin: 0,
+        scrollbarWidth: '2rem',
+      }}
+    >
       {/* Header Section */}
       <Header {...headerProps} />
       <br />
@@ -68,13 +74,9 @@ export default function Index() {
           sx={{
             width: '10%',
             minHeight: '100vh',
-            bgcolor: 'gray',
           }}
         >
           {/* Google Ads Placeholder */}
-          <Typography variant="h6" sx={{ textAlign: 'center', mt: 2 }}>
-            Google Ads
-          </Typography>
         </Box>
 
         {/* Middle Column: Main Content (80% width) */}
@@ -113,7 +115,11 @@ export default function Index() {
             >
               Seamless Automation. Powerful Analytics. Effortless Integration.
             </Typography>
-            <Typography variant="h6" className={styles.heroSubtitle}>
+            <Typography
+              variant="h6"
+              className={styles.heroSubtitle}
+              sx={{ fontSize: '2rem' }}
+            >
               Discover the power of Helix AI in managing your apps with
               AI-driven solutions and seamless integrations.
             </Typography>
@@ -121,7 +127,7 @@ export default function Index() {
             <Typography
               variant="body1"
               className={styles.heroText}
-              sx={{ padding: '1rem' }}
+              sx={{ padding: '1rem', fontSize: '1.5rem' }}
             >
               Helix AI is your ultimate all-in-one solution for seamless app
               management, making it easier than ever to handle your digital
@@ -223,13 +229,10 @@ export default function Index() {
           sx={{
             width: '10%',
             minHeight: '100vh',
-            bgcolor: 'gray',
+            display: { xs: 'none, sm: none, md: flex' },
           }}
         >
           {/* Google Ads Placeholder */}
-          <Typography variant="h6" sx={{ textAlign: 'center', mt: 2 }}>
-            Google Ads
-          </Typography>
         </Box>
       </Box>
     </Box>

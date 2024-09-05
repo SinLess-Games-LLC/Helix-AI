@@ -36,7 +36,7 @@ export function Header(props: HeaderProps) {
   }
 
   return (
-    <AppBar position="static">
+    <AppBar position="fixed" sx={{ backgroundColor: props.backgroundColor }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Box sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }}>
