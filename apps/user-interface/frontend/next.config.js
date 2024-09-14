@@ -9,11 +9,17 @@ const { composePlugins, withNx } = require('@nx/next')
  **/
 const nextConfig = {
   output: 'standalone',
+  trailingSlash: true,
   nx: {
     // Set this to true if you would like to use SVGR
     // See: https://github.com/gregberge/svgr
     svgr: false,
   },
+  /**
+   *
+   * Webpack configuration
+   *
+   */
   webpack(config, { isServer }) {
     // Add any custom webpack plugins here
     config.plugins.push(new webpack.HotModuleReplacementPlugin())
@@ -27,6 +33,20 @@ const nextConfig = {
     }
 
     return config
+  },
+  /**
+   *
+   * Internationalization configuration
+   * See: https://nextjs.org/docs/advanced-features/i18n-routing
+   *
+   */
+  i18n: {
+    // These are all the locales you want to support in
+    // your application
+    locales: ['default', 'en-US', 'tl-PH', 'id-ID'],
+    // This is the default locale you want to be used when visiting
+    // a non-locale prefixed path e.g. `/hello`
+    defaultLocale: 'default',
   },
 }
 

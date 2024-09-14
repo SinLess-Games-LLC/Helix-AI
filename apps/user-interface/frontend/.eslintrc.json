@@ -14,7 +14,8 @@
           "error",
           "apps/user-interface/frontend/src/pages"
         ],
-        "@nx/enforce-module-boundaries": "off"
+        "@nx/enforce-module-boundaries": "off",
+        "@typescript-eslint/no-explicit-any": "off"
       }
     },
     {

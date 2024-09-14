@@ -10,7 +10,7 @@ services:
       - './post-create-setup.sh:/home/node/post-create-setup.sh'
       - nx-daemon-socket:/tmp/nx-daemon
     environment:
-      NX_DAEMON_SOCKET_PATH: '../../tmp/nx-daemon'
+      NX_DAEMON_SOCKET_PATH: '/tmp/nx-daemon'
     command: |
       npm install -g nx && \
       nx daemon start && \

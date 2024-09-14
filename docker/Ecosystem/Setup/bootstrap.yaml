@@ -6,13 +6,13 @@ services:
     image: sinless777/helix-bootstrap
     container_name: bootstrap
     hostname: bootstrap
+    privileged: true
     volumes:
-      - '../.data/certs:/certs/'
-      - './config.yaml:/config/config.yaml'
-      - './setup/scripts:/home/docker/config/'
-      - './consul/generated:/consul/generated'
-    command: >
-      /bin/bash -c "ls && /app/security/certs.sh && /app/consul/consul.sh"
+      - certificates_data:/certs/
+      - ./config.yaml:/config/config.yaml
+      - ./scripts:/app/scripts/
+      - consul_generated:/consul/generated
+    command: "/app/scripts/run.sh"
     healthcheck:
       test: ['CMD', 'stat', '/certs/success']
       interval: 30s

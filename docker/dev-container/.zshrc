@@ -1,6 +1,10 @@
 # Path to your oh-my-zsh installation.
 export ZSH=/home/node/.oh-my-zsh
 
+# Go config
+export GOPATH="$HOME/go"
+export PATH="$PATH:/usr/local/go/bin:$GOPATH/bin"
+
 # Set the Zsh theme
 ZSH_THEME="strug"
 

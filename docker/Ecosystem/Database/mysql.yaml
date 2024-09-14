@@ -1,18 +1,24 @@
 services:
-  mysql:
+  helix-mysql:
     image: mysql:latest
-    container_name: mysql
+    container_name: helix-mysql
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: helix
-      MYSQL_USER: helix
-      MYSQL_PASSWORD: helix
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-helix}
+      MYSQL_USER: ${MYSQL_USER:-helix}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-helix}
+    volumes:
+      - helix_mysql_data:/var/lib/mysql
+    restart: unless-stopped
 
   vault-mysql:
     image: mysql:latest
     container_name: vault-mysql
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: vault
-      MYSQL_USER: vault
-      MYSQL_PASSWORD: vault
+      MYSQL_ROOT_PASSWORD: ${VAULT_MYSQL_ROOT_PASSWORD:-root}
+      MYSQL_DATABASE: ${VAULT_MYSQL_DATABASE:-vault}
+      MYSQL_USER: ${VAULT_MYSQL_USER:-vault}
+      MYSQL_PASSWORD: ${VAULT_MYSQL_PASSWORD:-vault}
+    volumes:
+      - vault_mysql_data:/var/lib/mysql
+    restart: unless-stopped

@@ -1,69 +1,89 @@
 name: 'helix-ai'
 
-secrets:
-  ca.crt:
-    file: '../.data/certs/certificate_authority/certificate_authority.crt'
-  elastic.crt:
-    file: '../.data/certs/certificates/elastic/elastic.crt'
-  elastic.key:
-    file: '../.data/certs/certificates/elastic/elastic.key'
-  elastic.p12:
-    file: '../.data/certs/certificates/elastic/elastic.p12'
-  prometheus.crt:
-    file: '../.data/certs/certificates/prometheus/prometheus.crt'
-  prometheus.key:
-    file: '../.data/certs/certificates/prometheus/prometheus.key'
-  prometheus.p12:
-    file: '../.data/certs/certificates/prometheus/prometheus.p12'
-  fluentd.crt:
-    file: '../.data/certs/certificates/fluentd/fluentd.crt'
-  fluentd.key:
-    file: '../.data/certs/certificates/fluentd/fluentd.key'
-  fluentd.p12:
-    file: '../.data/certs/certificates/fluentd/fluentd.p12'
-  grafana.crt:
-    file: '../.data/certs/certificates/grafana/grafana.crt'
-  grafana.key:
-    file: '../.data/certs/certificates/grafana/grafana.key'
-  grafana.p12:
-    file: '../.data/certs/certificates/grafana/grafana.p12'
-  vault.crt:
-    file: '../.data/certs/certificates/vault/vault.crt'
-  vault.key:
-    file: '../.data/certs/certificates/vault/vault.key'
-  vault.p12:
-    file: '../.data/certs/certificates/vault/vault.p12'
-  consul.crt:
-    file: '../.data/certs/certificates/consul/consul.crt'
-  consul.key:
-    file: '../.data/certs/certificates/consul/consul.key'
-  consul.p12:
-    file: '../.data/certs/certificates/consul/consul.p12'
-  kafka.crt:
-    file: '../.data/certs/certificates/kafka/kafka.crt'
-  kafka.key:
-    file: '../.data/certs/certificates/kafka/kafka.key'
-  kafka.p12:
-    file: '../.data/certs/certificates/kafka/kafka.p12'
-  kibana.crt:
-    file: '../.data/certs/certificates/kibana/kibana.crt'
-  kibana.key:
-    file: '../.data/certs/certificates/kibana/kibana.key'
-  kibana.p12:
-    file: '../.data/certs/certificates/kibana/kibana.p12'
-  zookeeper.crt:
-    file: '../.data/certs/certificates/zookeeper/zookeeper.crt'
-  zookeeper.key:
-    file: '../.data/certs/certificates/zookeeper/zookeeper.key'
-  zookeeper.p12:
-    file: '../.data/certs/certificates/zookeeper/zookeeper.p12'
-
 #
 # Volumes
 #
 volumes:
   nx-daemon-socket:
     driver: local
+
+  consul_generated:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ${PWD}/.data/consul/generated
+
+  elastic_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ${PWD}/.data/elastic/data
+
+  certificates_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ${PWD}/.data/certs
+
+  prometheus_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ${PWD}/.data/prometheus
+
+  grafana_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ${PWD}/.data/grafana
+
+  kibana_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ${PWD}/.data/kibana
+
+  vault_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ${PWD}/.data/vault/data
+
+  vault_logs:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ${PWD}/.data/vault/logs
+
+  helix_mysql_data:
+    driver: local
+    # driver_opts:
+    #   type: none
+    #   o: bind
+    #   device: ${PWD}/.data/mysql/data
+
+  vault_mysql_data:
+    driver: local
+    # driver_opts:
+    #   type: none
+    #   o: bind
+    #   device: ${PWD}/.data/vault-mysql/data
+
+  redis_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ${PWD}/.data/redis/data
+
 
 # Ports Used:
 # - Database Layer: 3306 (mapped to 3310)
@@ -113,10 +133,10 @@ services:
   #
   # Database Layer
   #
-  mysql: &mysql # port: 3308
+  helix-mysql: &helix-mysql # port: 3308
     extends:
       file: ./Ecosystem/Database/mysql.yaml
-      service: mysql
+      service: helix-mysql
     ports:
       - '3310:3306'
     healthcheck:
@@ -270,6 +290,13 @@ services:
         condition: service_completed_successfully
       vault-mysql:
         condition: service_healthy
+    environment:
+      AUTH0_CLIENT_ID: ${AUTH0_CLIENT_ID}
+      AUTH0_CLIENT_SECRET: ${AUTH0_CLIENT_SECRET}
+      AUTH0_ISSUER: ${AUTH0_ISSUER}
+      AUTH0_AUTHORIZATION_ENDPOINT: ${AUTH0_AUTHORIZATION_ENDPOINT}
+      AUTH0_JWKSET_PATH: ${AUTH0_JWKSET_PATH}
+
     ports:
       - '8200:8200'
     healthcheck:
@@ -281,6 +308,25 @@ services:
   #
   # Event Bus
   #
+  kafdrop:
+    extends:
+      file: ./Ecosystem/Event-Bus/event-bus.layer.yaml
+      service: kafdrop
+    depends_on:
+      kafka-1:
+        condition: service_healthy
+      kafka-2:
+        condition: service_healthy
+      kafka-3:
+        condition: service_healthy
+    ports:
+      - '9000:9000'
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
   zookeeper:
     extends:
       file: ./Ecosystem/Event-Bus/event-bus.layer.yaml

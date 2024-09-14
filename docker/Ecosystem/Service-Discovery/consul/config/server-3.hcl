@@ -1,4 +1,4 @@
-node_name = "consul-server-1"
+node_name = "consul-server-3"
 
 datacenter = "Helix-DC-1"
 
@@ -25,7 +25,6 @@ connect = {
   enabled = true
 }
 
-
 acl = {
   enabled = true
   default_policy = "deny"
@@ -44,8 +43,8 @@ ui_config = {
 
 auto_config ={
   server_addresses = [
-    "consul-server-2",
-    "consul-server-3"
+    "consul-server-1",
+    "consul-server-2"
   ]
   authorization = {
     enabled = false
@@ -64,9 +63,22 @@ auto_config ={
 }
 
 retry_join = [
-  "consul-server-2",
-  "consul-server-3"
+  "consul-server-1",
+  "consul-server-2"
 ]
+
+tls = {
+  defaults = {
+    ca_file = "/consul/config/certs/data/certificate_authority/certificate_authorities.crt"
+    cert_file = "/consul/config/certs/data/certificates/consul/consul.crt"
+    key_file = "/consul/config/certs/data/certificates/consul/consul.key"
+    verify_incoming = true
+    verify_outgoing = true
+  }
+  internal_rpc = {
+    verify_server_hostname = true
+  }
+}
 
 # By default this is set to false and will run as a client
 # This is required to run as a server
@@ -83,3 +95,6 @@ enable_script_checks = true
 # Encrypt
 # This must be 32-bytes that are base64-encoded
 encrypt = "2dnBVvoxDe6ZwEo2KtHs3E+aRMaNguoFO31kXvCRxvQ="
+
+# Include extra configuration files
+include_config_dir = "/consul/config.d"

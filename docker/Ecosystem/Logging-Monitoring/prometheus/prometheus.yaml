@@ -20,50 +20,73 @@ scrape_configs:
     static_configs:
       - targets: ['localhost:9090']
 
-  # Scrape Node Exporter (if you use it)
-  - job_name: 'node_exporter'
-    static_configs:
-      - targets: ['node-exporter:9100']
-
-  # Scrape Consul servers
-  - job_name: 'consul'
-    metrics_path: '/v1/agent/metrics'
-    scheme: 'http'
-    static_configs:
-      - targets:
-          - 'consul-server-1:8500'
-          - 'consul-server-2:8500'
-          - 'consul-server-3:8500'
-
-  # Scrape Redis
-  - job_name: 'redis'
-    metrics_path: '/metrics'
-    static_configs:
-      - targets: ['redis:6379']
-
   # Scrape Fluentd
   - job_name: 'fluentd'
-    metrics_path: '/api/plugins/prometheus'
     static_configs:
-      - targets: ['fluentd:25224']
+      - targets: ['fluentd:24224']
 
-  # Scrape Kafka Brokers
-  - job_name: 'kafka'
-    metrics_path: '/metrics'
+  # Scrape Grafana (if exposing metrics)
+  - job_name: 'grafana'
     static_configs:
-      - targets:
-          - 'kafka-1:9092'
-          - 'kafka-2:9093'
-          - 'kafka-3:9094'
+      - targets: ['grafana:3000']
 
   # Scrape Elasticsearch
   - job_name: 'elasticsearch'
-    metrics_path: '/_prometheus/metrics'
+    metrics_path: "/_nodes/stats"
     static_configs:
       - targets: ['elastic:9200']
+    scheme: https
 
-  # Scrape Grafana
-  - job_name: 'grafana'
-    metrics_path: '/metrics'
+  # Scrape Kibana (if exposing metrics)
+  - job_name: 'kibana'
     static_configs:
-      - targets: ['grafana:3000']
+      - targets: ['kibana:5601']
+
+  # Scrape MySQL
+  - job_name: 'mysql'
+    static_configs:
+      - targets: ['mysql:9104', 'vault-mysql:3311'] # MySQL Exporter is typically used at port 9104
+
+  # Scrape Redis
+  - job_name: 'redis'
+    static_configs:
+      - targets: ['redis:9121'] # Redis Exporter is typically used at port 9121
+
+  # Scrape Consul
+  - job_name: 'consul'
+    static_configs:
+      - targets: ['consul-server-1:8500', 'consul-server-2:8500', 'consul-server-3:8500']
+    metrics_path: '/v1/agent/metrics'
+
+  # Scrape Vault
+  - job_name: 'vault'
+    static_configs:
+      - targets: ['vault-server:8200']
+    metrics_path: '/v1/sys/metrics'
+
+  # Scrape Zookeeper
+  - job_name: 'zookeeper'
+    static_configs:
+      - targets: ['zookeeper:2181']
+    metrics_path: '/metrics' # If exposing metrics through Prometheus exporter
+
+  # Scrape Kafka
+  - job_name: 'kafka'
+    static_configs:
+      - targets: ['kafka-1:9092', 'kafka-2:9093', 'kafka-3:9094']
+    metrics_path: '/metrics' # If exposing metrics through Prometheus exporter
+
+  # Scrape LavLink (if exposing metrics)
+  - job_name: 'lavalink'
+    static_configs:
+      - targets: ['lavalink:2333']
+    metrics_path: '/metrics' # Adjust if different
+
+  # Scrape Nginx (if exposing metrics)
+  - job_name: 'nginx'
+    static_configs:
+      - targets: ['nginx-lb:2343']
+    metrics_path: '/metrics' # Adjust if different
+
+# Add more scrape_configs here if needed for other services
+

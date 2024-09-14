@@ -1,5 +1,4 @@
-# GENERAL SETTINS
-
+# GENERAL SETTINGS
 cluster.name: 'HelixAI'
 node.name: 'helix-elasticsearch'
 node.attr.zone: 'zone1'
@@ -8,11 +7,69 @@ node.data: true
 node.master: true
 
 network.host: 0.0.0.0
-discovery.zen.minimum_master_nodes: 1
-
 http.port: 9200
-transport.tcp.port: 9300
+transport.port: 9300
 
 bootstrap.memory_lock: true
 
+# Discovery settings for cluster formation
+discovery.zen.minimum_master_nodes: 1
+discovery.type: single-node
+
+# Enable memory locking to prevent swapping
+bootstrap.memory_lock: true
+
+# Script settings (allow inline scripting)
 script.allowed_types: inline
+
+# Security settings
+xpack.security.enabled: true
+xpack.security.transport.ssl.enabled: true
+xpack.security.http.ssl.enabled: true
+xpack.security.audit.enabled: true
+
+# OIDC Authentication with Auth0
+xpack.security.authc:
+  providers:
+    native.basic:
+      order: 0
+      realm: native1
+    oidc.oidc1:
+      order: 1
+      realm: oidc1
+  realms:
+    native:
+      native1:
+        order: 0
+    oidc:
+      oidc1:
+        order: 1
+        rp.client_id: "${AUTH0_CLIENT_ID}" # Environment variable for client ID
+        rp.client_secret: "${AUTH0_CLIENT_SECRET}" # Environment variable for client secret
+        rp.requested_scopes: [ "openid", "profile", "email" ]
+        rp.redirect_uri: "https://localhost:9200/_security/oidc/callback"
+        op.issuer: "${AUTH0_ISSUER}" # Environment variable for Auth0 issuer (domain)
+        op.authorization_endpoint: "${AUTH0_AUTHORIZATION_ENDPOINT}" # Environment variable for Auth0 authorization endpoint
+        op.token_endpoint: "${AUTH0_TOKEN_ENDPOINT}" # Environment variable for Auth0 token endpoint
+        op.jwkset_path: "${AUTH0_JWKSET_PATH}" # Environment variable for Auth0 JWKS endpoint
+        claims.principal: sub
+        claims.groups: roles
+        rp.post_logout_redirect_uri: "https://localhost:9200/"
+
+# Enable TLS/SSL for secure communication
+xpack.security.http.ssl:
+  enabled: true
+  keystore.path: /usr/share/elasticsearch/config/certs/data/keystores/elastic/elastic.p12
+  truststore.path: /usr/share/elasticsearch/config/certs/data/keystores/elastic/elastic.p12
+  certificate_authorities: '/usr/share/elastic/certs/data/certificate_authority/certificate_authority.crt'
+
+# Built-in users (optional, for native users)
+xpack.security.authc.reserved_users:
+  elastic:
+    password: "$2a$10$PjxKG8vzSFMKIAOCRnY39uTdfqP/ZyODMXVn42p1/IgmEDhOa44d6"  # Password hash (use the elasticsearch tool to generate this)
+  fluentd:
+    password: "$2a$10$PjxKG8vzSFMKIAOCRnY39uTdfqP/ZyODMXVn42p1/IgmEDhOa44d6"
+  kibana:
+    password: "$2a$10$PjxKG8vzSFMKIAOCRnY39uTdfqP/ZyODMXVn42p1/IgmEDhOa44d6"
+  sinless777:
+    password: "$2a$10$PjxKG8vzSFMKIAOCRnY39uTdfqP/ZyODMXVn42p1/IgmEDhOa44d6"

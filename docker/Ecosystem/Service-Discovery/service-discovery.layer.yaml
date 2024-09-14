@@ -1,27 +1,33 @@
 services:
   consul-server-1: &consul-server-1
-    image: hashicorp/consul:1.17.1
+    image: hashicorp/consul:1.19.2
     container_name: consul-server-1
     hostname: consul-server-1
     restart: always
     volumes:
-      - ./consul/config/server-1:/consul/config
+      - ./consul/config/server-1.hcl:/consul/config/server.hcl
+      - ./consul/config.d:/consul/config/config.d
+      - certificates_data:/consul/config/certs/data
     command: 'agent -bootstrap-expect=3'
 
   consul-server-2: &consul-server-2
-    image: hashicorp/consul:1.17.1
+    image: hashicorp/consul:1.19.2
     container_name: consul-server-2
     hostname: consul-server-2
     restart: always
     volumes:
-      - ./consul/config/server-2:/consul/config
+      - ./consul/config/server-2.hcl:/consul/config/server.hcl
+      - ./consul/config.d:/consul/config/config.d
+      - certificates_data:/consul/config/certs/data
     command: 'agent -bootstrap-expect=3'
 
   consul-server-3: &consul-server-3
-    image: hashicorp/consul:1.17.1
+    image: hashicorp/consul:1.19.2
     container_name: consul-server-3
     hostname: consul-server-3
     restart: always
     volumes:
-      - ./consul/config/server-3:/consul/config
+      - ./consul/config/server-3.hcl:/consul/config/server.hcl
+      - ./consul/config.d:/consul/config/config.d
+      - certificates_data:/consul/config/certs/data
     command: 'agent -bootstrap-expect=3'

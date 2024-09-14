@@ -3,4 +3,12 @@ services:
     image: devopsfaith/krakend
     container_name: krakend
     volumes:
-      - ./krakend:/etc/krakend
+      - ./krakend/krakend.yaml:/etc/krakend/krakend.yaml
+    environment:
+      FLUENTD_HOST: fluentd
+      FLUENTD_PORT: 25224
+    command: >
+      krakend run -c /etc/krakend/krakend.yaml
+      --log-fluentd
+      --log-fluentd-host=${FLUENTD_HOST}
+      --log-fluentd-port=${FLUENTD_PORT}

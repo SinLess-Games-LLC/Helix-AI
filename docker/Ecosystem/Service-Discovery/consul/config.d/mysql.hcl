@@ -4,6 +4,7 @@ service =  {
   address = "mysql"
   port = 3306
   tags = ["primary", "data", "mysql"]
+
   check = {
     id = "mysql-check"
     name = "check Mysql port"
@@ -11,5 +12,6 @@ service =  {
     interval = "10s"
     service_id = "mysql"
   }
+
   token = "root"
 }

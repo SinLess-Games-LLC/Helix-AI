@@ -7,6 +7,7 @@ services:
       context: ./fluentd
     image: sinless777/helix-fluentd
     container_name: fluentd
+    hostname: fluentd
 
   #
   # Monitoring
@@ -17,6 +18,7 @@ services:
     container_name: prometheus
     volumes:
       - ./prometheus/prometheus.yaml:/etc/prometheus/prometheus.yaml
+      - prometheus_data:/prometheus/data
     command:
       - '--config.file=/etc/prometheus/prometheus.yaml'
 
@@ -29,9 +31,7 @@ services:
       - GF_SECURITY_ADMIN_PASSWORD=admin
       - GF_USERS_ALLOW_SIGN_UP=false
     volumes:
-      - '../../../.data/grafana:/var/lib/grafana'
-    depends_on:
-      - prometheus
+      - grafana_data:/var/lib/grafana
 
   #
   # Log Analysis
@@ -41,12 +41,13 @@ services:
     hostname: elastic
     container_name: elastic
     environment:
-      - discovery.type=single-node
-      - 'ES_JAVA_OPTS=-Xms512m -Xmx512m'
-      - ELASTIC_PASSWORD=admin
-      - xpack.security.enabled=true
-      - path.data=/usr/share/elasticsearch/data
-      - bootstrap.memory_lock=true
+      ES_JAVA_OPTS: '-Xms512m -Xmx512m'
+      AUT0_CLIENT_ID: ${AUTH0_CLIENT_ID}
+      AUT0_CLIENT_SECRET: ${AUTH0_CLIENT_SECRET}
+      AUT0_ISSUER: ${AUTH0_ISSUER}
+      AUT0_AUTHORIZATION_ENDPOINT: ${AUTH0_AUTHORIZATION_ENDPOINT}
+      AUTH0_TOKEN_ENDPOINT: ${AUTH0_TOKEN_ENDPOINT}
+      AUTH0_JWKSET_PATH: ${AUTH0_JWKSET_PATH}
     ulimits:
       memlock:
         soft: -1
@@ -54,11 +55,20 @@ services:
     mem_limit: 1g
     volumes:
       - ./elastic/config.yaml:/usr/share/elasticsearch/config/elasticsearch.yaml
+      - certificates_data:/usr/share/elasticsearch/config/certs/data
 
   kibana:
     image: docker.elastic.co/kibana/kibana:8.14.0
     container_name: kibana
     environment:
-      - ELASTICSEARCH_HOSTS=http://elastic:9200
-    depends_on:
-      - elastic
+      ELASTICSEARCH_HOSTS: https://elastic:9200
+      ELASTICSEARCH_USERNAME: kibana
+      ELASTICSEARCH_PASSWORD: admin
+      AUTH0_CLIENT_ID: ${AUTH0_CLIENT_ID}
+      AUTH0_CLIENT_SECRET: ${AUTH0_CLIENT_SECRET}
+      AUTH0_ISSUER: ${AUTH0_ISSUER}
+      AUTH0_AUTHORIZATION_ENDPOINT: ${AUTH0_AUTHORIZATION_ENDPOINT}
+    volumes:
+      - ./kibana/config.yaml:/usr/share/kibana/config/kibana.yaml
+      - kibana_data:/usr/share/kibana/data
+      - certificates_data:/usr/share/kibana/config/certs/data

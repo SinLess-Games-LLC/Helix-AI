@@ -1,4 +1,4 @@
-node_name = "consul-server-2"
+node_name = "consul-server-1"
 
 datacenter = "Helix-DC-1"
 
@@ -17,13 +17,11 @@ bind_addr = "0.0.0.0" # listen on all interfaces IPv4
 # use this instead of placing the Ip address of the server in the config
 advertise_addr = "{{ GetInterfaceIP `eth0` }}" # advertise address for client connections
 
-# This is the consul data directory and is required for consul to run
-data_dir = "/consul/data"
-
 # service Mesh
 connect = {
   enabled = true
 }
+
 
 acl = {
   enabled = true
@@ -43,7 +41,7 @@ ui_config = {
 
 auto_config ={
   server_addresses = [
-    "consul-server-1",
+    "consul-server-2",
     "consul-server-3"
   ]
   authorization = {
@@ -63,9 +61,22 @@ auto_config ={
 }
 
 retry_join = [
-  "consul-server-1",
+  "consul-server-2",
   "consul-server-3"
 ]
+
+tls = {
+  defaults = {
+    ca_file = "/consul/config/certs/data/certificate_authority/certificate_authorities.crt"
+    cert_file = "/consul/config/certs/data/certificates/consul/consul.crt"
+    key_file = "/consul/config/certs/data/certificates/consul/consul.key"
+    verify_incoming = true
+    verify_outgoing = true
+  }
+  internal_rpc = {
+    verify_server_hostname = true
+  }
+}
 
 # By default this is set to false and will run as a client
 # This is required to run as a server
@@ -82,3 +93,7 @@ enable_script_checks = true
 # Encrypt
 # This must be 32-bytes that are base64-encoded
 encrypt = "2dnBVvoxDe6ZwEo2KtHs3E+aRMaNguoFO31kXvCRxvQ="
+
+
+# Include extra configuration files
+include_config_dir = "/consul/config.d"
