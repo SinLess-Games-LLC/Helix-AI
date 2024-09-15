@@ -1,11 +1,24 @@
 services:
+  init-kafka-topics: &init-kafka-topics
+    image: bitnami/kafka:3.5
+    entrypoint:
+      - bash
+      - -c
+      - |
+        echo "Waiting for Kafka to be ready..."
+        until /opt/bitnami/kafka/bin/kafka-topics.sh --list --bootstrap-server kafka-0:9092 --command-config /etc/kafka/config.properties; do sleep 5; done;
+        echo "Kafka is ready now, start creating topics."
+        echo "Seed kafka topic finished."
+    volumes:
+      - ./infra/kafka/config.properties:/etc/kafka/config.properties
+
   kafdrop:
     image: obsidiandynamics/kafdrop
     container_name: kafdrop
     environment:
       KAFKA_BROKER_CONNECT: kafka-1:9092,kafka-2:9093,kafka-3:9094
-      KAFKA_PROPERTIES_SSL_TRUSTSTORE_LOCATION: /etc/kafka/secrets/data/keystores/kafka/kafka.p12
-      KAFKA_PROPERTIES_SSL_KEYSTORE_LOCATION: /etc/kafka/secrets/data/keystores/kafka/kafka.p12
+      # KAFKA_PROPERTIES_SSL_TRUSTSTORE_LOCATION: /etc/kafka/secrets/data/keystores/kafka/kafka.p12
+      # KAFKA_PROPERTIES_SSL_KEYSTORE_LOCATION: /etc/kafka/secrets/data/keystores/kafka/kafka.p12
 
   zookeeper:
     image: confluentinc/cp-zookeeper:7.7.0
@@ -19,61 +32,91 @@ services:
       ZOOKEEPER_TICK_TIME: 2000
 
   kafka-1:
-    image: confluentinc/cp-kafka:7.7.0
+    image: bitnami/kafka:3.5
     container_name: kafka-1
     ports:
       - '9092:9092'
     volumes:
       - certificates_data:/etc/kafka/secrets
     environment:
-      KAFKA_BROKER_ID: 1
+      # KRaft settings
+      KAFKA_CFG_NODE_ID: 1
+      KAFKA_CFG_PROCESS_ROLES: controller,broker
+      KAFKA_CFG_CONTROLLER_QUORUM_VOTERS: 1@kafka-1:9093,2@kafka-2:9093,3@kafka-3:9093
+      KAFKA_KRAFT_CLUSTER_ID: helix-event-bus
+      # Listeners
+      KAFKA_CFG_LISTENERS: PLAINTEXT://:9092,PLAINTEXT_HOST://:29092,CONTROLLER://:9093
+      KAFKA_CFG_ADVERTISED_LISTENERS: PLAINTEXT://kafka-1:9092,PLAINTEXT_HOST://localhost:29092
+      KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:SASL_PLAINTEXT,PLAINTEXT_HOST:SASL_PLAINTEXT,CONTROLLER:SASL_PLAINTEXT
+      KAFKA_CLIENT_USERS: kafka
+      KAFKA_CLIENT_PASSWORDS: bitnami
+      KAFKA_CFG_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_CFG_SASL_MECHANISM_CONTROLLER_PROTOCOL: PLAIN
+      KAFKA_CONTROLLER_USER: kafka
+      KAFKA_CONTROLLER_PASSWORD: bitnami
+      KAFKA_CFG_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_CFG_SASL_MECHANISM_INTER_BROKER_PROTOCOL: PLAIN
+      KAFKA_INTER_BROKER_USER: kafka
+      KAFKA_INTER_BROKER_PASSWORD: bitnami
+      KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE: 'true'
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:32181
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:SSL,EXTERNAL:SSL
-      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
-      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka-1:29092,EXTERNAL://localhost:9092
-      KAFKA_SSL_KEYSTORE_LOCATION: /etc/kafka/secrets/data/keystores/kafka/kafka.p12
-      KAFKA_SSL_KEYSTORE_TYPE: PKCS12
-      KAFKA_SSL_TRUSTSTORE_LOCATION: /etc/kafka/secrets/data/keystores/kafka/kafka.p12
-      KAFKA_SSL_TRUSTSTORE_TYPE: PKCS12
-      KAFKA_DEFAULT_REPLICATION_FACTOR: 3
-      KAFKA_NUM_PARTITIONS: 3
 
   kafka-2:
-    image: confluentinc/cp-kafka:7.7.0
+    image: bitnami/kafka:3.5
     container_name: kafka-2
     ports:
       - '9093:9093'
     volumes:
       - certificates_data:/etc/kafka/secrets/data
     environment:
-      KAFKA_BROKER_ID: 2
+      # KRaft settings
+      KAFKA_CFG_NODE_ID: 1
+      KAFKA_CFG_PROCESS_ROLES: controller,broker
+      KAFKA_CFG_CONTROLLER_QUORUM_VOTERS: 1@kafka-1:9093,2@kafka-2:9093,3@kafka-3:9093
+      KAFKA_KRAFT_CLUSTER_ID: helix-event-bus
+      # Listeners
+      KAFKA_CFG_LISTENERS: PLAINTEXT://:9092,PLAINTEXT_HOST://:29092,CONTROLLER://:9093
+      KAFKA_CFG_ADVERTISED_LISTENERS: PLAINTEXT://kafka-1:9092,PLAINTEXT_HOST://localhost:29092
+      KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:SASL_PLAINTEXT,PLAINTEXT_HOST:SASL_PLAINTEXT,CONTROLLER:SASL_PLAINTEXT
+      KAFKA_CLIENT_USERS: kafka
+      KAFKA_CLIENT_PASSWORDS: bitnami
+      KAFKA_CFG_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_CFG_SASL_MECHANISM_CONTROLLER_PROTOCOL: PLAIN
+      KAFKA_CONTROLLER_USER: kafka
+      KAFKA_CONTROLLER_PASSWORD: bitnami
+      KAFKA_CFG_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_CFG_SASL_MECHANISM_INTER_BROKER_PROTOCOL: PLAIN
+      KAFKA_INTER_BROKER_USER: kafka
+      KAFKA_INTER_BROKER_PASSWORD: bitnami
+      KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE: 'true'
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:32181
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:SSL,EXTERNAL:SSL
-      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
-      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka-2:29093,EXTERNAL://localhost:9093
-      KAFKA_SSL_KEYSTORE_LOCATION: /etc/kafka/secrets/data/keystores/kafka/kafka.p12
-      KAFKA_SSL_KEYSTORE_TYPE: PKCS12
-      KAFKA_SSL_TRUSTSTORE_LOCATION: /etc/kafka/secrets/data/keystores/kafka/kafka.p12
-      KAFKA_SSL_TRUSTSTORE_TYPE: PKCS12
-      KAFKA_DEFAULT_REPLICATION_FACTOR: 3
-      KAFKA_NUM_PARTITIONS: 3
 
   kafka-3:
-    image: confluentinc/cp-kafka:7.7.0
+    image: bitnami/kafka:3.5
     container_name: kafka-3
     ports:
       - '9094:9094'
     volumes:
       - certificates_data:/etc/kafka/secrets/data
     environment:
-      KAFKA_BROKER_ID: 3
+      # KRaft settings
+      KAFKA_CFG_NODE_ID: 1
+      KAFKA_CFG_PROCESS_ROLES: controller,broker
+      KAFKA_CFG_CONTROLLER_QUORUM_VOTERS: 1@kafka-1:9093,2@kafka-2:9093,3@kafka-3:9093
+      KAFKA_KRAFT_CLUSTER_ID: helix-event-bus
+      # Listeners
+      KAFKA_CFG_LISTENERS: PLAINTEXT://:9092,PLAINTEXT_HOST://:29092,CONTROLLER://:9093
+      KAFKA_CFG_ADVERTISED_LISTENERS: PLAINTEXT://kafka-1:9092,PLAINTEXT_HOST://localhost:29092
+      KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:SASL_PLAINTEXT,PLAINTEXT_HOST:SASL_PLAINTEXT,CONTROLLER:SASL_PLAINTEXT
+      KAFKA_CLIENT_USERS: kafka
+      KAFKA_CLIENT_PASSWORDS: bitnami
+      KAFKA_CFG_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_CFG_SASL_MECHANISM_CONTROLLER_PROTOCOL: PLAIN
+      KAFKA_CONTROLLER_USER: kafka
+      KAFKA_CONTROLLER_PASSWORD: bitnami
+      KAFKA_CFG_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_CFG_SASL_MECHANISM_INTER_BROKER_PROTOCOL: PLAIN
+      KAFKA_INTER_BROKER_USER: kafka
+      KAFKA_INTER_BROKER_PASSWORD: bitnami
+      KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE: 'true'
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:32181
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:SSL,EXTERNAL:SSL
-      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
-      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka-3:29094,EXTERNAL://localhost:9094
-      KAFKA_SSL_KEYSTORE_LOCATION: /etc/kafka/secrets/data/keystores/kafka/kafka.p12
-      KAFKA_SSL_KEYSTORE_TYPE: PKCS12
-      KAFKA_SSL_TRUSTSTORE_LOCATION: /etc/kafka/secrets/data/keystores/kafka/kafka.p12
-      KAFKA_SSL_TRUSTSTORE_TYPE: PKCS12
-      KAFKA_DEFAULT_REPLICATION_FACTOR: 3
-      KAFKA_NUM_PARTITIONS: 3

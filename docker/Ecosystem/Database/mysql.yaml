@@ -2,6 +2,7 @@ services:
   helix-mysql:
     image: mysql:latest
     container_name: helix-mysql
+    hostname: helix-mysql
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root}
       MYSQL_DATABASE: ${MYSQL_DATABASE:-helix}
@@ -14,6 +15,7 @@ services:
   vault-mysql:
     image: mysql:latest
     container_name: vault-mysql
+    hostname: vault-mysql
     environment:
       MYSQL_ROOT_PASSWORD: ${VAULT_MYSQL_ROOT_PASSWORD:-root}
       MYSQL_DATABASE: ${VAULT_MYSQL_DATABASE:-vault}

@@ -4,10 +4,9 @@ service_registration "consul" {
   service_address = "vault-server"
   token = "root"
 
-
-    ca_file = "/vault/config/certs/data/certificate_authority/certificate_authorities.crt"
-    cert_file = "/vault/config/certs/data/certificates/consul/consul.crt"
-    key_file = "/vault/config/certs/data/certificates/consul/consul.key"
+  ca_file = "${VAULT_CONSUL_CA_FILE}"
+  cert_file = "${VAULT_CONSUL_CERT_FILE}"
+  key_file = "${VAULT_CONSUL_KEY_FILE}"
 }
 
 consul = {
@@ -20,35 +19,35 @@ storage "mysql" {
   username = "vault"
   password = "vault"
   table = "helix_vault"
+  plaintext_connection_allowed = true
 }
+
 
 listener "tcp" {
   address       = "0.0.0.0:8200"
   tls_disable   = 0
-  tls_cert_file = "/vault/config/certs/data/certificates/vault/vault.pem"
-  tls_key_file  = "/vault/config/certs/data/certificates/vault/vault.key"
+  tls_cert_file = "${VAULT_TLS_CERT_FILE}"
+  tls_key_file  = "${VAULT_TLS_KEY_FILE}"
 }
 
-# Set log driver to fluentd
-log_drivers = ["fluentd", "syslog"]
-
-# Use syslog for Fluentd
+# Log configuration
 log_level = "info"
 log_format = "json"
 
-# audit configuration
+# Send logs to syslog, which Fluentd will capture
+syslog_facility = "local0"
+syslog_address = "fluentd:514"
+
+# Audit configuration
 audit_device {
   type = "file"
   path = "/var/log/vault/server.log"
 }
 
-# Server log configuration
-log_file = "/var/log/vault/server.log"
-
 telemetry {
-  prometheus_retention_time = "24h" # Duration to retain metrics
+  prometheus_retention_time = "24h"
   disable_hostname = true
 }
 
 # Auth0 (OIDC) Configuration (additional configuration file required)
-include_config_file = "/vault/config/oidc-auth.hcl"
+include_config_file = "./oidc-auth.hcl"
