@@ -1,0 +1,6 @@
+notifiers:
+  - name: Alertmanager
+    type: alertmanager
+    uid: alertmanager
+    url: http://alertmanager:9093
+    isDefault: true

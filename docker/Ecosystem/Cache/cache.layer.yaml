@@ -2,6 +2,12 @@ services:
   redis:
     image: redis/redis-stack-server:7.4.0-v0
     container_name: redis
+    hostname: redis
+    deploy:
+      resources:
+        limits:
+          memory: 500m
+          cpus: "0.5"
     environment:
       REDIS_PASSWORD: ${REDIS_PASSWORD:-your_secure_password}
     command: [
@@ -15,3 +21,17 @@ services:
     ]
     volumes:
       - redis_data:/data
+
+  redis-exporter:
+    image: oliver006/redis_exporter:v1.0.3
+    container_name: redis-exporter
+    hostname: redis-exporter
+    command:
+      - '--redis.addr=redis://redis:6379'
+      - '--redis.password=${REDIS_PASSWORD}'
+
+  redisinsight:
+    image: redis/redisinsight:latest
+    container_name: redisinsight
+    environment:
+      REDISINSIGHT_REDIS_URI: redis://redis:6379

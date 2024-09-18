@@ -12,63 +12,37 @@ services:
   #
   # Monitoring
   #
-  prometheus:
-    image: prom/prometheus
-    hostname: prometheus
-    container_name: prometheus
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:latest
+    container_name: cadvisor
+    restart: always
     volumes:
-      - ./prometheus/prometheus.yaml:/etc/prometheus/prometheus.yaml
-      - prometheus_data:/prometheus/data
-    command:
-      - '--config.file=/etc/prometheus/prometheus.yaml'
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker:/var/lib/docker:ro
+      - /var/run/docker.sock:/var/run/docker.sock:rw
+    devices:
+      - /dev/kmsg:/dev/kmsg
+
+  alertmanager:
+    extends:
+      file: ./grafana-stack/grafana.layer.yaml
+      service: alertmanager
+
+  discord-alerts:
+    extends:
+      file: ./grafana-stack/grafana.layer.yaml
+      service: discord-alerts
+
+  prometheus:
+    extends:
+      file: ./grafana-stack/grafana.layer.yaml
+      service: prometheus
 
   grafana:
-    image: grafana/grafana
-    container_name: grafana
-    ports:
-      - '3000:3000'
-    environment:
-      - GF_SECURITY_ADMIN_PASSWORD=admin
-      - GF_USERS_ALLOW_SIGN_UP=false
-    volumes:
-      - grafana_data:/var/lib/grafana
-
-  #
-  # Log Analysis
-  #
-  elastic:
-    image: docker.elastic.co/elasticsearch/elasticsearch:8.14.0
-    hostname: elastic
-    container_name: elastic
-    environment:
-      ES_JAVA_OPTS: '-Xms512m -Xmx512m'
-      AUT0_CLIENT_ID: ${AUTH0_CLIENT_ID}
-      AUT0_CLIENT_SECRET: ${AUTH0_CLIENT_SECRET}
-      AUT0_ISSUER: ${AUTH0_ISSUER}
-      AUT0_AUTHORIZATION_ENDPOINT: ${AUTH0_AUTHORIZATION_ENDPOINT}
-      AUTH0_TOKEN_ENDPOINT: ${AUTH0_TOKEN_ENDPOINT}
-      AUTH0_JWKSET_PATH: ${AUTH0_JWKSET_PATH}
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
-    mem_limit: 1g
-    volumes:
-      - ./elastic/config.yaml:/usr/share/elasticsearch/config/elasticsearch.yaml
-      - certificates_data:/usr/share/elasticsearch/config/certs/data
-
-  kibana:
-    image: docker.elastic.co/kibana/kibana:8.14.0
-    container_name: kibana
-    environment:
-      ELASTICSEARCH_HOSTS: https://elastic:9200
-      ELASTICSEARCH_USERNAME: kibana
-      ELASTICSEARCH_PASSWORD: admin
-      AUTH0_CLIENT_ID: ${AUTH0_CLIENT_ID}
-      AUTH0_CLIENT_SECRET: ${AUTH0_CLIENT_SECRET}
-      AUTH0_ISSUER: ${AUTH0_ISSUER}
-      AUTH0_AUTHORIZATION_ENDPOINT: ${AUTH0_AUTHORIZATION_ENDPOINT}
-    volumes:
-      - ./kibana/config.yaml:/usr/share/kibana/config/kibana.yaml
-      - kibana_data:/usr/share/kibana/data
-      - certificates_data:/usr/share/kibana/config/certs/data
+    extends:
+      file: ./grafana-stack/grafana.layer.yaml
+      service: grafana

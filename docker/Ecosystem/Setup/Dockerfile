@@ -10,6 +10,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     wget consul curl git make sudo openssl zip m4 autoconf automake jq bash dnsutils dos2unix && \
     rm -rf /var/lib/apt/lists/* && \
     pip install --upgrade pip yq shyaml && \
+    apt-get update && apt-get install -y --no-install-recommends openjdk-11-jre-headless && \
     apt-get clean
 
 ############################################################################################################
@@ -22,6 +23,7 @@ FROM base AS builder
 WORKDIR /app
 
 # Copy source code and scripts
+COPY ./scripts/kafka /app/kafka
 COPY ./scripts/consul /app/consul
 COPY ./scripts/security /app/security
 COPY ./scripts/vault /app/vault

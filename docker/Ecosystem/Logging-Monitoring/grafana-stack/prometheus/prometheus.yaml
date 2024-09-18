@@ -1,0 +1,47 @@
+global:
+  scrape_interval: 20s # How often to scrape targets by default
+  evaluation_interval: 15s # How often to evaluate rules by default
+  scrape_timeout: 1s # Timeout for scraping targets
+
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+            - alertmanager:9093
+
+rule_files:
+  - /etc/prometheus/rules/*.yaml
+
+scrape_configs:
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+
+  - job_name: 'redis-exporter'
+    scrape_timeout: 10s
+    static_configs:
+      - targets: ['redis-exporter:9121']
+        labels:
+          service: 'redis-exporter'
+
+  - job_name: 'helix-mysql'
+    static_configs:
+      - targets: [helix-mysql-exporter:9104]
+
+  - job_name: 'vault-mysql'
+    static_configs:
+      - targets: ['vault-mysql-exporter:9104']
+
+  - job_name: 'grafana'
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['grafana:3000']
+
+  - job_name: 'cadvisor'
+    static_configs:
+      - targets: ['cadvisor:8080']
+
+  - job_name: 'alertmanager'
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['alertmanager:9093']

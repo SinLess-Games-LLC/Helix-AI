@@ -32,7 +32,17 @@ runtime() {
   bash /app/consul/consul.sh
 
   printf "==================== Completed consul.sh =====================\n\n"
+  printf "===========================================================\n\n"
+
+  # Run the kafka.sh script
   printf "===========================================================\n"
+  printf "==================== Running kafka.sh =====================\n\n"
+
+  bash /app/kafka/kafka-certs.sh
+
+  printf "==================== Completed kafka.sh =====================\n\n"
+  printf "===========================================================\n\n"
+
 }
 
 runtime

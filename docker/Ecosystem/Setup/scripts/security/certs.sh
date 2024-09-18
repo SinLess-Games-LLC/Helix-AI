@@ -21,12 +21,33 @@ KEY_STORES_DIR=$OUTPUT_DIR/keystores
 CERT_DIR=$OUTPUT_DIR/certificates
 
 # File names
-CA_P12=$CA_DIR/certificate_authority.p12
+CA_P12=$CA_DIR/ca.p12
 CA_ZIP=$CA_DIR/certificate_authority.zip
-CA_CERT=$CA_DIR/certificate_authority.crt
-CA_KEY=$CA_DIR/certificate_authority.key
+CA_CERT=$CA_DIR/ca.crt
+CA_KEY=$CA_DIR/ca.key
 
 CONFIG=$CONFIG_DIR/config.yaml
+
+# Check if java is installed and if not install it
+check_install_java_keytool() {
+  if ! command -v "keytool" &>/dev/null; then
+    echo "Java not found. Installing Java..."
+    # Update package lists
+    sudo apt-get update -y
+
+    # Attempt to install OpenJDK 11, fallback to OpenJDK 8 if not available
+    if ! sudo apt-get install -y openjdk-11-jre-headless; then
+      echo "OpenJDK 11 not found, trying OpenJDK 8..."
+      if ! sudo apt-get install -y openjdk-8-jre-headless; then
+        echo "Error: Failed to install Java. Exiting."
+        exit 1
+      fi
+    fi
+    echo "Java installed."
+  else
+    echo "Java already installed."
+  fi
+}
 
 # Install a package if not already installed
 install_if_missing() {
@@ -109,7 +130,7 @@ create_self_signed_ca() {
 create_ca_p12() {
   echo "Creating CA P12 file..."
 
-  if ! sudo openssl pkcs12 -export -out "$CA_P12" -inkey "$CA_KEY" -in "$CA_CERT" -passout pass:; then
+  if ! sudo openssl pkcs12 -export -out "$CA_P12" -inkey "$CA_KEY" -in "$CA_CERT" -passout pass:"$KEYSTORE_PASSWORD"; then
     echo "Error: Failed to create CA P12 file. Exiting."
     exit 1
   fi
@@ -120,6 +141,19 @@ create_ca_zip() {
 
   if ! sudo zip "$CA_ZIP" "$CA_CERT" "$CA_KEY"; then
     echo "Error: Failed to create CA ZIP file. Exiting."
+    exit 1
+  fi
+}
+
+create_jks() {
+  local p12_file=$1
+  local jks_file=$2
+  local password=$3
+
+  echo "Creating JKS keystore from $p12_file..."
+
+  if ! sudo keytool -importkeystore -srckeystore "$p12_file" -srcstoretype pkcs12 -srcstorepass "$password" -destkeystore "$jks_file" -deststoretype jks -deststorepass "$KEYSTORE_PASSWORD"; then
+    echo "Error: Failed to create JKS keystore from $p12_file. Exiting."
     exit 1
   fi
 }
@@ -136,15 +170,21 @@ create_certificates() {
     instance_keystore_dir="$KEY_STORES_DIR/$sanitized_instance"
 
     p12_filename="$instance_keystore_dir/$sanitized_instance.p12"
+    jks_filename="$instance_keystore_dir/$sanitized_instance.jks"
     key_filename="$instance_cert_dir/$sanitized_instance.key"
     csr_filename="$instance_cert_dir/$sanitized_instance.csr"
     pem_filename="$instance_cert_dir/$sanitized_instance.pem"
 
-    if ! sudo openssl pkcs12 -export -out "$p12_filename" -inkey "$CA_KEY" -in "$CA_CERT" -passout pass:; then
+    # Generate .p12 file
+    if ! sudo openssl pkcs12 -export -out "$p12_filename" -inkey "$CA_KEY" -in "$CA_CERT" -passout pass:"$KEYSTORE_PASSWORD"; then
       echo "Error: Failed to create p12 certificate for $sanitized_instance. Exiting."
       exit 1
     fi
 
+    # Convert .p12 to .jks
+    create_jks "$p12_filename" "$jks_filename" "$KEYSTORE_PASSWORD"
+
+    # Generate CSR and PEM
     if ! sudo openssl req -new -newkey rsa:4096 -keyout "$key_filename" -out "$csr_filename" -nodes -subj "/CN=$sanitized_instance"; then
       echo "Error: Failed to create CSR for $sanitized_instance. Exiting."
       exit 1
@@ -162,6 +202,9 @@ create_certificates() {
 run() {
   echo "===== Starting Helix AI Certificate Generation ====="
 
+  check_install_java_keytool
+
+  echo "checking java version"
   install_dependencies
   delete_old_structure
   create_directory_structure

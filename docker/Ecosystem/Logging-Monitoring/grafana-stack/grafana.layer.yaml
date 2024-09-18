@@ -1,0 +1,52 @@
+services:
+  #
+  # Monitoring
+  #
+  alertmanager:
+    image: prom/alertmanager:v0.27.0
+    container_name: alertmanager
+    volumes:
+      - ./alertmanager/alertmanager.yaml:/etc/alertmanager/alertmanager.yaml
+    command: --config.file=/etc/alertmanager/alertmanager.yaml --log.level=debug --cluster.advertise-address=0.0.0.0:9093
+
+  discord-alerts:
+    image: benjojo/alertmanager-discord
+    container_name: discord-alerts
+    restart: on-failure
+    environment:
+      - DISCORD_WEBHOOK=${ALERT_MANAGER_DISCORD_WEBHOOK_URL}
+
+  prometheus:
+    image: prom/prometheus:v2.54.1
+    hostname: prometheus
+    container_name: prometheus
+    volumes:
+      - ./prometheus:/etc/prometheus
+      - prometheus_data:/prometheus/data
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yaml'
+      - '--web.enable-lifecycle'
+
+  grafana:
+    image: grafana/grafana:11.2.0
+    container_name: grafana
+    ports:
+      - '3000:3000'
+    environment:
+      GF_FEATURE_TOGGLES_ENABLE: externalServiceAccounts
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_USER:-admin}
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_PASSWORD:-admin}
+      GF_ALLOW_SIGN_UP: false
+    deploy:
+      resources:
+        limits:
+          memory: 500m
+          cpus: "0.5"
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+      - ./grafana/grafana.ini:/etc/grafana/grafana.ini
+      - ./grafana/provisioning:/etc/grafana/provisioning

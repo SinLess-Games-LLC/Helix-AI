@@ -7,14 +7,12 @@ services:
     container_name: bootstrap
     hostname: bootstrap
     privileged: true
+    environment:
+      KEYSTORE_PASSWORD: lhsdghzvuawnlh8suvjli2360
     volumes:
-      - certificates_data:/certs/
+      - ../../../.data/certs:/certs
       - ./config.yaml:/config/config.yaml
       - ./scripts:/app/scripts/
       - consul_generated:/consul/generated
+      - kafka_truststore:/kafka/certs
     command: "/app/scripts/run.sh"
-    healthcheck:
-      test: ['CMD', 'stat', '/certs/success']
-      interval: 30s
-      timeout: 10s
-      retries: 5

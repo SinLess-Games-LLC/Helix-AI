@@ -24,3 +24,35 @@ services:
     volumes:
       - vault_mysql_data:/var/lib/mysql
     restart: unless-stopped
+
+  helix-mysql-exporter:
+    image: prom/mysqld-exporter
+    container_name: helix-mysql-exporter
+    hostname: helix-mysql-exporter
+    environment:
+      - DATA_SOURCE_NAME=exporter:exporter_password@tcp(helix-mysql:3306)/
+    ports:
+      - '9104:9104'
+    volumes:
+      - ./configs/helix-mysql.cnf:/etc/.my.cnf
+    command:
+      - --config.my-cnf=/etc/.my.cnf
+      - --mysqld.address=helix-mysql:3306
+      - --collect.global_status
+      - --collect.global_variables
+
+  vault-mysql-exporter:
+    image: prom/mysqld-exporter
+    container_name: vault-mysql-exporter
+    hostname: vault-mysql-exporter
+    environment:
+      - DATA_SOURCE_NAME=exporter:exporter_password@tcp(vault-mysql:3306)/
+    ports:
+      - '9105:9104'
+    volumes:
+      - ./configs/vault-mysql.cnf:/etc/.my.cnf
+    command:
+      - --config.my-cnf=/etc/.my.cnf
+      - --mysqld.address=vault-mysql:3306
+      - --collect.global_status
+      - --collect.global_variables

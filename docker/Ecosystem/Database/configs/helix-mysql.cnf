@@ -1,0 +1,6 @@
+[client]
+user=root
+password=root
+host=helix-mysql
+
+
