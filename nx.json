@@ -44,7 +44,12 @@
       "options": {
         "targetName": "test"
       },
-      "exclude": ["apps/auth-server-e2e/**/*", "apps/api/discord-bot-e2e/**/*"]
+      "exclude": [
+        "apps/auth-server-e2e/**/*",
+        "apps/api/discord-bot-e2e/**/*",
+        "apps/vs-code-exts/DevSecOps-Dashboard-e2e/**/*",
+        "apps/vs-code-exts/DevSecOps-Dashboard-e2e/**/*"
+      ]
     },
     {
       "plugin": "@nx/next/plugin",
@@ -81,6 +86,11 @@
     },
     "build-custom-server": {
       "cache": true
+    },
+    "@nx/esbuild:esbuild": {
+      "cache": true,
+      "dependsOn": ["^build"],
+      "inputs": ["production", "^production"]
     }
   },
   "release": {

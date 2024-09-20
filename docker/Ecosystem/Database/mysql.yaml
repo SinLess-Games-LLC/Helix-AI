@@ -1,58 +1,95 @@
 services:
-  helix-mysql:
-    image: mysql:latest
-    container_name: helix-mysql
-    hostname: helix-mysql
-    environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root}
-      MYSQL_DATABASE: ${MYSQL_DATABASE:-helix}
-      MYSQL_USER: ${MYSQL_USER:-helix}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-helix}
-    volumes:
-      - helix_mysql_data:/var/lib/mysql
+  # ProxySQL for routing and sharding
+  proxysql:
+    image: proxysql/proxysql
+    container_name: proxysql
     restart: unless-stopped
-
-  vault-mysql:
-    image: mysql:latest
-    container_name: vault-mysql
-    hostname: vault-mysql
-    environment:
-      MYSQL_ROOT_PASSWORD: ${VAULT_MYSQL_ROOT_PASSWORD:-root}
-      MYSQL_DATABASE: ${VAULT_MYSQL_DATABASE:-vault}
-      MYSQL_USER: ${VAULT_MYSQL_USER:-vault}
-      MYSQL_PASSWORD: ${VAULT_MYSQL_PASSWORD:-vault}
-    volumes:
-      - vault_mysql_data:/var/lib/mysql
-    restart: unless-stopped
-
-  helix-mysql-exporter:
-    image: prom/mysqld-exporter
-    container_name: helix-mysql-exporter
-    hostname: helix-mysql-exporter
-    environment:
-      - DATA_SOURCE_NAME=exporter:exporter_password@tcp(helix-mysql:3306)/
     ports:
-      - '9104:9104'
+      - "6033:6033"  # ProxySQL port for client connections
+      - "6032:6032"  # ProxySQL admin interface
     volumes:
-      - ./configs/helix-mysql.cnf:/etc/.my.cnf
-    command:
-      - --config.my-cnf=/etc/.my.cnf
-      - --mysqld.address=helix-mysql:3306
-      - --collect.global_status
-      - --collect.global_variables
-
-  vault-mysql-exporter:
-    image: prom/mysqld-exporter
-    container_name: vault-mysql-exporter
-    hostname: vault-mysql-exporter
+      - ./configs/proxysql/proxysql.cnf:/etc/proxysql.cnf
     environment:
-      - DATA_SOURCE_NAME=exporter:exporter_password@tcp(vault-mysql:3306)/
-    ports:
-      - '9105:9104'
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_REPLICATION_USER: ${MYSQL_REPLICATION_USER}
+      MYSQL_REPLICATION_PASSWORD: ${MYSQL_REPLICATION_PASSWORD}
+      MYSQL_DATABASES: vault,helix
+      MYSQL_ADMINISTRATOR_PASSWORD: ${MYSQL_ADMINISTRATOR_PASSWORD}
+      MYSQL_DEVELOPER_PASSWORD: ${MYSQL_DEVELOPER_PASSWORD}
+      MYSQL_HELIX_PASSWORD: ${MYSQL_HELIX_PASSWORD}
+      MYSQL_VAULT_PASSWORD: ${MYSQL_VAULT_PASSWORD}
+
+  # MySQL Master Node 1
+  mysql-master-1:
+    image: mysql:8.0
+    container_name: mysql-master-1
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_INIT_DB}
+      MYSQL_REPLICATION_USER: ${MYSQL_REPLICATION_USER}
+      MYSQL_REPLICATION_PASSWORD: ${MYSQL_REPLICATION_PASSWORD}
+      MYSQL_DATABASES: vault,helix
+      MYSQL_ADMINISTRATOR_PASSWORD: ${MYSQL_ADMINISTRATOR_PASSWORD}
+      MYSQL_DEVELOPER_PASSWORD: ${MYSQL_DEVELOPER_PASSWORD}
+      MYSQL_HELIX_PASSWORD: ${MYSQL_HELIX_PASSWORD}
+      MYSQL_VAULT_PASSWORD: ${MYSQL_VAULT_PASSWORD}
     volumes:
-      - ./configs/vault-mysql.cnf:/etc/.my.cnf
-    command:
-      - --config.my-cnf=/etc/.my.cnf
-      - --mysqld.address=vault-mysql:3306
-      - --collect.global_status
-      - --collect.global_variables
+      - mysql-1-data:/var/lib/mysql
+      - ./configs/mysql-1/my.cnf:/etc/mysql/my.cnf
+      - ./configs/mysql-1/init.sql:/docker-entrypoint-initdb.d/init.sql  # Initialization script
+
+  # MySQL Master Node 2
+  mysql-master-2:
+    image: mysql:8.0
+    container_name: mysql-master-2
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_INIT_DB}
+      MYSQL_REPLICATION_USER: ${MYSQL_REPLICATION_USER}
+      MYSQL_REPLICATION_PASSWORD: ${MYSQL_REPLICATION_PASSWORD}
+      MYSQL_DATABASES: vault,helix
+      MYSQL_ADMINISTRATOR_PASSWORD: ${MYSQL_ADMINISTRATOR_PASSWORD}
+      MYSQL_DEVELOPER_PASSWORD: ${MYSQL_DEVELOPER_PASSWORD}
+      MYSQL_HELIX_PASSWORD: ${MYSQL_HELIX_PASSWORD}
+      MYSQL_VAULT_PASSWORD: ${MYSQL_VAULT_PASSWORD}
+    volumes:
+      - mysql-2-data:/var/lib/mysql
+      - ./configs/mysql-2/my.cnf:/etc/mysql/my.cnf
+      - ./configs/mysql-2/init.sql:/docker-entrypoint-initdb.d/init.sql  # Initialization script
+
+  # MySQL Master Node 3
+  mysql-master-3:
+    image: mysql:8.0
+    container_name: mysql-master-3
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_INIT_DB}
+      MYSQL_REPLICATION_USER: ${MYSQL_REPLICATION_USER}
+      MYSQL_REPLICATION_PASSWORD: ${MYSQL_REPLICATION_PASSWORD}
+      MYSQL_DATABASES: vault,helix
+      MYSQL_ADMINISTRATOR_PASSWORD: ${MYSQL_ADMINISTRATOR_PASSWORD}
+      MYSQL_DEVELOPER_PASSWORD: ${MYSQL_DEVELOPER_PASSWORD}
+      MYSQL_HELIX_PASSWORD: ${MYSQL_HELIX_PASSWORD}
+      MYSQL_VAULT_PASSWORD: ${MYSQL_VAULT_PASSWORD}
+    volumes:
+      - mysql-3-data:/var/lib/mysql
+      - ./configs/mysql-3/my.cnf:/etc/mysql/my.cnf
+      - ./configs/mysql-3/init.sql:/docker-entrypoint-initdb.d/init.sql
+  # mysqld_exporter for monitoring MySQL metrics
+  mysqld_exporter_1:
+    image: prom/mysqld-exporter
+    container_name: mysqld_exporter_1
+    environment:
+      DATA_SOURCE_NAME: "exporter:${MYSQL_EXPORTER_PASSWORD}@tcp(mysql-master-1:3306)/"
+
+  mysqld_exporter_2:
+    image: prom/mysqld-exporter
+    container_name: mysqld_exporter_2
+    environment:
+      DATA_SOURCE_NAME: "exporter:${MYSQL_EXPORTER_PASSWORD}@tcp(mysql-master-2:3306)/"
+
+  mysqld_exporter_3:
+    image: prom/mysqld-exporter
+    container_name: mysqld_exporter_3
+    environment:
+      DATA_SOURCE_NAME: "exporter:${MYSQL_EXPORTER_PASSWORD}@tcp(mysql-master-3:3306)/"

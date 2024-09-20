@@ -1,0 +1,29 @@
+apiVersion: 1
+
+providers:
+  - name: 'default'
+    orgId: 1
+    folder: ''
+    type: file
+    disableDeletion: false
+    updateIntervalSeconds: 10
+    options:
+      path: '/etc/grafana/provisioning/dashboards/default.json' # Update this path to where your default dashboards are stored
+
+  - name: 'Redis'
+    orgId: 1
+    folder: 'Redis'
+    type: file
+    disableDeletion: false
+    updateIntervalSeconds: 10
+    options:
+      path: '/etc/grafana/provisioning/dashboards/redis' # Update this path to where your Redis dashboards are stored
+
+  - name: 'MySQL'
+    orgId: 1
+    folder: 'MySQL'
+    type: file
+    disableDeletion: false
+    updateIntervalSeconds: 10
+    options:
+      path: '/etc/grafana/provisioning/dashboards/mysql' # Update this path to where your MySQL dashboards are stored

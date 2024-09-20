@@ -30,6 +30,8 @@
 
 #### Status
 
+<a href="https://wakatime.com/badge/github/SinLess-Games-LLC/Helix-Ai"><img src="https://wakatime.com/badge/github/SinLess-Games-LLC/Helix-Ai.svg?style=for-the-badge" alt="wakatime"></a>
+
 ![GitHub](https://img.shields.io/github/license/SinLess-Games-LLC/Helix-AI?style=for-the-badge)
 ![GitHub package.json version (branch)](https://img.shields.io/github/package-json/v/SinLess-Games-LLC/Helix-AI/master?style=for-the-badge)
 ![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/SinLess-Games-LLC/Helix-AI/nx-workflow.yml?style=for-the-badge&label=Nx%20Pipeline%20Status)

@@ -1,14 +1,11 @@
 services:
-  krakend:
-    image: devopsfaith/krakend
-    container_name: krakend
+  nginx:
+    image: nginx:1.19.0
+    hostname: nginx-api-gateway
+    ports:
+      - 80:80
     volumes:
-      - ./krakend/krakend.yaml:/etc/krakend/krakend.yaml
+      - ./nginx:/etc/nginx
     environment:
-      FLUENTD_HOST: fluentd
-      FLUENTD_PORT: 25224
-    command: >
-      krakend run -c /etc/krakend/krakend.yaml
-      --log-fluentd
-      --log-fluentd-host=${FLUENTD_HOST}
-      --log-fluentd-port=${FLUENTD_PORT}
+      - NGINX_HOST='localhost'
+      - NGINX_PORT='8080'

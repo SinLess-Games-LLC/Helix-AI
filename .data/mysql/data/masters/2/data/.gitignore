@@ -1,0 +1,6 @@
+# Ignore everything
+*
+
+# Allow .gitignore and .gitkeep
+!.gitignore
+!.gitkeep

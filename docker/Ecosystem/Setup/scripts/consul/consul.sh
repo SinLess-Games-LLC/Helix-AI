@@ -23,7 +23,7 @@ create_or_check_directory() {
   echo "Checking for directory: $directory"
   if [ ! -d "$directory" ]; then
     echo "Creating directory $directory"
-    if ! mkdir -p "$directory"; then
+    if ! mkdir -p "$directory" > /dev/null 2>&1; then
       echo "Error: Failed to create directory $directory"
       exit 1
     fi
@@ -40,7 +40,7 @@ gen_encryption_key() {
   echo "========== Generating base64 encoded encryption key ========="
   if [ -f "$key_file" ]; then
     echo "Deleting existing $key_file"
-    rm "$key_file"
+    rm "$key_file" > /dev/null 2>&1
   fi
   if ! consul keygen > "$key_file"; then
     echo "Error: Failed to generate encryption key."
@@ -56,12 +56,12 @@ update_encrypt_key() {
   echo "Updating 'encrypt' key in $config_file"
   local key_value="\"$(cat $GENERATED_DIR/consul-encryption-key.txt)\""
   if grep -q "^encrypt\s*=" "$config_file"; then
-    sed -i.bak "s|^\\(encrypt\\s*=\\s*\\).*\$|\\1$key_value|" "$config_file"
+    sed -i.bak "s|^\\(encrypt\\s*=\\s*\\).*\$|\\1$key_value|" "$config_file" > /dev/null 2>&1
   else
     echo "encrypt = $key_value" >> "$config_file"
   fi
-  sed -i.bak "/^\\s*#.*encrypt/d" "$config_file"
-  rm "$config_file.bak"
+  sed -i.bak "/^\\s*#.*encrypt/d" "$config_file" > /dev/null 2>&1
+  rm "$config_file.bak" > /dev/null 2>&1
   echo "Updated 'encrypt' key in $config_file"
 }
 
@@ -85,7 +85,7 @@ create_or_check_token_key_file() {
     echo "File $file_path already exists."
   else
     echo "Creating $file_path..."
-    if ! touch "$file_path"; then
+    if ! touch "$file_path" > /dev/null 2>&1; then
       echo "Error: Failed to create token key file."
       exit 1
     fi
@@ -99,16 +99,16 @@ create_certs() {
   local cert_dir="$GENERATED_DIR/consul-certs"
   if [ -d "$cert_dir" ]; then
     echo "Deleting existing $cert_dir"
-    sudo rm -rf "$cert_dir"
+    sudo rm -rf "$cert_dir" > /dev/null 2>&1
   fi
   if [ ! -d "$cert_dir" ]; then
     echo "Creating directory $cert_dir"
-    mkdir -p "$cert_dir"
+    mkdir -p "$cert_dir" > /dev/null 2>&1
   fi
   cd "$cert_dir" || exit
 
   echo "Creating CA cert..."
-  if ! consul tls ca create > /dev/null 2>&1; then
+  if ! consul tls ca create; then
     echo "Error: Failed to create CA certificate."
     exit 1
   fi
@@ -119,7 +119,7 @@ create_certs() {
     exit 1
   fi
 
-  cd - || exit
+  cd - > /dev/null 2>&1 || exit
 }
 
 # Main function to run the script

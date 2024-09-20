@@ -24,13 +24,17 @@ scrape_configs:
         labels:
           service: 'redis-exporter'
 
-  - job_name: 'helix-mysql'
+  - job_name: 'mysql-master-1'
     static_configs:
-      - targets: [helix-mysql-exporter:9104]
+      - targets: [mysqld_exporter_1:9104]
 
-  - job_name: 'vault-mysql'
+  - job_name: 'mysql-master-2'
     static_configs:
-      - targets: ['vault-mysql-exporter:9104']
+      - targets: ['mysqld_exporter_2:9105']
+
+  - job_name: 'mysql-master-3'
+    static_configs:
+      - targets: ['mysqld_exporter_3:9106']
 
   - job_name: 'grafana'
     metrics_path: '/metrics'

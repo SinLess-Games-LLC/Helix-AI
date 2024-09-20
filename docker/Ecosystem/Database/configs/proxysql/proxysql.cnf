@@ -1,0 +1,57 @@
+datadir="/var/lib/proxysql"
+
+# ====================== Admin Settings ======================
+admin_variables=
+{
+    # Secure credentials for ProxySQL admin interface
+    admin_credentials="admin:${PROXYSQL_ADMIN_PASSWORD}"
+    mysql_ifaces="0.0.0.0:6032"
+}
+
+# ====================== MySQL Users ======================
+mysql_users:
+(
+    {
+        # Root user for ProxySQL with a secure password
+        username = "root"
+        password = "${MYSQL_ROOT_PASSWORD}"
+        default_hostgroup = 0
+    },
+    {
+        # Additional user for monitoring and management with limited permissions
+        username = "proxysql"
+        password = "${MYSQL_PROXYSQL_PASSWORD}"
+        default_hostgroup = 0
+    }
+)
+
+# ====================== MySQL Servers for Sharding ======================
+mysql_servers:
+(
+    { address = "mysql-master-1", port = 3306, hostgroup = 1, max_connections = 200 },
+    { address = "mysql-master-2", port = 3306, hostgroup = 2, max_connections = 200 },
+    { address = "mysql-master-3", port = 3306, hostgroup = 3, max_connections = 200 }
+)
+
+# ====================== Query Rules for Sharding Logic ======================
+mysql_query_rules:
+(
+    {
+        rule_id=1
+        match_pattern="/* shard1 */"
+        destination_hostgroup=1
+        apply=1
+    },
+    {
+        rule_id=2
+        match_pattern="/* shard2 */"
+        destination_hostgroup=2
+        apply=1
+    },
+    {
+        rule_id=3
+        match_pattern="/* shard3 */"
+        destination_hostgroup=3
+        apply=1
+    }
+)

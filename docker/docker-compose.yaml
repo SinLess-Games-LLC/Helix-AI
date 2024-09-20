@@ -17,6 +17,25 @@ secrets:
   ###################################################
 
 
+  ###################################################
+  #                                                 #
+  #                    TrustStores                  #
+  #                                                 #
+  ###################################################
+
+  ###################################################
+  #                                                 #
+  #                    Certificates                 #
+  #                                                 #
+  ###################################################
+
+  ###################################################
+  #                                                 #
+  #                    Scripts                      #
+  #                                                 #
+  ###################################################
+  run.sh:
+    file: ./Ecosystem/Setup/run.sh
 
 #
 # Volumes
@@ -74,19 +93,9 @@ volumes:
       o: bind
       device: ${PWD}/.data/consul/vault/logs
 
-  helix_mysql_data:
-    driver: local
-    driver_opts:
-      type: none
-      o: bind
-      device: ${PWD}/.data/mysql/data/helix
-
-  vault_mysql_data:
-    driver: local
-    driver_opts:
-      type: none
-      o: bind
-      device: ${PWD}/.data/mysql/data/vault
+  mysql-1-data:
+  mysql-2-data:
+  mysql-3-data:
 
   redis_data:
     driver: local
@@ -135,43 +144,99 @@ services:
   #
   # Database Layer
   #
-  helix-mysql: &helix-mysql # port: 3308
+  proxysql:
     extends:
       file: ./Ecosystem/Database/mysql.yaml
-      service: helix-mysql
+      service: proxysql
+    depends_on:
+      helix-bootstrap:
+        condition: service_healthy
+      mysql-master-1:
+        condition: service_healthy
+      mysql-master-2:
+        condition: service_healthy
     ports:
-      - '3306:3306'
+      - '3310:3306'
     healthcheck:
-      test: ['CMD', 'mysqladmin', 'ping', '-h', 'localhost']
+      test: ['CMD', 'mysql', '-h', 'localhost', '-P', '3310', '-u', 'root', '-p${MYSQL_ROOT_PASSWORD}', '-e', 'SELECT 1']
       interval: 10s
       timeout: 5s
       retries: 5
 
-  vault-mysql: &vault-mysql # port: 3311
+  mysql-master-1:
     extends:
       file: ./Ecosystem/Database/mysql.yaml
-      service: vault-mysql
+      service: mysql-master-1
+    depends_on:
+      helix-bootstrap:
+        condition: service_completed_successfully
+    ports:
+      - "3306:3306"
     healthcheck:
-      test: ['CMD', 'mysqladmin', 'ping', '-h', 'localhost']
+      test: ['CMD', 'mysqladmin', 'ping', '-h', 'localhost', '-P', '3306', '-u', 'root', '-p${MYSQL_ROOT_PASSWORD}']
       interval: 10s
       timeout: 5s
       retries: 5
 
-  helix-mysql-exporter:
+  mysql-master-2:
     extends:
       file: ./Ecosystem/Database/mysql.yaml
-      service: helix-mysql-exporter
+      service: mysql-master-2
     depends_on:
-      helix-mysql:
+      helix-bootstrap:
+        condition: service_completed_successfully
+    ports:
+      - "3307:3306"
+    healthcheck:
+      test: ['CMD', 'mysqladmin', 'ping', '-h', 'localhost', '-P', '3306', '-u', 'root', '-p${MYSQL_ROOT_PASSWORD}']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  mysql-master-3:
+    extends:
+      file: ./Ecosystem/Database/mysql.yaml
+      service: mysql-master-3
+    depends_on:
+      helix-bootstrap:
+        condition: service_completed_successfully
+    ports:
+      - '3308:3306'
+    healthcheck:
+      test: ['CMD', 'mysqladmin', 'ping', '-h', 'localhost', '-P', '3306', '-u', 'root', '-p${MYSQL_ROOT_PASSWORD}']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  mysql_exporter_1:
+    extends:
+      file: ./Ecosystem/Database/mysql.yaml
+      service: mysqld_exporter_1
+    depends_on:
+      mysql-master-1:
+        condition: service_healthy
+    ports:
+      - '9104:9104'
+
+  mysql_exporter_2:
+    extends:
+      file: ./Ecosystem/Database/mysql.yaml
+      service: mysqld_exporter_2
+    ports:
+      - '9105:9104'
+    depends_on:
+      mysql-master-2:
         condition: service_healthy
 
-  vault-mysql-exporter:
+  mysql_exporter_3:
     extends:
       file: ./Ecosystem/Database/mysql.yaml
-      service: vault-mysql-exporter
+      service: mysqld_exporter_3
     depends_on:
-      vault-mysql:
+      mysql-master-3:
         condition: service_healthy
+    ports:
+      - '9106:9104'
 
   #
   # Logging and Monitoring Layer

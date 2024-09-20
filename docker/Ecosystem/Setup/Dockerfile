@@ -2,16 +2,14 @@
 # Base stage (common dependencies)
 ############################################################################################################
 
-# Use a lightweight Python image
-FROM python:3.13.0rc1-bullseye AS base
+# Use a smaller Python image
+FROM python:3.13.0rc1-slim-bullseye AS base
 
 # Install build dependencies and upgrade pip
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    wget consul curl git make sudo openssl zip m4 autoconf automake jq bash dnsutils dos2unix && \
+    wget consul curl git make sudo openssl zip m4 autoconf automake jq bash dnsutils dos2unix openjdk-11-jre-headless && \
     rm -rf /var/lib/apt/lists/* && \
-    pip install --upgrade pip yq shyaml && \
-    apt-get update && apt-get install -y --no-install-recommends openjdk-11-jre-headless && \
-    apt-get clean
+    pip install --no-cache-dir --upgrade pip yq shyaml
 
 ############################################################################################################
 # Build stage
@@ -39,9 +37,15 @@ RUN chmod 755 /app/consul/*.sh /app/security/*.sh /app/vault/*.sh && \
 
 FROM base AS runtime
 
-# Copy the built files from the builder stage
+# Copy only the necessary files from the builder stage
 COPY --from=builder /app /app
 
+# Install only runtime dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends sudo && \
+    rm -rf /var/lib/apt/lists/*
+
+# Install Consul cli
+RUN sudo apt-get update && sudo apt-get install -y --no-install-recommends consul
 # Create a non-root user with sudo privileges
 RUN adduser --uid 1000 --disabled-password --gecos "" docker && \
     adduser docker sudo && \

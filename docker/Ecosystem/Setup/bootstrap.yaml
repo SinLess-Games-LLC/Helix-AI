@@ -7,12 +7,14 @@ services:
     container_name: bootstrap
     hostname: bootstrap
     privileged: true
+    secrets:
+      - source: run.sh
+        target: /app/run.sh
+    command: /bin/bash /app/run.sh --tail
     environment:
       KEYSTORE_PASSWORD: lhsdghzvuawnlh8suvjli2360
     volumes:
       - ../../../.data/certs:/certs
       - ./config.yaml:/config/config.yaml
       - ./scripts:/app/scripts/
-      - consul_generated:/consul/generated
       - kafka_truststore:/kafka/certs
-    command: "/app/scripts/run.sh"

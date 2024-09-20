@@ -1,0 +1,61 @@
+{
+  "name": "DevSecOps-Dashboard",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/vs-code-exts/DevSecOps-Dashboard/src",
+  "projectType": "application",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/esbuild:esbuild",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "platform": "node",
+        "outputPath": "dist/apps/vs-code-exts/DevSecOps-Dashboard",
+        "format": ["cjs"],
+        "bundle": false,
+        "main": "apps/vs-code-exts/DevSecOps-Dashboard/src/main.ts",
+        "tsConfig": "apps/vs-code-exts/DevSecOps-Dashboard/tsconfig.app.json",
+        "assets": [
+          "apps/vs-code-exts/DevSecOps-Dashboard/src/assets",
+          "apps/vs-code-exts/DevSecOps-Dashboard/src/package.json"
+        ],
+        "generatePackageJson": true,
+        "esbuildOptions": {
+          "sourcemap": true,
+          "outExtension": {
+            ".js": ".js"
+          }
+        }
+      },
+      "configurations": {
+        "development": {},
+        "production": {
+          "esbuildOptions": {
+            "sourcemap": false,
+            "outExtension": {
+              ".js": ".js"
+            }
+          }
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "dependsOn": ["build"],
+      "options": {
+        "buildTarget": "DevSecOps-Dashboard:build",
+        "runBuildTargetDependencies": false
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "DevSecOps-Dashboard:build:development"
+        },
+        "production": {
+          "buildTarget": "DevSecOps-Dashboard:build:production"
+        }
+      }
+    }
+  }
+}

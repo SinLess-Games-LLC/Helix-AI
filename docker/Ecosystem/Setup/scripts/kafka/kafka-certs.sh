@@ -9,12 +9,12 @@ KAFKA_CERTS_DIR="/kafka/certs"
 move_ca_cert() {
   echo "Moving CA certificate..."
 
-  if [ ! -f "$CA_DIR/certificate_authority.crt" ]; then
+  if [ ! -f "$CA_DIR/ca.crt" ]; then
     echo "Error: CA certificate not found at $CA_DIR"
     exit 1
   fi
 
-  cp "$CA_DIR/certificate_authority.crt" "$KAFKA_CERTS_DIR/ca.crt"
+  cp "$CA_DIR/ca.crt" "$KAFKA_CERTS_DIR/ca.crt" > /dev/null 2>&1
 
   echo "CA certificate moved."
 }
@@ -24,7 +24,7 @@ create_truststores() {
   echo "Creating truststores..."
 
   for component in kafka-1 kafka-2 kafka-3 zookeeper kafdrop; do
-    keytool -keystore "$KAFKA_CERTS_DIR/$component.truststore.jks" -alias CARoot -import -file "$KAFKA_CERTS_DIR/ca.crt" -storepass "lhsdghzvuawnlh8suvjli2360" -noprompt
+    keytool -keystore "$KAFKA_CERTS_DIR/$component.truststore.jks" -alias CARoot -import -file "$KAFKA_CERTS_DIR/ca.crt" -storepass "lhsdghzvuawnlh8suvjli2360" -noprompt > /dev/null 2>&1
     echo "Truststore created for $component."
   done
 }
@@ -40,17 +40,17 @@ create_keystores() {
       -keystore "$KAFKA_CERTS_DIR/$component.keystore.jks" \
       -keyalg RSA \
       -storepass "$KEYSTORE_PASSWORD" \
-      -keypass "$KEYSTORE_PASSWORD"
+      -keypass "$KEYSTORE_PASSWORD" > /dev/null 2>&1
 
     # Create a CSR
-    keytool -certreq -alias "$component" -keystore "$KAFKA_CERTS_DIR/$component.keystore.jks" -file "$KAFKA_CERTS_DIR/$component.csr" -storepass "lhsdghzvuawnlh8suvjli2360"
+    keytool -certreq -alias "$component" -keystore "$KAFKA_CERTS_DIR/$component.keystore.jks" -file "$KAFKA_CERTS_DIR/$component.csr" -storepass "lhsdghzvuawnlh8suvjli2360" > /dev/null 2>&1
 
     # Sign the certificate with the CA
-    openssl x509 -req -CA "$KAFKA_CERTS_DIR/ca.crt" -CAkey "$CA_DIR/certificate_authority.key" -in "$KAFKA_CERTS_DIR/$component.csr" -out "$KAFKA_CERTS_DIR/$component.crt" -days 365 -CAcreateserial -passin pass:"$KEYSTORE_PASSWORD"
+    openssl x509 -req -CA "$KAFKA_CERTS_DIR/ca.crt" -CAkey "$CA_DIR/certificate_authority.key" -in "$KAFKA_CERTS_DIR/$component.csr" -out "$KAFKA_CERTS_DIR/$component.crt" -days 365 -CAcreateserial -passin pass:"$KEYSTORE_PASSWORD" > /dev/null 2>&1
 
     # Import the CA certificate and signed certificate into the keystore
-    keytool -import -keystore "$KAFKA_CERTS_DIR/$component.keystore.jks" -file "$KAFKA_CERTS_DIR/ca.crt" -alias CARoot -storepass "lhsdghzvuawnlh8suvjli2360" -noprompt
-    keytool -import -keystore "$KAFKA_CERTS_DIR/$component.keystore.jks" -file "$KAFKA_CERTS_DIR/$component.crt" -alias "$component" -storepass "lhsdghzvuawnlh8suvjli2360" -noprompt
+    keytool -import -keystore "$KAFKA_CERTS_DIR/$component.keystore.jks" -file "$KAFKA_CERTS_DIR/ca.crt" -alias CARoot -storepass "lhsdghzvuawnlh8suvjli2360" -noprompt > /dev/null 2>&1
+    keytool -import -keystore "$KAFKA_CERTS_DIR/$component.keystore.jks" -file "$KAFKA_CERTS_DIR/$component.crt" -alias "$component" -storepass "lhsdghzvuawnlh8suvjli2360" -noprompt > /dev/null 2>&1
 
     echo "Keystore created and signed for $component."
   done
@@ -62,10 +62,10 @@ validate_stores() {
 
   for component in kafka-1 kafka-2 kafka-3 zookeeper kafdrop; do
     echo "Validating $component.keystore.jks"
-    keytool -list -v -keystore "$KAFKA_CERTS_DIR/$component.keystore.jks" -storepass "lhsdghzvuawnlh8suvjli2360"
+    keytool -list -v -keystore "$KAFKA_CERTS_DIR/$component.keystore.jks" -storepass "lhsdghzvuawnlh8suvjli2360" > /dev/null 2>&1
 
     echo "Validating $component.truststore.jks"
-    keytool -list -v -keystore "$KAFKA_CERTS_DIR/$component.truststore.jks" -storepass "lhsdghzvuawnlh8suvjli2360"
+    keytool -list -v -keystore "$KAFKA_CERTS_DIR/$component.truststore.jks" -storepass "lhsdghzvuawnlh8suvjli2360" > /dev/null 2>&1
   done
 }
 
