@@ -147,8 +147,19 @@ touch /tmp/auto-commit.lock
 while true; do
   check_for_stop_file
 
-  # Perform the commit and push operations...
-  make_request
+  # Perform the commit if there are changes in git
+  if git diff-index --quiet HEAD; then
+    log_info "No changes detected. Skipping commit..."
+  else
+    log_info "Changes detected. Making commit..."
+    make_request
+  fi
+
+  # Check if the script was interrupted during the commit process
+  if [ $? -ne 0 ]; then
+    break
+  fi
+
 
   # Check if the script was interrupted during the API request
   if [ $? -ne 0 ]; then
