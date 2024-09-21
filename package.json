@@ -4,6 +4,7 @@
   "license": "MIT",
   "private": true,
   "scripts": {
+    "auto commit": "",
     "build": "nx run-many --target=build --all",
     "build:auth-server": "nx run auth-server:build:development",
     "build:frontend": "nx run frontend:build:development",
