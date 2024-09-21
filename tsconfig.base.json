@@ -18,6 +18,7 @@
     "isolatedModules": false,
     "baseUrl": ".",
     "paths": {
+      "@helix-ai/auto-commiter": ["libs/auto-commiter/src/index.ts"],
       "@helix/core": ["libs/shared/core/src/index.ts"],
       "@helix/database": ["libs/shared/database/src/index.ts"],
       "@helix/logger": ["libs/shared/logger/src/index.ts"],

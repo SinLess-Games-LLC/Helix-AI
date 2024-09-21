@@ -1,3 +1,38 @@
+export const Scopes = [
+  'docs',
+  'config',
+  'core',
+  'components',
+  'utils',
+  'authentication',
+  'frontend',
+  'backend',
+  'ci\/cd',
+  'docker',
+  'kubernetes',
+  'testing',
+  'linting',
+  'formatting',
+  'security',
+  'dependencies',
+  'performance',
+  'accessibility',
+  'workflow',
+  'auto-commit',
+  ...(await getProjects(
+    './apps/*',
+    ({ name, projectType }) =>
+      !name.includes('e2e') && projectType == 'application',
+  )),
+  ...(await getProjects(
+    './libs/*',
+    ({ name, projectType }) =>
+      !name.includes('e2e') && projectType == 'library',
+  )),
+]
+
+export const Types = ['feat', 'fix', 'docs', 'style', 'refactor', 'test', 'chore', 'revert']
+
 async function getConfig() {
   const {
     default: {
@@ -11,44 +46,20 @@ async function getConfig() {
       'type-enum': [
         2,
         'always',
-        ['feat', 'fix', 'docs', 'style', 'refactor', 'test', 'chore', 'revert'],
+        types,
       ],
       'scope-enum': [
         2,
         'always',
-        [
-          'docs',
-          'config',
-          'core',
-          'components',
-          'utils',
-          'authentication',
-          'frontend',
-          'backend',
-          'ci/cd',
-          'docker',
-          'kubernetes',
-          'testing',
-          'linting',
-          'formatting',
-          'security',
-          'dependencies',
-          'performance',
-          'accessibility',
-          'workflow',
-          ...(await getProjects(
-            './apps/**/*',
-            ({ name, projectType }) =>
-              !name.includes('e2e') && projectType == 'application',
-          )),
-          ...(await getProjects(
-            './libs/**/*',
-            ({ name, projectType }) =>
-              !name.includes('e2e') && projectType == 'library',
-          )),
-        ],
-      ],
+        scopes,
+      ]
     },
+    propmt: {
+      settings: {
+        'enableMultipleScopes': true,
+        'ScopeEnumSeparator': ',',
+      }
+    }
   }
 }
 

@@ -7,6 +7,7 @@ import process from 'process'
 const loggerOptions: LoggerOptions = {
   serviceName: 'auth-server',
   fluentd: {
+    enabled: true,
     host: process.env.FLUENTD_HOST || 'localhost',
     port: parseInt(process.env.FLUENTD_PORT || '24224', 10),
     tag_prefix: 'auth-server',

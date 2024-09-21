@@ -3,10 +3,11 @@ import('chalk')
 import { FluentClient } from '@fluent-org/logger'
 
 export interface FluentdOptions {
-  host: string
-  port: number
+  enabled: boolean
+  host?: string
+  port?: number
   timeout?: number
-  tag_prefix: string
+  tag_prefix?: string
 }
 
 export interface LoggerOptions {
@@ -17,14 +18,18 @@ export interface LoggerOptions {
 export class Logger {
   private serviceName: string
   private fluentClient: any
+  public options: LoggerOptions
 
   constructor(options: LoggerOptions) {
     this.serviceName = options.serviceName
+    this.options = options
+
+    this.options.fluentd.enabled  = true
 
     this.fluentClient = new FluentClient(options.fluentd.tag_prefix, {
       socket: {
-        host: options.fluentd.host,
-        port: options.fluentd.port,
+        host: options.fluentd.host || 'localhost',
+        port: options.fluentd.port || 24224,
         timeout: options.fluentd.timeout || 3000,
       },
     })
@@ -68,7 +73,10 @@ export class Logger {
 
   private log(level: string, message: string) {
     this.logToConsole(level, message)
-    this.logToFluentd(level, message)
+
+    if (this.options.fluentd.enabled === true) {
+      this.logToFluentd(level, message)
+    }
   }
 
   fatal(message: string) {
