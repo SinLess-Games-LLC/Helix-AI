@@ -2,6 +2,7 @@ import { Logger } from '@helix/logger';
 import { execSync } from 'child_process';
 import axios  from 'axios';
 
+
 const logger = new Logger({
   serviceName: 'auto-commiter',
   fluentd: {
@@ -10,7 +11,7 @@ const logger = new Logger({
 });
 
 export async function FetchCommitMessage() {
-  const Scopes = [
+  const scopes = [
     'docs',
     'config',
     'core',
@@ -33,7 +34,10 @@ export async function FetchCommitMessage() {
     'auto-commit',
   ]
 
-  const Types = ['feat', 'fix', 'docs', 'style', 'refactor', 'test', 'chore', 'revert']
+  const types = ['feat', 'fix', 'docs', 'style', 'refactor', 'test', 'chore', 'revert']
+
+  const Scopes = json.strigify(scopes);
+  const Types = json.strigify(types);
 
   // API Configuration
   const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
