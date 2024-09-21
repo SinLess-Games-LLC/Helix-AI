@@ -1,23 +1,39 @@
 #!/bin/zsh
 
-printf '\n\n######################################'
-printf '\n Run commit_msg \n'
-printf '######################################\n\n'
+# Define color codes
+BLUE="\033[1;34m"
+ORANGE="\033[0;33m"
+RED="\033[1;31m"
+BOLD_RED="\033[1;31m\033[1m"
+RESET="\033[0m"
 
-#
-# Run lint-staged with husky
-printf '######################################\n'
-printf 'Running lint-staged \n'
-lint-staged
-printf 'Completed lint-staged \n'
+# Logging functions for info, warn, and error
+log_info() {
+  echo -e "${BLUE}INFO:${RESET} $1"
+}
 
-#
-# run Commitlint with husky
-printf 'Running commitlint \n'
-npx --no-install commitlint --edit $1
-printf 'Completed commitlint \n'
-printf '######################################\n\n'
+log_warn() {
+  echo -e "${ORANGE}WARN:${RESET} $1"
+}
 
-printf '\n\n######################################'
-printf '\n Completed commit_msg \n'
-printf '######################################\n\n'
+log_error() {
+  echo -e "${BOLD_RED}ERROR:${RESET} $1"
+}
+
+# Run Lint staged
+if lint-staged; then
+  log_info "Running lint-staged"
+else
+  log_error "lint-staged failed"
+  exit 1
+fi
+
+
+output=$(npx --no-install commitlint --edit "$1" 2>&1 | tee /dev/tty)
+if [ $? -eq 0 ]; then
+  log_info "commitlint completed successfully"
+else
+  log_error "commitlint failed with the following output:"
+  echo "$output"
+  exit 1
+fi

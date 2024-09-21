@@ -1,21 +1,38 @@
 #!/bin/zsh
 
-printf '\n\n######################################'
-printf "\nRunning precommmit hook\n"
-printf '######################################\n\n'
+# Define color codes
+BLUE="\033[1;34m"
+ORANGE="\033[0;33m"
+RED="\033[1;31m"
+BOLD_RED="\033[1;31m\033[1m"
+RESET="\033[0m"
 
-# Install dependencies
-printf '######################################\n'
-printf "Installing dependencies\n"
+# Logging functions for info, warn, and error
+log_info() {
+  echo -e "${BLUE}INFO:${RESET} $1"
+}
 
-npm install
-printf '######################################\n\n'
+log_warn() {
+  echo -e "${ORANGE}WARN:${RESET} $1"
+}
 
-printf '######################################\n'
-printf "\nValidateing renovate.json\n"
-npx --yes --package renovate -- renovate-config-validator --strict
-printf '######################################\n\n'
+log_error() {
+  echo -e "${BOLD_RED}ERROR:${RESET} $1"
+}
 
-printf '######################################'
-printf "\n\nCompleted Precommit\n\n"
-printf '######################################\n\n'
+log_info "Installing dependencies"
+if npm install; then
+  log_info "npm install completed successfully"
+else
+  log_error "npm install failed"
+  exit 1
+fi
+
+log_info "Validateing renovate.json"
+if npx --yes --package renovate -- renovate-config-validator --strict; then
+  log_info "Renovate config validated successfully"
+else
+  log_error "Renovate config validation failed"
+  exit 1
+fi
+
