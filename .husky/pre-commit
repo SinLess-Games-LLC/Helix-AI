@@ -9,19 +9,19 @@ RESET="\033[0m"
 
 # Logging functions for info, warn, and error
 log_info() {
-  echo -e "${BLUE}INFO:${RESET} $1"
+  echo  "${BLUE}INFO:${RESET} $1"
 }
 
 log_warn() {
-  echo -e "${ORANGE}WARN:${RESET} $1"
+  echo "${ORANGE}WARN:${RESET} $1"
 }
 
 log_error() {
-  echo -e "${BOLD_RED}ERROR:${RESET} $1"
+  echo "${BOLD_RED}ERROR:${RESET} $1"
 }
 
 log_info "Installing dependencies"
-if npm install; then
+if npm install > /dev/null; then
   log_info "npm install completed successfully"
 else
   log_error "npm install failed"
@@ -29,7 +29,7 @@ else
 fi
 
 log_info "Validateing renovate.json"
-if npx --yes --package renovate -- renovate-config-validator --strict; then
+if npx --yes --package renovate -- renovate-config-validator --strict > /dev/null; then
   log_info "Renovate config validated successfully"
 else
   log_error "Renovate config validation failed"

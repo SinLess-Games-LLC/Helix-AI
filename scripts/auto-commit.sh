@@ -36,6 +36,11 @@ SCOPES='["docs","config","core","components","utils","authentication","frontend"
 API_URL="https://api.openai.com/v1/chat/completions"
 MODEL="gpt-4"
 
+clean_exit() {
+  rm -rf /tmp/auto-commit.lock
+  exit 1
+}
+
 # Function to make the API request
 make_request() {
   log_info "Preparing payload for OpenAI API request..."
@@ -49,7 +54,7 @@ make_request() {
   # Check if there are changed files
   if [ -z "$CHANGED_FILES" ]; then
     log_warn "No files have changed."
-    return 1
+    clean_exit
   fi
 
   # Create the messages object using jq
@@ -68,7 +73,9 @@ make_request() {
       ],
       temperature: 0.7,
     }')
+  log_info "Paylod created"
 
+  log_info "Sending payload to $API_URL"
   # Make the API request using curl
   response=$(curl -s -X POST "$API_URL" \
     -H "Content-Type: application/json" \
@@ -77,16 +84,23 @@ make_request() {
 
   if [ $? -ne 0 ]; then
     log_error "Failed to make the request to OpenAI API."
-    return 1
+    clean_exit
   fi
 
   # Check if the API call was successful
+  log_info "Formatting Response"
   reply=$(echo "$response" | jq -r '.choices[0].message.content')
+
+  if [ "$reply" = "null" ]; then
+    log_error "Null response returned exiting"
+    clean_exit
+  fi
+
   if [ -z "$reply" ]; then
     # Output error details and return failure
     error_message=$(echo "$response" | jq -r '.error.message')
     log_error "Error from OpenAI: $error_message"
-    return 1
+    clean_exit
   else
     log_info "OpenAI response received successfully."
     echo "Reply: $reply"

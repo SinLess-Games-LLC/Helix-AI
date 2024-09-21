@@ -9,19 +9,19 @@ RESET="\033[0m"
 
 # Logging functions for info, warn, and error
 log_info() {
-  echo -e "${BLUE}INFO:${RESET} $1"
+  echo  "${BLUE}INFO:${RESET} $1"
 }
 
 log_warn() {
-  echo -e "${ORANGE}WARN:${RESET} $1"
+  echo "${ORANGE}WARN:${RESET} $1"
 }
 
 log_error() {
-  echo -e "${BOLD_RED}ERROR:${RESET} $1"
+  echo "${BOLD_RED}ERROR:${RESET} $1"
 }
 
 # Run Lint staged
-if lint-staged; then
+if npx lint-staged; then
   log_info "Running lint-staged"
 else
   log_error "lint-staged failed"
