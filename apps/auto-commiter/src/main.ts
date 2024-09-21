@@ -2,7 +2,7 @@ import { Logger } from '@helix/logger';
 import axios  from 'axios';
 import * as fs from 'fs';
 import { execSync } from 'child_process';
-import { Types, Scopes } from '../../../.commitlintrc'
+import { Types, Scopes } from '../../../'
 
 const logger = new Logger({
   serviceName: 'backend',

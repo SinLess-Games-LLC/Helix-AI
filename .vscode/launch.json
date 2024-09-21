@@ -1,0 +1,16 @@
+
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Launch Auto-Commiter",
+      "skipFiles": ["<node_internals>/**"],
+      "program": "${workspaceFolder}/dist/apps/auto-commiter/main.js",
+      "runtimeArgs": ["--nolazy", "--inspect=9229"],
+      "sourceMaps": true,
+      "console": "integratedTerminal"
+    }
+  ]
+}
