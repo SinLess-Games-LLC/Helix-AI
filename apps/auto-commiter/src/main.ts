@@ -1,4 +1,5 @@
 import { Logger } from '@helix/logger';
+import { FetchCommitMessage } from './fetch-commit-message';
 import * as fs from 'fs';
 import { execSync } from 'child_process';
 import chalk from 'chalk';
@@ -28,7 +29,7 @@ process.on('SIGTERM', cleanup);
 const run_loop = true
 const verifyCommitMessage = async () => {
   while (run_loop) {
-    const commitMessage = await makeRequest();
+    const commitMessage = await FetchCommitMessage();
     if (!commitMessage) continue;
 
     try {
