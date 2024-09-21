@@ -54,7 +54,6 @@ make_request() {
   # Check if there are changed files
   if [ -z "$CHANGED_FILES" ]; then
     log_warn "No files have changed."
-    clean_exit
   fi
 
   # Create the messages object using jq

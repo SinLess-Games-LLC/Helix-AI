@@ -38,7 +38,9 @@
     "datadir",
     "dbaeumer",
     "devsecops",
+    "eeef",
     "esbenp",
+    "ffec",
     "Fidalgo",
     "firsttris",
     "gitflow",
@@ -64,6 +66,7 @@
     "shakram",
     "uuidv",
     "venv",
+    "wontfix",
     "XXHASH"
   ]
 }

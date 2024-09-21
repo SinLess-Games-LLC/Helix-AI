@@ -37,9 +37,9 @@ area/package.json:
   - changed-files:
       - any-glob-to-any-file: [package.json, '**/package.json']
 
-area/requirments.txt:
+area/requirements.txt:
   - changed-files:
-      - any-glob-to-any-file: [requirments.txt, '**/requirments.txt']
+      - any-glob-to-any-file: [requirements.txt, '**/requirements.txt']
 
 # Applications
 app/frontend:
