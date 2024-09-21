@@ -4,6 +4,7 @@ import * as fs from 'fs';
 import { execSync } from 'child_process';
 import chalk from 'chalk';
 
+
 export const Scopes = [
   'docs',
   'config',
@@ -129,7 +130,7 @@ const verifyCommitMessage = async () => {
 };
 
 // Function to commit and push changes
-const commitAndPush = async (commitMessage) => {
+const commitAndPush = async (commitMessage: string) => {
   try {
     logger.info('Committing changes...');
     execSync('git add .');
