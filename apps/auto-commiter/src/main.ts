@@ -2,6 +2,7 @@ import { Logger } from '@helix/logger';
 import axios  from 'axios';
 import * as fs from 'fs';
 import { execSync } from 'child_process';
+import chalk from 'chalk';
 
 export const Scopes = [
   'docs',
