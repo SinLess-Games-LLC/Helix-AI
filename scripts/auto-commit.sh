@@ -69,6 +69,7 @@ make_request() {
         {role: "system", content: "Your job is to create commit messages for me following my commit lint rules."},
         {role: "system", content: "Commitlint types: \($types)"},
         {role: "system", content: "Commitlint scopes: \($scopes)"},
+        {role: "system", content: "scope must be one of [docs, config, core, components, utils, authentication, frontend, backend, ci/cd, docker, kubernetes, testing, linting, formatting, security, dependencies, performance, accessibility, workflow, helix, auth-server, discord-bot, frontend, DevSecOps-Dashboard, core, database, logger, ui] [scope-enum]"},
         {role: "user", content: "Create a commit message for the following changes:\n\($changed_files)"}
       ],
       temperature: 0.7,
