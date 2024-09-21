@@ -4,32 +4,6 @@ import * as fs from 'fs';
 import { execSync } from 'child_process';
 import chalk from 'chalk';
 
-
-export const Scopes = [
-  'docs',
-  'config',
-  'core',
-  'components',
-  'utils',
-  'authentication',
-  'frontend',
-  'backend',
-  'ci/cd',
-  'docker',
-  'kubernetes',
-  'testing',
-  'linting',
-  'formatting',
-  'security',
-  'dependencies',
-  'performance',
-  'accessibility',
-  'workflow',
-  'auto-commit',
-]
-
-export const Types = ['feat', 'fix', 'docs', 'style', 'refactor', 'test', 'chore', 'revert']
-
 const logger = new Logger({
   serviceName: 'backend',
   fluentd: {
@@ -49,10 +23,6 @@ const cleanup = () => {
 process.on('SIGINT', cleanup);
 process.on('SIGTERM', cleanup);
 
-// API Configuration
-const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
-const API_URL = 'https://api.openai.com/v1/chat/completions';
-const MODEL = 'gpt-4o';
 
 // Make API request to OpenAI
 const makeRequest = async () => {
