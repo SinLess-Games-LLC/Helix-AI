@@ -1,4 +1,4 @@
-import { Logger } from '@helix/logger';
+import { Logger } from './Logger';
 import { FetchCommitMessage } from './fetch-commit-message';
 import * as fs from 'fs';
 import { execSync } from 'child_process';
@@ -6,9 +6,6 @@ import chalk from 'chalk';
 
 const logger = new Logger({
   serviceName: 'auto-commiter',
-  fluentd: {
-    enabled: false,
-  },
 });
 
 // Cleanup on exit (handles INT and TERM signals)
