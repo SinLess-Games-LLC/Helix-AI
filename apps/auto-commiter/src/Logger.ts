@@ -1,22 +1,18 @@
-import chalk from 'chalk'
-import('chalk')
-import { FluentClient } from '@fluent-org/logger'
-
-
 export interface LoggerOptions {
-  serviceName: string
+  serviceName: string;
 }
 
 export class Logger {
-  private serviceName: string
-  public options: LoggerOptions
+  private serviceName: string;
+  public options: LoggerOptions;
 
   constructor(options: LoggerOptions) {
-    this.serviceName = options.serviceName
-    this.options = options
+    this.serviceName = options.serviceName;
+    this.options = options;
   }
 
-  private logToConsole(level: string, message: string) {
+  private async logToConsole(level: string, message: string) {
+    const chalk = (await import('chalk')).default;  // Dynamically import chalk
     const levelStyles: Record<string, typeof chalk> = {
       Fatal: chalk.bold.redBright,
       Error: chalk.red,
@@ -25,7 +21,7 @@ export class Logger {
       Debug: chalk.white,
       Trace: chalk.gray,
       Success: chalk.green,
-    }
+    };
 
     const emojiMap: Record<string, string> = {
       Fatal: '💀',
@@ -35,45 +31,45 @@ export class Logger {
       Debug: '🐞',
       Trace: '🔍',
       Success: '✅',
-    }
+    };
 
     const styledMessage = `${emojiMap[level]} ${levelStyles[level](
-      `[${this.serviceName}] [${level}] ${message}`,
-    )}`
-    console.log(styledMessage)
+      `[${this.serviceName}] [${level}] ${message}`
+    )}`;
+    console.log(styledMessage);
   }
 
   private log(level: string, message: string) {
-    this.logToConsole(level, message)
+    this.logToConsole(level, message);
   }
 
   fatal(message: string) {
-    this.log('Fatal', message)
+    this.log('Fatal', message);
   }
 
   error(message: string) {
-    this.log('Error', message)
+    this.log('Error', message);
   }
 
   warn(message: string) {
-    this.log('Warn', message)
+    this.log('Warn', message);
   }
 
   info(message: string) {
-    this.log('Info', message)
+    this.log('Info', message);
   }
 
   debug(message: string) {
-    this.log('Debug', message)
+    this.log('Debug', message);
   }
 
   trace(message: string) {
-    this.log('Trace', message)
+    this.log('Trace', message);
   }
 
   success(message: string) {
-    this.log('Success', message)
+    this.log('Success', message);
   }
 }
 
-export default Logger
+export default Logger;

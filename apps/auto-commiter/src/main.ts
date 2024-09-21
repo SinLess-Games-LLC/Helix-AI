@@ -2,7 +2,6 @@ import { Logger } from './Logger';
 import { FetchCommitMessage } from './fetch-commit-message';
 import * as fs from 'fs';
 import { execSync } from 'child_process';
-import chalk from 'chalk';
 
 const logger = new Logger({
   serviceName: 'auto-commiter',

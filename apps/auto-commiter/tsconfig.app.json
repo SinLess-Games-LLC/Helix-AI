@@ -1,8 +1,13 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
+    "module": "ESNext",    // or "ES2020" or "NodeNext"
+    "target": "ES2020",    // Must target ES2020 or later
+    "moduleResolution": "node",
+    "esModuleInterop": true,  // Ensures compatibility between CommonJS and ES modules
+    "skipLibCheck": true,
+    "strict": true,
     "outDir": "../../dist/out-tsc",
-    "module": "commonjs",
     "types": ["node"]
   },
   "exclude": ["jest.config.ts", "src/**/*.spec.ts", "src/**/*.test.ts"],
