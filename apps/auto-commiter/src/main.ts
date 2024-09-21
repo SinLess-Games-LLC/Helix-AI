@@ -2,7 +2,31 @@ import { Logger } from '@helix/logger';
 import axios  from 'axios';
 import * as fs from 'fs';
 import { execSync } from 'child_process';
-import { Types, Scopes } from '../../../'
+
+export const Scopes = [
+  'docs',
+  'config',
+  'core',
+  'components',
+  'utils',
+  'authentication',
+  'frontend',
+  'backend',
+  'ci/cd',
+  'docker',
+  'kubernetes',
+  'testing',
+  'linting',
+  'formatting',
+  'security',
+  'dependencies',
+  'performance',
+  'accessibility',
+  'workflow',
+  'auto-commit',
+]
+
+export const Types = ['feat', 'fix', 'docs', 'style', 'refactor', 'test', 'chore', 'revert']
 
 const logger = new Logger({
   serviceName: 'backend',

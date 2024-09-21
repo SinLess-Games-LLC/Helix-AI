@@ -19,16 +19,6 @@ export const Scopes = [
   'accessibility',
   'workflow',
   'auto-commit',
-  ...(await getProjects(
-    './apps/*',
-    ({ name, projectType }) =>
-      !name.includes('e2e') && projectType == 'application',
-  )),
-  ...(await getProjects(
-    './libs/*',
-    ({ name, projectType }) =>
-      !name.includes('e2e') && projectType == 'library',
-  )),
 ]
 
 export const Types = ['feat', 'fix', 'docs', 'style', 'refactor', 'test', 'chore', 'revert']
