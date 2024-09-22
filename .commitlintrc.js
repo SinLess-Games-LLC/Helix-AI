@@ -21,7 +21,16 @@ export const Scopes = [
   'auto-commit',
 ]
 
-export const Types = ['feat', 'fix', 'docs', 'style', 'refactor', 'test', 'chore', 'revert']
+export const Types = [
+  'feat',
+  'fix',
+  'docs',
+  'style',
+  'refactor',
+  'test',
+  'chore',
+  'revert',
+]
 
 export async function getConfig() {
   return {
@@ -36,16 +45,16 @@ export async function getConfig() {
         2,
         'always',
         Scopes, // Corrected the variable name from `scopes` to `Scopes`
-      ]
+      ],
     },
     prompt: {
       settings: {
         enableMultipleScopes: true,
         ScopeEnumSeparator: ',', // Fixed key casing: removed quotes from key names
-      }
-    }
+      },
+    },
   }
 }
 
 // Use ES6 export syntax to export the function
-export default getConfig;
+export default getConfig

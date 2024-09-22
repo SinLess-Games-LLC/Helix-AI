@@ -2,13 +2,13 @@ import { FluentClient } from '@fluent-org/logger'
 import { SystemColors } from '@helix/core'
 
 interface levelStyles {
-  Fatal: string;
-  Error: { ansi: string; hex: string; rgb: string; rgba: string };
-  Warn: { ansi: string; hex: string; rgb: string; rgba: string };
-  Info: { ansi: string; hex: string; rgb: string; rgba: string };
-  Debug: { ansi: string; hex: string; rgb: string; rgba: string };
-  Trace: { ansi: string; hex: string; rgb: string; rgba: string };
-  Success: { ansi: string; hex: string; rgb: string; rgba: string };
+  Fatal: string
+  Error: { ansi: string; hex: string; rgb: string; rgba: string }
+  Warn: { ansi: string; hex: string; rgb: string; rgba: string }
+  Info: { ansi: string; hex: string; rgb: string; rgba: string }
+  Debug: { ansi: string; hex: string; rgb: string; rgba: string }
+  Trace: { ansi: string; hex: string; rgb: string; rgba: string }
+  Success: { ansi: string; hex: string; rgb: string; rgba: string }
 }
 
 export interface FluentdOptions {
@@ -33,7 +33,7 @@ export class Logger {
     this.serviceName = options.serviceName
     this.options = options
 
-    this.options.fluentd.enabled  = true
+    this.options.fluentd.enabled = true
 
     this.fluentClient = new FluentClient(options.fluentd.tag_prefix, {
       socket: {
@@ -65,7 +65,7 @@ export class Logger {
       Success: '✅',
     }
 
-    const styledMessage = `${emojiMap[level]} ${levelStyles[level]} [${this.serviceName}] [${level}] ${SystemColors.reset} ${message}`;
+    const styledMessage = `${emojiMap[level]} ${levelStyles[level]} [${this.serviceName}] [${level}] ${SystemColors.reset} ${message}`
     console.log(styledMessage)
   }
 

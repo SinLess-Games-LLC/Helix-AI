@@ -3,7 +3,12 @@ import { SystemColors, BotColors } from './Colors'
 export { SystemColors, BotColors }
 
 // import and export the Constants
-import { StatusUrls, HelixColors, DiscordColorPalette, Openai } from './Constants'
+import {
+  StatusUrls,
+  HelixColors,
+  DiscordColorPalette,
+  Openai,
+} from './Constants'
 export { StatusUrls, HelixColors, DiscordColorPalette, Openai }
 
 // import and export the Errors

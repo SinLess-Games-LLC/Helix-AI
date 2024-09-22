@@ -1,26 +1,26 @@
-import { SystemColors } from '@helix/core';
+import { SystemColors } from '@helix/core'
 
 export interface LoggerOptions {
-  serviceName: string;
+  serviceName: string
 }
 
 type LevelStyles = {
-  Fatal: string;
-  Error: string;
-  Warn: string;
-  Info: string;
-  Debug: string;
-  Trace: string;
-  Success: string;
-};
+  Fatal: string
+  Error: string
+  Warn: string
+  Info: string
+  Debug: string
+  Trace: string
+  Success: string
+}
 
 export class Logger {
-  private serviceName: string;
-  public options: LoggerOptions;
+  private serviceName: string
+  public options: LoggerOptions
 
   constructor(options: LoggerOptions) {
-    this.serviceName = options.serviceName;
-    this.options = options;
+    this.serviceName = options.serviceName
+    this.options = options
   }
 
   private async logToConsole(level: keyof LevelStyles, message: string) {
@@ -32,7 +32,7 @@ export class Logger {
       Debug: SystemColors.fg.white.ansi,
       Trace: SystemColors.fg.gray.ansi,
       Success: SystemColors.fg.green.ansi,
-    };
+    }
 
     const emojiMap: Record<keyof LevelStyles, string> = {
       Fatal: '💀',
@@ -42,49 +42,48 @@ export class Logger {
       Debug: '🐞',
       Trace: '🔍',
       Success: '✅',
-    };
+    }
 
     // Enforce that the `level` is one of the defined keys in `LevelStyles`
     if (level in levelStyles) {
-      const styledMessage = `${emojiMap[level]} ${levelStyles[level]} [${this.serviceName}] [${level}] ${SystemColors.reset} ${message}`;
-      console.log(styledMessage);
+      const styledMessage = `${emojiMap[level]} ${levelStyles[level]} [${this.serviceName}] [${level}] ${SystemColors.reset} ${message}`
+      console.log(styledMessage)
     } else {
-      console.error(`Invalid log level: ${level}`);
+      console.error(`Invalid log level: ${level}`)
     }
   }
 
-
   private log(level: keyof LevelStyles, message: string) {
-    this.logToConsole(level, message);
+    this.logToConsole(level, message)
   }
 
   fatal(message: string) {
-    this.log('Fatal', message);
+    this.log('Fatal', message)
   }
 
   error(message: string) {
-    this.log('Error', message);
+    this.log('Error', message)
   }
 
   warn(message: string) {
-    this.log('Warn', message);
+    this.log('Warn', message)
   }
 
   info(message: string) {
-    this.log('Info', message);
+    this.log('Info', message)
   }
 
   debug(message: string) {
-    this.log('Debug', message);
+    this.log('Debug', message)
   }
 
   trace(message: string) {
-    this.log('Trace', message);
+    this.log('Trace', message)
   }
 
   success(message: string) {
-    this.log('Success', message);
+    this.log('Success', message)
   }
 }
 
-export default Logger;
+export default Logger

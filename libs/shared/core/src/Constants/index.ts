@@ -1,3 +1,8 @@
-import { StatusUrls, HelixColors, DiscordColorPalette, Openai } from './constants'
+import {
+  StatusUrls,
+  HelixColors,
+  DiscordColorPalette,
+  Openai,
+} from './constants'
 
-export { StatusUrls, HelixColors, DiscordColorPalette , Openai  }
+export { StatusUrls, HelixColors, DiscordColorPalette, Openai }

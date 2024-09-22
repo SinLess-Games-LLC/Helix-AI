@@ -28,18 +28,18 @@ export const StatusUrls = {
 export const Openai = {
   api_key: process.env.OPENAI_API_KEY,
   orgId: 'org-wlCKckgkuIxvlsdhXmzeWzkS',
-  projectId: "proj_SPeb8ul5y6WNrRw0Ri7SJE0h",
+  projectId: 'proj_SPeb8ul5y6WNrRw0Ri7SJE0h',
   completions_url: 'https://api.openai.com/v1/chat/completions',
   embeddingsUrl: 'https://api.openai.com/v1/embeddings',
-  models:{
-    gpt4o: "gpt-4-o",
-    gpt4oMini: "gpt-4-mini",
-    gpt35Turbo: "gpt-3.5-turbo",
+  models: {
+    gpt4o: 'gpt-4-o',
+    gpt4oMini: 'gpt-4-mini',
+    gpt35Turbo: 'gpt-3.5-turbo',
     dalle: 'DALL·E',
     whisper: 'Whisper',
     moderation: 'Moderation',
-    embedings: 'text-embedding-ada-002'
-  }
+    embedings: 'text-embedding-ada-002',
+  },
 }
 
 /**
