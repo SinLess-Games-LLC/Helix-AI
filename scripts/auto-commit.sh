@@ -28,9 +28,14 @@ log_error() {
 OPENAI_ORG_ID="org-wlCKckgkuIxvlsdhXmzeWzkS"
 OPENAI_PROJECT_ID="proj_SPeb8ul5y6WNrRw0Ri7SJE0h"
 
+COMMITLINT_CONFIG=".commitlintrc.js"
+
 # Define your commitlint format
-TYPES='["feat", "fix", "docs", "style", "refactor", "test", "chore", "revert"]'
-SCOPES='["docs","config","core","components","utils","authentication","frontend","backend","ci/cd","docker","kubernetes","testing","linting","formatting","security","dependencies","performance","accessibility","workflow"]'
+TYPES=$(grep -oP '(?<=type-enum).*\[.*?\]' $COMMITLINT_CONFIG | sed -E 's/.*\[([^\]]*)\].*/\1/' | tr -d '\n' | tr -d '"' | tr ',' ' ')
+SCOPES=$(grep -oP '(?<=scope-enum).*\[.*?\]' $COMMITLINT_CONFIG | sed -E 's/.*\[([^\]]*)\].*/\1/' | tr -d '\n' | tr -d '"' | tr ',' ' ')
+
+log_info "Valid Scopes: ${SCOPES}"
+log_info "Valid Types: ${TYPES}"
 
 # Define the API endpoint and model
 API_URL="https://api.openai.com/v1/chat/completions"
@@ -41,23 +46,34 @@ clean_exit() {
   exit 1
 }
 
-# Function to make the API request
+# Function to make the API request with file changes and filenames
 make_request() {
   log_info "Preparing payload for OpenAI API request..."
 
   # Get the list of changed files
-  CHANGED_FILES=$(git diff --name-only HEAD)
+  CHANGED_FILES="$(git diff --name-only HEAD)"
 
-  # Escape newlines and double quotes for valid JSON
-  ESCAPED_CHANGED_FILES=$(echo "$CHANGED_FILES" | sed ':a;N;$!ba;s/\n/\\n/g' | sed 's/"/\\"/g')
+  # Get the actual changes (diffs)
+  FILE_DIFFS="$(git diff HEAD)"
 
-  # Check if there are changed files
-  if [ -z "$CHANGED_FILES" ]; then
-    log_warn "No files have changed."
+
+  # Escape special characters for JSON
+  ESCAPED_CHANGED_FILES=$(echo "$CHANGED_FILES" | jq -Rsa '.' | sed 's/\\n/\\n/g')
+
+
+  # Check if the API key is set
+  if [ -z "$OPENAI_API_KEY" ]; then
+    log_error "OPENAI_API_KEY is not set. Please set it in your environment."
     clean_exit
   fi
 
-  # Create the messages object using jq
+  # Check if there are changes
+  if [ -z "$CHANGED_FILES" ]; then
+    log_warn "No files have changed."
+    return 1
+  fi
+
+  # Create the payload for OpenAI API request using the escaped values
   PAYLOAD=$(jq -n \
     --arg model "$MODEL" \
     --arg types "$TYPES" \
@@ -69,12 +85,16 @@ make_request() {
         {role: "system", content: "Your job is to create commit messages for me following my commit lint rules."},
         {role: "system", content: "Commitlint types: \($types)"},
         {role: "system", content: "Commitlint scopes: \($scopes)"},
-        {role: "system", content: "scope must be one of [docs, config, core, components, utils, authentication, frontend, backend, ci/cd, docker, kubernetes, testing, linting, formatting, security, dependencies, performance, accessibility, workflow, helix, auth-server, discord-bot, frontend, DevSecOps-Dashboard, core, database, logger, ui] [scope-enum]"},
-        {role: "user", content: "Create a commit message for the following changes:\n\($changed_files)"}
+        {role: "system", content: "Here are the file names that have been modified:\n\($changed_files)"},
+        {role: "system", content: "Do not use the folowing as scopes: scripts, automation"},
+        {role: "system", content: "aynything in ./scrpts falls into Ci/CD"},
+        {role: "system", content: "there can only be 1 scope"},
+        {role: "user", content: "Please generate a commit message with both a subject based on these changes."}
       ],
-      temperature: 0.7,
+      temperature: 0.7
     }')
-  log_info "Paylod created"
+
+  log_info "Payload created"
 
   log_info "Sending payload to $API_URL"
   # Make the API request using curl
@@ -90,34 +110,23 @@ make_request() {
 
   # Check if the API call was successful
   log_info "Formatting Response"
-  reply=$(echo "$response" | jq -r '.choices[0].message.content')
+  reply=$(echo "$response" | jq -r '.choices[0].message.content' | sed -E 's/^"(.+)"$/\1/') # Remove any unnecessary quotes
 
-  if [ "$reply" = "null" ]; then
-    log_error "Null response returned exiting"
-    clean_exit
+  # Add a default commit type and scope if OpenAI response doesn't include them correctly
+  if [[ "$reply" != *":"* ]]; then
+    log_warn "No valid type or scope detected in the response. Adding default 'chore(ci/cd)'."
+    reply="chore(ci/cd): $reply"
   fi
 
-  if [ -z "$reply" ]; then
-    # Output error details and return failure
-    error_message=$(echo "$response" | jq -r '.error.message')
-    log_error "Error from OpenAI: $error_message"
-    clean_exit
-  else
-    log_info "OpenAI response received successfully."
-    echo "Reply: $reply"
+  log_info "Commit message generated: $reply"
 
-    log_info "Commitlint rules followed. Pushing changes..."
-    log_info "adding files to commit"
-    git add .
-
-    log_info "Pushing changes to the remote repository..."
-    git commit -m "$reply"
-    if git push; then
-      log_info "Changes pushed successfully."
-    else
-      log_error "Failed to push changes to the remote repository."
-    fi
+  if [ -z "$reply" ] || [ "$reply" = "null" ]; then
+    log_error "Received an invalid response from OpenAI."
+    return 1
   fi
+
+  log_info "Commit message generated: $reply"
+  return 0
 }
 
 # Function to wait for 5 minutes
@@ -135,6 +144,59 @@ check_for_stop_file() {
   fi
 }
 
+# Function to check the reply with commitlint
+check_commitlint() {
+  # Run commitlint with the reply
+  log_info "Reply: $reply"
+  echo "$reply" | npx --no-install commitlint
+  if [ $? -ne 0 ]; then
+    log_error "Commit message failed commitlint check. Retrying..."
+    return 1  # Failed
+  else
+    log_info "Commit message passed commitlint check."
+    return 0  # Passed
+  fi
+}
+
+verify_commitmessage() {
+  while true; do
+    # Make the API request to get the commit message
+    make_request
+    if [ $? -ne 0 ]; then
+      log_error "Failed to generate commit message. Retrying..."
+      continue  # Retry the request
+    fi
+
+    # Check the commit message with commitlint
+    if check_commitlint; then
+      log_info "Commit message passed commitlint check."
+      break  # Exit the loop if commitlint passes
+    else
+      log_warn "Commitlint check failed with the message: $reply. Retrying..."
+      sleep 1  # Sleep for 1 second before retrying
+    fi
+  done
+
+  log_info "Commit message is valid. Proceeding with the commit."
+}
+
+commit_and_push() {
+  # Commit the changes and push to the remote repository
+  log_info "Committing changes..."
+  git add .
+  git commit -m "$reply"
+  if [ $? -eq 0 ]; then
+    git push
+    if [ $? -eq 0 ]; then
+      log_info "Changes pushed successfully."
+    else
+      log_error "Failed to push changes to the remote repository."
+    fi
+  else
+    log_error "Failed to create commit."
+  fi
+}
+
 # Main logic: create the lock file and enter the loop
 if [ -f /tmp/auto-commit.lock ]; then
   log_warn "Script is already running. Exiting to prevent multiple instances."
@@ -148,10 +210,20 @@ touch /tmp/auto-commit.lock
 while true; do
   check_for_stop_file
 
-  # Perform the commit and push operations...
-  make_request
+  # Perform the commit if there are changes in git
+  if git diff-index --quiet HEAD; then
+    log_info "No changes detected. Skipping commit..."
+  else
+    log_info "Changes detected. Making commit..."
 
-  # Check if the script was interrupted during the API request
+    # Verify the commit message with commitlint
+    verify_commitmessage
+
+    # Commit and push the changes
+    commit_and_push
+  fi
+
+  # Check if the script was interrupted during the commit process
   if [ $? -ne 0 ]; then
     break
   fi

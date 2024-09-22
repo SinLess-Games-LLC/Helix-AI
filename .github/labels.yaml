@@ -17,8 +17,8 @@
 - name: area/package.json
   description: Package.json specific changes
   color: '2b7489'
-- name: area/requirments.txt
-  description: Requirments.txt specific changes
+- name: area/requirements.txt
+  description: Requirements.txt specific changes
   color: '3572A5'
 
 # Applications

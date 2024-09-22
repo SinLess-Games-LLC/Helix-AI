@@ -5,6 +5,7 @@ export default async function middleware(req: NextRequest) {
   const loggerOptions: LoggerOptions = {
     serviceName: 'frontend',
     fluentd: {
+      enabled: true,
       host: 'localhost',
       port: 24224,
       tag_prefix: 'helix',

@@ -8,6 +8,7 @@ export const SystemColors = {
   blink: '\x1b[5m',
   reverse: '\x1b[7m',
   hidden: '\x1b[8m',
+  bold: '\x1b[9m',
 
   fg: {
     black: {

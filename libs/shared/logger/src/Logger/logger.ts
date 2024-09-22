@@ -1,12 +1,22 @@
-import chalk from 'chalk'
-import('chalk')
 import { FluentClient } from '@fluent-org/logger'
+import { SystemColors } from '@helix/core'
+
+interface levelStyles {
+  Fatal: string;
+  Error: { ansi: string; hex: string; rgb: string; rgba: string };
+  Warn: { ansi: string; hex: string; rgb: string; rgba: string };
+  Info: { ansi: string; hex: string; rgb: string; rgba: string };
+  Debug: { ansi: string; hex: string; rgb: string; rgba: string };
+  Trace: { ansi: string; hex: string; rgb: string; rgba: string };
+  Success: { ansi: string; hex: string; rgb: string; rgba: string };
+}
 
 export interface FluentdOptions {
-  host: string
-  port: number
+  enabled: boolean
+  host?: string
+  port?: number
   timeout?: number
-  tag_prefix: string
+  tag_prefix?: string
 }
 
 export interface LoggerOptions {
@@ -17,28 +27,32 @@ export interface LoggerOptions {
 export class Logger {
   private serviceName: string
   private fluentClient: any
+  public options: LoggerOptions
 
   constructor(options: LoggerOptions) {
     this.serviceName = options.serviceName
+    this.options = options
+
+    this.options.fluentd.enabled  = true
 
     this.fluentClient = new FluentClient(options.fluentd.tag_prefix, {
       socket: {
-        host: options.fluentd.host,
-        port: options.fluentd.port,
+        host: options.fluentd.host || 'localhost',
+        port: options.fluentd.port || 24224,
         timeout: options.fluentd.timeout || 3000,
       },
     })
   }
 
   private logToConsole(level: string, message: string) {
-    const levelStyles: Record<string, typeof chalk> = {
-      Fatal: chalk.bold.redBright,
-      Error: chalk.red,
-      Warn: chalk.hex('#FFA500'), // Orange
-      Info: chalk.blue,
-      Debug: chalk.white,
-      Trace: chalk.gray,
-      Success: chalk.green,
+    const levelStyles: levelStyles = {
+      Fatal: `${SystemColors.bold}${SystemColors.fg.crimson}`,
+      Error: SystemColors.fg.crimson,
+      Warn: SystemColors.fg.yellow,
+      Info: SystemColors.fg.blue,
+      Debug: SystemColors.fg.white,
+      Trace: SystemColors.fg.gray,
+      Success: SystemColors.fg.green,
     }
 
     const emojiMap: Record<string, string> = {
@@ -51,9 +65,7 @@ export class Logger {
       Success: '✅',
     }
 
-    const styledMessage = `${emojiMap[level]} ${levelStyles[level](
-      `[${this.serviceName}] [${level}] ${message}`,
-    )}`
+    const styledMessage = `${emojiMap[level]} ${levelStyles[level]} [${this.serviceName}] [${level}] ${SystemColors.reset} ${message}`;
     console.log(styledMessage)
   }
 
@@ -68,7 +80,10 @@ export class Logger {
 
   private log(level: string, message: string) {
     this.logToConsole(level, message)
-    this.logToFluentd(level, message)
+
+    if (this.options.fluentd.enabled === true) {
+      this.logToFluentd(level, message)
+    }
   }
 
   fatal(message: string) {

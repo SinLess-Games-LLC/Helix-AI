@@ -1,0 +1,58 @@
+{
+  "name": "auto-commiter",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/auto-commiter/src",
+  "projectType": "application",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/esbuild:esbuild",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "platform": "node",
+        "outputPath": "dist/apps/auto-commiter",
+        "format": ["cjs"],
+        "bundle": false,
+        "main": "apps/auto-commiter/src/main.ts",
+        "tsConfig": "apps/auto-commiter/tsconfig.app.json",
+        "assets": ["apps/auto-commiter/src/assets"],
+        "generatePackageJson": true,
+        "esbuildOptions": {
+          "sourcemap": true,
+          "outExtension": {
+            ".js": ".js"
+          }
+        }
+      },
+      "configurations": {
+        "development": {},
+        "production": {
+          "esbuildOptions": {
+            "sourcemap": false,
+            "outExtension": {
+              ".js": ".js"
+            }
+          }
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "dependsOn": ["build"],
+      "options": {
+        "buildTarget": "auto-commiter:build",
+        "runBuildTargetDependencies": false
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "auto-commiter:build:development"
+        },
+        "production": {
+          "buildTarget": "auto-commiter:build:production"
+        }
+      }
+    }
+  }
+}
