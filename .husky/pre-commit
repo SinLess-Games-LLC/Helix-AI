@@ -1,5 +1,3 @@
-#!/bin/zsh
-
 # Define color codes
 BLUE="\033[1;34m"
 ORANGE="\033[0;33m"
@@ -33,6 +31,24 @@ if npx --yes --package renovate -- renovate-config-validator --strict > /dev/nul
   log_info "Renovate config validated successfully"
 else
   log_error "Renovate config validation failed"
+  exit 1
+fi
+
+# Run Lint staged
+if lint-staged; then
+  log_info "Running lint-staged"
+else
+  log_error "lint-staged failed"
+  exit 1
+fi
+
+
+output=$(npx --no-install commitlint --edit "$1" 2>&1 | tee /dev/tty)
+if [ $? -eq 0 ]; then
+  log_info "commitlint completed successfully"
+else
+  log_error "commitlint failed with the following output:"
+  echo "$output"
   exit 1
 fi
 

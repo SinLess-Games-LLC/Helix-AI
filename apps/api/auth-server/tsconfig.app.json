@@ -9,7 +9,6 @@
     "composite": true,
     "declaration": true,
     "forceConsistentCasingInFileNames": true,
-    "noEmit": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
     "incremental": true,
