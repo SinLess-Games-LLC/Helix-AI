@@ -1,4 +1,4 @@
-export const Scopes = [
+const Scopes = [
   'docs',
   'config',
   'core',
@@ -21,7 +21,7 @@ export const Scopes = [
   'auto-commit',
 ]
 
-export const Types = [
+const Types = [
   'feat',
   'fix',
   'docs',
@@ -36,16 +36,10 @@ export async function getConfig() {
   return {
     extends: ['@commitlint/config-conventional'],
     rules: {
-      'type-enum': [
-        2,
-        'always',
-        Types, // Corrected the variable name from `types` to `Types`
-      ],
-      'scope-enum': [
-        2,
-        'always',
-        Scopes, // Corrected the variable name from `scopes` to `Scopes`
-      ],
+      'type-enum': [2, 'always', Types],
+      'scope-enum': [2, 'always', Scopes],
+      'body-max-length': [1, 'always', 1000],
+      'body-min-length': [2, 'always', 0],
     },
     prompt: {
       settings: {

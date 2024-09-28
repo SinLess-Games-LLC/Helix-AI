@@ -1,7 +1,7 @@
 {
   "name": "auto-commiter",
-  "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "apps/auto-commiter/src",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/Utilities/auto-commiter/src",
   "projectType": "application",
   "tags": [],
   "targets": {
@@ -11,12 +11,12 @@
       "defaultConfiguration": "production",
       "options": {
         "platform": "node",
-        "outputPath": "dist/apps/auto-commiter",
+        "outputPath": "dist/apps/Utilities/auto-commiter",
         "format": ["cjs"],
         "bundle": false,
-        "main": "apps/auto-commiter/src/main.ts",
-        "tsConfig": "apps/auto-commiter/tsconfig.app.json",
-        "assets": ["apps/auto-commiter/src/assets"],
+        "main": "apps/Utilities/auto-commiter/src/main.ts",
+        "tsConfig": "apps/Utilities/auto-commiter/tsconfig.app.json",
+        "assets": ["apps/Utilities/auto-commiter/src/assets"],
         "generatePackageJson": true,
         "esbuildOptions": {
           "sourcemap": true,
@@ -28,6 +28,7 @@
       "configurations": {
         "development": {},
         "production": {
+          "generateLockfile": true,
           "esbuildOptions": {
             "sourcemap": false,
             "outExtension": {
@@ -53,6 +54,10 @@
           "buildTarget": "auto-commiter:build:production"
         }
       }
+    },
+    "docker-build": {
+      "dependsOn": ["build"],
+      "command": "docker build -f apps/Utilities/auto-commiter/Dockerfile . -t auto-commiter"
     }
   }
 }

@@ -1,9 +1,9 @@
 import { Logger } from '@helix/logger'
 import { exec } from 'child_process'
 import { Openai } from '@helix/core'
-import axios from 'axios'
 import { promisify } from 'util'
 import chokidar from 'chokidar'
+import { OpenAI, ClientOptions } from 'openai'
 
 const execAsync = promisify(exec)
 
@@ -15,6 +15,7 @@ export class Daemon {
   private lockfilePresent: boolean
   private fileChangeQueue: Set<string>
   private debouncedHandleFileChange: NodeJS.Timeout | null
+  openai: OpenAI
 
   constructor() {
     this.logger = new Logger({
@@ -25,6 +26,11 @@ export class Daemon {
     this.fileChangeQueue = new Set()
     this.debouncedHandleFileChange = null
     this.lastCommit = null
+    const options: ClientOptions = {
+      apiKey: Openai.api_key,
+    }
+
+    this.openai = new OpenAI(options)
   }
 
   public async start() {
@@ -118,7 +124,7 @@ export class Daemon {
       }
 
       const changedFiles = Array.from(this.fileChangeQueue).join('\n')
-      this.logger.info(`Files have changed: \n${changedFiles}`)
+      // this.logger.info(`Files have changed: \n${changedFiles}`)
 
       // Retry logic for generating a valid commit message
       let attempts = 0
@@ -208,18 +214,31 @@ export class Daemon {
         /\n/g,
         '\\n',
       )
-      const payload = {
-        model: Openai.models.gpt4oMini,
+
+      // Include your commitlint rules in the message
+      this.logger.info('Payload created. Sending request to OpenAI...')
+      const response = await this.openai.chat.completions.create({
+        model: Openai.models.gpt4o,
         messages: [
           {
             role: 'system',
             content:
-              'Your job is to create commit messages following commit lint rules.',
+              'Your job is to create commit messages following commitlint rules.',
           },
           {
             role: 'system',
             content:
-              "Commitlint types: ['feat', 'fix', 'docs', 'style', 'refactor', 'test', 'chore', 'revert']",
+              "Commitlint types: ['feat', 'fix', 'docs', 'style', 'refactor', 'test', 'chore', 'revert'].",
+          },
+          {
+            role: 'system',
+            content:
+              "Commitlint scopes: ['docs', 'config', 'core', 'components', 'utils', 'authentication', 'frontend', 'backend', 'ci/cd', 'docker', 'kubernetes', 'testing', 'linting', 'formatting', 'security', 'dependencies', 'performance', 'accessibility', 'workflow', 'auto-commit'].",
+          },
+          {
+            role: 'system',
+            content:
+              'Each commit message must include a body. The body should describe the changes in detail.',
           },
           {
             role: 'system',
@@ -228,21 +247,13 @@ export class Daemon {
           {
             role: 'user',
             content:
-              'Please generate a commit message with both a subject and a body based on these changes.',
+              'Please generate a commit message with both a subject and a body based on these changes. Make sure the message follows the specified commitlint rules.',
           },
         ],
         temperature: 0.7,
-      }
-
-      this.logger.info('Payload created. Sending request to OpenAI...')
-      const response = await axios.post(Openai.completions_url, payload, {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${Openai.api_key}`,
-        },
       })
 
-      return response.data.choices[0].text.trim()
+      return response.choices[0].message.content
     } catch (error) {
       this.logger.error(`Failed to send payload to OpenAI API: ${error}`)
       return null
@@ -253,7 +264,7 @@ export class Daemon {
   private async validateCommitMessage(message: string): Promise<boolean> {
     try {
       const { stderr } = await execAsync(
-        `echo "${message}" | npx commitlint --verbose`,
+        `echo "${message.replace(/"/g, '\\"')}" | npx commitlint --verbose`,
       )
       if (stderr) {
         this.logger.error(`Commitlint validation failed: ${stderr}`)
@@ -266,7 +277,36 @@ export class Daemon {
     }
   }
 
-  private sleep(ms: number) {
-    return new Promise((resolve) => setTimeout(resolve, ms))
+  private async sleep(ms: number): Promise<void> {
+    return new Promise<void>((resolve) => {
+      const totalSeconds = Math.floor(ms / 1000)
+      let remainingSeconds = totalSeconds
+
+      this.logger.info(
+        `Sleeping for ${Math.floor(totalSeconds / 60)} minutes and ${
+          totalSeconds % 60
+        } seconds...`,
+      )
+
+      const interval = setInterval(() => {
+        remainingSeconds--
+
+        // Calculate minutes and seconds
+        const minutes = Math.floor(remainingSeconds / 60)
+        const seconds = remainingSeconds % 60
+
+        // Display the countdown timer on a single line
+        process.stdout.clearLine(0)
+        process.stdout.cursorTo(0)
+        process.stdout.write(`Time remaining: ${minutes}m ${seconds}s`)
+
+        if (remainingSeconds <= 0) {
+          clearInterval(interval)
+          process.stdout.clearLine(0)
+          process.stdout.cursorTo(0)
+          resolve()
+        }
+      }, 1000)
+    })
   }
 }

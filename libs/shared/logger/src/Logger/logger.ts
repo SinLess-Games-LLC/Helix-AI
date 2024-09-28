@@ -1,15 +1,13 @@
 import { FluentClient } from '@fluent-org/logger'
-import { SystemColors } from '@helix/core'
 
-interface levelStyles {
-  Fatal: string
-  Error: { ansi: string; hex: string; rgb: string; rgba: string }
-  Warn: { ansi: string; hex: string; rgb: string; rgba: string }
-  Info: { ansi: string; hex: string; rgb: string; rgba: string }
-  Debug: { ansi: string; hex: string; rgb: string; rgba: string }
-  Trace: { ansi: string; hex: string; rgb: string; rgba: string }
-  Success: { ansi: string; hex: string; rgb: string; rgba: string }
-}
+type LogLevel =
+  | 'Fatal'
+  | 'Error'
+  | 'Warn'
+  | 'Info'
+  | 'Debug'
+  | 'Trace'
+  | 'Success'
 
 export interface FluentdOptions {
   enabled: boolean
@@ -44,32 +42,38 @@ export class Logger {
     })
   }
 
-  private logToConsole(level: string, message: string) {
-    const levelStyles: levelStyles = {
-      Fatal: `${SystemColors.bold}${SystemColors.fg.crimson}`,
-      Error: SystemColors.fg.crimson,
-      Warn: SystemColors.fg.yellow,
-      Info: SystemColors.fg.blue,
-      Debug: SystemColors.fg.white,
-      Trace: SystemColors.fg.gray,
-      Success: SystemColors.fg.green,
+  private logToConsole(level: LogLevel, message: string) {
+    const levelStyles: Record<LogLevel, string> = {
+      Fatal: '\x1b[1m\x1b[38;5;196m',
+      Error: '\x1b[1m\x1b[31m',
+      Warn: '\x1b[38;5;208m\x1b[1m',
+      Info: '\x1b[1m\x1b[34m',
+      Debug: '\x1b[1m\x1b[37m',
+      Trace: '\x1b[1m\x1b[33m',
+      Success: '\x1b[1m\x1b[32m',
     }
 
-    const emojiMap: Record<string, string> = {
+    const emojiMap: Record<LogLevel, string> = {
       Fatal: '💀',
       Error: '❌',
       Warn: '⚠️',
-      Info: 'ℹ️',
+      Info: '📘', // Changed emoji
       Debug: '🐞',
       Trace: '🔍',
       Success: '✅',
     }
 
-    const styledMessage = `${emojiMap[level]} ${levelStyles[level]} [${this.serviceName}] [${level}] ${SystemColors.reset} ${message}`
+    const colorReset = '\x1b[0m'
+
+    // Handle object messages
+    const formattedMessage =
+      typeof message === 'object' ? JSON.stringify(message) : message
+
+    const styledMessage = `${emojiMap[level]} ${levelStyles[level]} | [${this.serviceName}] | [${level}] |${colorReset} ${formattedMessage}`
     console.log(styledMessage)
   }
 
-  private logToFluentd(level: string, message: string) {
+  private logToFluentd(level: LogLevel, message: string) {
     this.fluentClient.emit(level, {
       serviceName: this.serviceName,
       level,
@@ -78,7 +82,7 @@ export class Logger {
     })
   }
 
-  private log(level: string, message: string) {
+  private log(level: LogLevel, message: string) {
     this.logToConsole(level, message)
 
     if (this.options.fluentd.enabled === true) {

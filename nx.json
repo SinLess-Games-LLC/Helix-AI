@@ -49,7 +49,8 @@
         "apps/api/discord-bot-e2e/**/*",
         "apps/vs-code-exts/DevSecOps-Dashboard-e2e/**/*",
         "apps/vs-code-exts/DevSecOps-Dashboard-e2e/**/*",
-        "apps/auto-commiter-e2e/**/*"
+        "apps/auto-commiter-e2e/**/*",
+        "apps/Utilities/auto-commiter-e2e/**/*"
       ]
     },
     {

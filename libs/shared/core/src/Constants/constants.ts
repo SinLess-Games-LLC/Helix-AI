@@ -32,8 +32,8 @@ export const Openai = {
   completions_url: 'https://api.openai.com/v1/chat/completions',
   embeddingsUrl: 'https://api.openai.com/v1/embeddings',
   models: {
-    gpt4o: 'gpt-4-o',
-    gpt4oMini: 'gpt-4-mini',
+    gpt4o: 'gpt-4o',
+    gpt4oMini: 'gpt-4o-mini',
     gpt35Turbo: 'gpt-3.5-turbo',
     dalle: 'DALL·E',
     whisper: 'Whisper',

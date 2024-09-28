@@ -65,3 +65,5 @@ reports/**/*.*
 
 # Ignore .husky/_ folder
 .husky/_
+
+reports/

@@ -1,18 +1,16 @@
 {
   "extends": "./tsconfig.json",
-  "composite": true,
   "compilerOptions": {
-    "composite": true,
-    "declaration": true,
-    "outDir": "../../dist/out-tsc",
+    "outDir": "../../../dist/out-tsc",
     "module": "commonjs",
-    "types": ["jest", "node"]
+    "types": ["jest", "node"],
+    "composite": true,
+    "declaration": true
   },
   "include": [
     "jest.config.ts",
     "src/**/*.test.ts",
     "src/**/*.spec.ts",
-    "src/**/*.d.ts",
-    "src/types.ts"
+    "src/**/*.d.ts"
   ]
 }

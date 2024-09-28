@@ -31,10 +31,17 @@ import {
   Sexuality,
   TechCategory,
 } from './Database'
+
+export type {
+  DatabaseOptions,
+  MicroserviceInterface,
+  NewsInterface,
+  TechnologyInterface,
+}
+
 export {
   entities,
   MikroORMConfig,
-  DatabaseOptions,
   Microservice,
   News,
   Technology,
@@ -52,9 +59,6 @@ export {
   Pastebin,
   Image,
   Health,
-  MicroserviceInterface,
-  NewsInterface,
-  TechnologyInterface,
   Country,
   Gender,
   Pronoun,

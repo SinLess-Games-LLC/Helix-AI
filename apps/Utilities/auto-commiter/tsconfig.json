@@ -12,10 +12,6 @@
     }
   ],
   "compilerOptions": {
-    "esModuleInterop": true,
-    "composite": true,
-    "outDir": "../../dist/out-tsc",
-    "types": ["node"],
-    "declaration": true
+    "esModuleInterop": true
   }
 }

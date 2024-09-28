@@ -25,5 +25,6 @@
       "@helix/ui": ["libs/shared/ui/src/index.ts"]
     }
   },
-  "exclude": ["node_modules", "tmp"]
+  "exclude": ["node_modules", "tmp"],
+  "include": ["libs/**/*.ts", "libs/**/*.tsx"]
 }

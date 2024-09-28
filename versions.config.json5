@@ -1,11 +1,17 @@
 {
+  // The Version of the overall Helix Application
   "helixApplicationVersion": "1.0.0",
+  // The Versions of the User Interfaces
   "userInterfaceVersions": {
+    // The Version of the Website Frontend
     "helixWebsiteFront": "0.0.1"
   },
+  // The Versions of the APIs
   "helixApiVersions": {
+    // The Version of the Website Backend
     "helixWebsiteBack": "1.0.0"
   },
+  // The example of seting up this document
   "exampleGroupVersions": {
     "example": "0.0.0"
   }

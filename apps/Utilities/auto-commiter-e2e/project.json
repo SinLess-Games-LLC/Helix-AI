@@ -1,0 +1,17 @@
+{
+  "name": "auto-commiter-e2e",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "implicitDependencies": ["auto-commiter"],
+  "targets": {
+    "e2e": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{e2eProjectRoot}"],
+      "options": {
+        "jestConfig": "apps/Utilities/auto-commiter-e2e/jest.config.ts",
+        "passWithNoTests": true
+      },
+      "dependsOn": ["auto-commiter:build"]
+    }
+  }
+}

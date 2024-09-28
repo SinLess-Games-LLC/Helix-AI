@@ -1,10 +1,9 @@
 {
   "name": "@helix/logger",
   "version": "0.0.1",
-  "type": "module",
   "dependencies": {
     "@fluent-org/logger": "^1.0.10",
-    "chalk": "^5.3.0",
+    "@helix/core": "^0.0.1",
     "tslib": "^2.3.0"
   }
 }
