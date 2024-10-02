@@ -4,10 +4,9 @@
 
 The following table lists the versions of Helix AI currently supported with security updates:
 
-| Version | Supported          |
-| ------- | ------------------ |
-| 0.0.1   |                    |
-
+| Version | Supported |
+| ------- | --------- |
+| 0.0.1   |           |
 
 ## Reporting a Vulnerability
 
