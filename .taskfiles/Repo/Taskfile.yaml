@@ -1,0 +1,48 @@
+---
+# This code belongs to onrdr0p
+# https://github.com/onedr0p/flux-cluster-template/blob/main/.taskfiles/Repository/Taskfile.yaml
+#
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+version: '3'
+
+tasks:
+  init:
+    desc: Initialize repository
+    cmds:
+      - python3 -m pip install --upgrade pip setuptools wheel
+      - python3 -m pip install --upgrade -r requirements.txt
+      - ansible-galaxy install --role-file ./requirements.yaml
+
+  clean:
+    desc: Clean files and directories no longer needed after cluster bootstrap
+    cmds:
+      # Move bootstrap directory to gitignored directory
+      - mv {{.BOOTSTRAP_DIR}} {{.PRIVATE_DIR}}/bootstrap-{{now | date "150405"}}
+      - mv {{.MAKEJINJA_CONFIG_FILE}} {{.PRIVATE_DIR}}/makejinja-{{now | date "150405"}}.toml
+      # Update renovate.json5
+      - sed -i {{if eq OS "darwin"}}''{{end}} 's/(..\.j2)\?//g' {{.ROOT_DIR}}/.github/renovate.json5
+    preconditions:
+      - { msg: 'Missing bootstrap directory', sh: 'test -d {{.BOOTSTRAP_DIR}}' }
+      - { msg: 'Missing private directory', sh: 'test -d {{.PRIVATE_DIR}}' }
+      - {
+          msg: 'Missing Renovate config file',
+          sh: 'test -f {{.ROOT_DIR}}/.github/renovate.json5',
+        }
+
+  reset:
+    desc: Reset templated configuration files
+    prompt: Reset templated configuration files... continue?
+    cmds:
+      - task: :ansible:.reset
+      - task: :k0s:.reset
+      - task: :kubernetes:.reset
+      - task: :sops:.reset
+
+  force-reset:
+    desc: Reset repo back to HEAD
+    prompt: Reset repo back to HEAD... continue?
+    cmds:
+      - task: reset
+      - git reset --hard HEAD
+      - git clean -f -d
+      - git pull origin main

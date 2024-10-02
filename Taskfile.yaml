@@ -1,0 +1,146 @@
+---
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+version: '3'
+
+vars:
+  # Directories
+  ANSIBLE_DIR: '{{.ROOT_DIR}}/IaC/Ansible'
+  BOOTSTRAP_DIR: '{{.ROOT_DIR}}/IaC/bootstrap'
+  KUBERNETES_DIR: '{{.ROOT_DIR}}/IaC/Kubernetes'
+  TASKFILE_DIR: '{{.ROOT_DIR}}/.taskfiles'
+  # Files
+  BOOTSTRAP_CONFIG_FILE: '{{.BOOTSTRAP_DIR}}/vars/config.yaml'
+  KUBECONFIG_FILE: '{{.ROOT_DIR}}/kubeconfig'
+  MAKEJINJA_CONFIG_FILE: '{{.ROOT_DIR}}/makejinja.toml'
+  PIP_REQUIREMENTS_FILE: '{{.ROOT_DIR}}/requirements.txt'
+  SOPS_AGE_FILE: '{{.ROOT_DIR}}/.age.key'
+  # Binaries
+  PYTHON_BIN: python3
+  # Python
+  PYTHONDONTWRITEBYTECODE: '1'
+
+env:
+  KUBECONFIG: './kubeconfig'
+
+includes:
+  utilities:
+    aliases: ['util']
+    taskfile: ./.taskfiles/Utilities/Taskfile.yaml
+  repository:
+    aliases: ['repo']
+    taskfile: ./.taskfiles/Repo/Taskfile.yaml
+  kubernetes:
+    aliases: ['k8s', 'k0s', 'k3s']
+    taskfile: .taskfiles/Kubernetes/Taskfile.yaml
+  terraform:
+    aliases: ['tf']
+    taskfile: ./.taskfiles/Terraform/Taskfile.yaml
+  ansible: ./.taskfiles/Ansible/Taskfile.yaml
+  sops: .taskfiles/Sops/Taskfile.yaml
+  flux: .taskfiles/Flux/Taskfile.yaml
+
+tasks:
+  default: task -l
+
+  init:
+    desc: Initialize configuration files
+    cmds:
+      - cp -n {{.BOOTSTRAP_CONFIG_FILE | replace ".yaml" ".sample.yaml"}} {{.BOOTSTRAP_CONFIG_FILE}}
+      - cmd: echo === Configuration file copied ===
+        silent: true
+      - cmd: echo Proceed with updating the configuration files...
+        silent: true
+      - cmd: echo {{.BOOTSTRAP_CONFIG_FILE}}
+        silent: true
+    status:
+      - test -f "{{.BOOTSTRAP_CONFIG_FILE}}"
+
+  configure:
+    desc: Configure repository from bootstrap vars
+    prompt: Any conflicting config in the root kubernetes and ansible directories will be overwritten... continue?
+    deps: ['utilities:direnv', 'init']
+    cmds:
+      - task: .template
+      # Move .sops.yaml to root dir
+      - task: .copy-sops
+      - task: sops:encrypt
+      - task: terraform:encrypt
+      - task: .validate
+
+  .copy-sops:
+    internal: true
+    deps: ['init']
+    cmd: cp ./IaC/.sops.yaml {{.ROOT_DIR}}/.sops.yaml
+    status:
+      - test -f {{.ROOT_DIR}}/.sops.yaml
+
+  .template:
+    internal: true
+    cmd: makejinja
+    preconditions:
+      - {
+          msg: 'Missing Makejinja config file',
+          sh: 'test -f {{.MAKEJINJA_CONFIG_FILE}}',
+        }
+      - {
+          msg: 'Missing Makejinja plugin file',
+          sh: 'test -f {{.BOOTSTRAP_DIR}}/scripts/plugin.py',
+        }
+      - {
+          msg: 'Missing bootstrap config file',
+          sh: 'test -f {{.BOOTSTRAP_CONFIG_FILE}}',
+        }
+
+  .validate:
+    internal: true
+    cmds:
+      - task: kubernetes:kubeconform
+
+  remove-ssh:
+    desc: Remove SSH known hosts
+    cmds:
+      - ssh-keygen -f "/home/vscode/.ssh/known_hosts" -R "192.168.86.80"
+      - ssh-keygen -f "/home/vscode/.ssh/known_hosts" -R "192.168.86.81"
+      - ssh-keygen -f "/home/vscode/.ssh/known_hosts" -R "192.168.86.85"
+      - ssh-keygen -f "/home/vscode/.ssh/known_hosts" -R "192.168.86.86"
+      - ssh-keygen -f "/home/vscode/.ssh/known_hosts" -R "192.168.86.87"
+      - ssh-keygen -f "/home/vscode/.ssh/known_hosts" -R "192.168.86.90"
+      - ssh-keygen -f "/home/vscode/.ssh/known_hosts" -R "192.168.86.91"
+      - ssh-keygen -f "/home/vscode/.ssh/known_hosts" -R "192.168.86.100"
+      - ssh-keygen -f "/home/vscode/.ssh/known_hosts" -R "192.168.86.101"
+      - ssh-keygen -f "/home/vscode/.ssh/known_hosts" -R "192.168.86.102"
+      - ssh-keygen -f "/home/vscode/.ssh/known_hosts" -R "192.168.86.103"
+      - ssh-keygen -f "/home/vscode/.ssh/known_hosts" -R "192.168.86.104"
+      - ssh-keygen -f "/home/vscode/.ssh/known_hosts" -R "192.168.86.105"
+      - ssh-keygen -f "/home/vscode/.ssh/known_hosts" -R "192.168.86.150"
+      - ssh-keygen -f "/home/vscode/.ssh/known_hosts" -R "192.168.86.151"
+      - ssh-keygen -f "/home/vscode/.ssh/known_hosts" -R "192.168.86.152"
+      - ssh-keygen -f "/home/vscode/.ssh/known_hosts" -R "192.168.86.153"
+      - ssh-keygen -f "/home/vscode/.ssh/known_hosts" -R "192.168.86.154"
+      - ssh-keygen -f "/home/vscode/.ssh/known_hosts" -R "192.168.86.155"
+      - ssh-keygen -f "/home/vscode/.ssh/known_hosts" -R "192.168.86.156"
+      - ssh-keygen -f "/home/vscode/.ssh/known_hosts" -R "192.168.86.157"
+      - ssh-keygen -f "/home/vscode/.ssh/known_hosts" -R "192.168.86.158"
+      - ssh-keygen -f "/home/vscode/.ssh/known_hosts" -R "192.168.86.159"
+
+  add-ssh:
+    desc: Add SSH known hosts
+    cmds:
+      - ssh-keyscan -H 192.168.86.80 >> ~/.ssh/known_hosts
+      - ssh-keyscan -H 192.168.86.81 >> ~/.ssh/known_hosts
+      - ssh-keyscan -H 192.168.86.100 >> ~/.ssh/known_hosts
+      - ssh-keyscan -H 192.168.86.101 >> ~/.ssh/known_hosts
+      - ssh-keyscan -H 192.168.86.102 >> ~/.ssh/known_hosts
+      - ssh-keyscan -H 192.168.86.102 >> ~/.ssh/known_hosts
+      - ssh-keyscan -H 192.168.86.150 >> ~/.ssh/known_hosts
+      - ssh-keyscan -H 192.168.86.151 >> ~/.ssh/known_hosts
+      - ssh-keyscan -H 192.168.86.152 >> ~/.ssh/known_hosts
+      - ssh-keyscan -H 192.168.86.153 >> ~/.ssh/known_hosts
+
+  deploy:
+    desc: Deploy the Kubernetes cluster
+    cmds:
+      - task: remove-ssh
+      - task tf:deploy
+      - task: add-ssh
+      - task ansible:deploy
