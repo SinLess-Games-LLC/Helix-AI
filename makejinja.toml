@@ -1,0 +1,18 @@
+[makejinja]
+inputs = ["./IaC/bootstrap/templates"]
+output = "./IaC"
+exclude_patterns = [".mjfilter.py", "*.partial.yaml.j2"]
+data = ["./IaC/bootstrap/vars/config.yaml"]
+import_paths = ["./IaC/bootstrap/scripts"]
+loaders = ["plugin:Plugin"]
+jinja_suffix = ".j2"
+force = true
+undefined = "chainable"
+
+[makejinja.delimiter]
+block_start = "{%"
+block_end = "%}"
+comment_start = "{#"
+comment_end = "#}"
+variable_start = "{{"
+variable_end = "}}"

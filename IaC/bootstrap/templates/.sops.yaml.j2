@@ -1,0 +1,11 @@
+---
+creation_rules:
+  - path_regex: Kubernetes/.*\.sops\.ya?ml
+    key_groups:
+      - age:
+          - "{{ encryption.age_public_key }}"
+
+  - path_regex: Terraform/.*\.sops\.ya?ml
+    key_groups:
+      - age:
+          - "{{ encryption.age_public_key }}"

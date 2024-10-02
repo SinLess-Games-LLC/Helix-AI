@@ -17,9 +17,21 @@
 - name: area/package.json
   description: Package.json specific changes
   color: '2b7489'
-- name: area/requirments.txt
-  description: Requirments.txt specific changes
+- name: area/requirements.txt
+  description: Requirements.txt specific changes
   color: '3572A5'
+- name: area/addons
+  color: '0e8a16'
+- name: area/ansible
+  color: '0e8a16'
+- name: area/bootstrap
+  color: '0e8a16'
+- name: area/github
+  color: '0e8a16'
+- name: area/kubernetes
+  color: '0e8a16'
+- name: area/taskfile
+  color: '0e8a16'
 
 # Applications
 - name: app/frontend
@@ -38,6 +50,16 @@
 # Renovate
 - name: renovate/container
   description: Renovate container updates
+  color: '027fa0'
+- name: renovate/ansible
+  color: '027fa0'
+- name: renovate/container
+  color: '027fa0'
+- name: renovate/github-action
+  color: '027fa0'
+- name: renovate/github-release
+  color: '027fa0'
+- name: renovate/helm
   color: '027fa0'
 
 # Semantic Type
@@ -129,3 +151,6 @@
 - name: priority/critical
   description: Critical priority
   color: 'cfd3d7'
+
+- name: hold/upstream
+  color: 'ee0701'
