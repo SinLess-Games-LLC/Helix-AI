@@ -264,7 +264,7 @@ export class Daemon {
   private async validateCommitMessage(message: string): Promise<boolean> {
     try {
       const { stderr } = await execAsync(
-        `echo "${message.replace(/"/g, '\\"')}" | npx commitlint --verbose`,
+        `echo "${message.replace(/\\/g, '\\\\').replace(/"/g, '\\"')}" | npx commitlint --verbose`,
       )
       if (stderr) {
         this.logger.error(`Commitlint validation failed: ${stderr}`)
