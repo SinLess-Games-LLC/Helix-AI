@@ -115,7 +115,8 @@
         "imgildev.vscode-nestjs-mikroorm-snippets",
         "G-Fidalgo.cypress-runner",
         "bodil.prettier-toml",
-        "mrmlnc.vscode-json5"
+        "mrmlnc.vscode-json5",
+        "Serhioromano.vscode-gitflow"
       ]
     }
   }
