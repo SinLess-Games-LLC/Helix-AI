@@ -92,7 +92,7 @@
   },
   "dependencies": {
     "@fluent-org/logger": "^1.0.10",
-    "@mikro-orm/core": "^6.3.6",
+    "@mikro-orm/core": "^6.3.8",
     "@mikro-orm/entity-generator": "^6.3.6",
     "@mikro-orm/migrations": "^6.3.6",
     "@mikro-orm/mysql": "^6.3.6",
@@ -104,7 +104,7 @@
     "@nestjs/platform-express": "^10.4.2",
     "axios": "^1.6.0",
     "chalk": "^5.3.0",
-    "next": "14.2.7",
+    "next": "14.2.10",
     "react": "18.3.1",
     "react-dom": "18.3.1",
     "reflect-metadata": "^0.2.2",

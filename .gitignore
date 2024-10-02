@@ -6,7 +6,63 @@
 __pycache__/
 *.py[cod]
 *$py.class
+# =======================================================
+# ==                  Compiled Output                   ==
+# =======================================================
 
+# Ignore compiled Python bytecode and DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Ignore compiled TypeScript/Javascript output
+dist/
+tmp/
+out-tsc/
+.next/
+out/
+
+# =======================================================
+# ==                  Node.js Dependencies              ==
+# =======================================================
+
+# Node modules folder (contains all installed dependencies)
+node_modules/
+
+# Cache directories for various Node.js tools
+.nx/cache/
+.nx/workspace-data/
+.cache/
+
+# =======================================================
+# ==                 Virtual Environments               ==
+# =======================================================
+
+# Python virtual environments
+.venv/
+.env/
+.venv*
+.env
+
+
+# Ansible virtual environment
+.task
+
+# =======================================================
+# ==                  Logs and Reports                  ==
+# =======================================================
+
+# Ignore log files and reports
+*.log
+**/*.log
+reports/**/*
+
+# =======================================================
+# ==                   Configuration                    ==
+# =======================================================
+
+# Ignore IDE-specific configurations
+/.idea/
 # Ignore compiled TypeScript/Javascript output
 dist/
 tmp/
@@ -63,12 +119,42 @@ reports/**/*
 *.sublime-workspace
 
 # VSCode configurations
+# VSCode configurations
 .vscode/*
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
 
+# Terraform configurations
+/.terraform/
+.terraform/
+Terraform/.terraform.lock.hcl
+Terraform/terraform.tfstate
+Terraform/tfplan
+Terraform/variables.auto.tfvars.json
+
+# Ansible-related private files
+.config.env
+*.agekey
+*.pub
+*.key
+.private
+
+# SSH configuration files
+.ssh/
+.ssh/.ssh
+
+# =======================================================
+# ==                     Caches                         ==
+# =======================================================
+
+# Nx workspace cache
+.nx/
+.nx/cache/
+.nx/workspace-data/
+
+# npm and yarn debug and error logs
 # Terraform configurations
 /.terraform/
 .terraform/
@@ -107,7 +193,40 @@ yarn-error.log
 # Other cache files and directories
 .connect.lock
 libpeerconnection.log
+
+# Sass cache
+/.sass-cache/
+
+# Other cache files and directories
+.connect.lock
+libpeerconnection.log
 testem.log
+.typings
+/pnpm-global/
+
+# Basic cache directory
+.cache/
+
+# =======================================================
+# ==                   Kubernetes Files                 ==
+# =======================================================
+
+# Kubernetes-related sensitive files
+kubeconfig         # Kubernetes configuration
+.decrypted~*.yaml  # Decrypted YAML files containing secrets
+
+# =======================================================
+# ==               Brew and Task Management             ==
+# =======================================================
+
+# Brewfile lock file (contains locked dependencies for Homebrew)
+Brewfile.lock.json
+
+# =======================================================
+# ==                 System and Trash Files             ==
+# =======================================================
+
+# macOS system files
 .typings
 /pnpm-global/
 
@@ -137,6 +256,8 @@ Brewfile.lock.json
 .DS_Store
 
 # Windows system files
+
+# Windows system files
 Thumbs.db
 
 # Other system files
@@ -164,7 +285,38 @@ wiki/
 /bootstrap/.ssh/
 
 # Husky - Ignore internal Husky configurations
+# Other system files
+/tmp/              # Temporary directory
+/tmp/*             # Ignore all files in tmp directory
+
+# =======================================================
+# ==                 Git Encryption                     ==
+# =======================================================
+
+# SOPS encryption configuration
+.sops.yaml
+
+# =======================================================
+# ==                      Miscellaneous                 ==
+# =======================================================
+
+# Ignore personal wiki directory
+wiki/
+
+# Ignore packer cache
+/packer_cache/
+
+# Bootstrap SSH directory
+/bootstrap/.ssh/
+
+# Husky - Ignore internal Husky configurations
 .husky/_
+
+
+# =======================================================
+# ==                 End of .gitignore                  ==
+# =======================================================
+IaC/bootstrap/vars/config.yaml
 
 
 # =======================================================
