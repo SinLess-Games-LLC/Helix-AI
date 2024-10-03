@@ -38,7 +38,3 @@ tasks:
           msg: 'Missing kubernetes directory',
           sh: 'test -d {{.KUBERNETES_DIR}}',
         }
-
-  .reset:
-    internal: true
-    cmd: rm -rf {{.KUBERNETES_DIR}}

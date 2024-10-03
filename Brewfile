@@ -85,6 +85,7 @@ brew 'go'                      # Go programming language and compiler.
 brew 'node'                    # Node.js runtime for server-side JavaScript.
 brew 'nvm'                     # Node Version Manager to manage multiple Node.js versions.
 brew 'openjdk'                 # Java Development Kit (JDK) for Java development.
+brew "gcc"                     # GNU Compiler Collection for C, C++, and Fortran.
 
 # === Development Utilities ===
 brew 'git'                     # Version control system to track changes in source code.

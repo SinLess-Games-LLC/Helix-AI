@@ -5,26 +5,26 @@
 #
 area/addons:
   - changed-files:
-      - any-glob-to-any-file: bootstrap/templates/addons/**/*
-      - any-glob-to-any-file: bootstrap/tasks/addons/**/*
-      - any-glob-to-any-file: bootstrap/vars/addons.sample.yaml
+      - any-glob-to-any-file: IaC/bootstrap/templates/addons/**/*
+      - any-glob-to-any-file: IaC/bootstrap/tasks/addons/**/*
+      - any-glob-to-any-file: IaC/bootstrap/vars/addons.sample.yaml
 area/ansible:
   - changed-files:
-      - any-glob-to-any-file: ansible/**/*
-      - any-glob-to-any-file: bootstrap/templates/ansible/**/*
-      - any-glob-to-any-file: bootstrap/tasks/ansible/**/*
+      - any-glob-to-any-file: IaC/Ansible/**/*
+      - any-glob-to-any-file: IaC/bootstrap/templates/Ansible/**/*
+      - any-glob-to-any-file: IaC/bootstrap/tasks/Ansible/**/*
 area/bootstrap:
   - changed-files:
-      - any-glob-to-any-file: bootstrap/**/*
-      - any-glob-to-any-file: bootstrap/configure.yaml
+      - any-glob-to-any-file: IaC/bootstrap/**/*
+      - any-glob-to-any-file: IaC/bootstrap/configure.yaml
 area/github:
   - changed-files:
       - any-glob-to-any-file: .github/**/*
 area/kubernetes:
   - changed-files:
-      - any-glob-to-any-file: kubernetes/**/*
-      - any-glob-to-any-file: bootstrap/templates/kubernetes/**/*
-      - any-glob-to-any-file: bootstrap/tasks/kubernetes/**/*
+      - any-glob-to-any-file: IaC/Kubernetes/**/*
+      - any-glob-to-any-file: IaC/bootstrap/templates/Kubernetes/**/*
+      - any-glob-to-any-file: IaC/bootstrap/tasks/Kubernetes/**/*
 area/taskfile:
   - changed-files:
       - any-glob-to-any-file: .taskfiles/**/*

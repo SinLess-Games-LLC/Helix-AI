@@ -39,8 +39,10 @@ if [ ! -d ".venv" ]; then
     log_info "Creating virtual environment..."
     python3 -m venv .venv
     chown -R $USER:$USER .venv
+    venv
 else
     log_info "Virtual environment already exists. Skipping creation."
+    venv
 fi
 
 # Install Python requirements
@@ -76,13 +78,9 @@ log_info "Checking Homebrew installation..."
 if ! command -v brew &> /dev/null; then
     log_warn "Homebrew not found, installing..."
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    sudo chown -R vscode /home/linuxbrew/.linuxbrew/Homebrew
 else
     log_info "Homebrew is already installed."
-fi
-
-log_info "Unshallowing Homebrew core tap..."
-if ! git -C /home/linuxbrew/.linuxbrew/Homebrew/Library/Taps/homebrew/homebrew-core fetch --unshallow; then
-    log_error "Failed to unshallow Homebrew core tap."
 fi
 
 log_info "Installing packages from Brewfile..."
@@ -94,8 +92,8 @@ fi
 log_info "Configuring GPG..."
 if ! command -v gpg &> /dev/null; then
     log_warn "GPG not found, installing..."
-    apt-get update > /dev/null
-    apt-get install -y gnupg > /dev/null
+    sudo apt-get update > /dev/null
+    sudo apt-get install -y gnupg > /dev/null
 fi
 
 cp ./.devcontainer/gpg-pubkey /home/vscode/.gnupg/pub.gpg

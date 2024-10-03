@@ -92,7 +92,7 @@ tasks:
           msg: 'Missing Ansible lint file',
           sh: 'test -f {{.ANSIBLE_LINT_FILE}}',
         }
-  
+
   deploy:
     desc: Deploy the cluster
     deps: ['deps']

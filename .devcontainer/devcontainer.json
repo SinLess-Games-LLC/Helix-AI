@@ -116,7 +116,9 @@
         "G-Fidalgo.cypress-runner",
         "bodil.prettier-toml",
         "mrmlnc.vscode-json5",
-        "Serhioromano.vscode-gitflow"
+        "Serhioromano.vscode-gitflow",
+        "weaveworks.vscode-gitops-tools",
+        "HashiCorp.terraform"
       ]
     }
   }

@@ -166,6 +166,8 @@ wiki/
 # Husky - Ignore internal Husky configurations
 .husky/_
 
+# logs dir
+.logs/
 
 # =======================================================
 # ==                 End of .gitignore                  ==

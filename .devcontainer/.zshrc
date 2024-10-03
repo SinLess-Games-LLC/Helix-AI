@@ -110,12 +110,6 @@ eval "$(direnv hook zsh)"
 # Add SSH key to ssh-agent
 eval "$(ssh-agent -s)"
 
-if [ -f ~/.ssh/id_rsa ]; then
-    ssh-add ~/.ssh/id_rsa
-elif [ -f ~/.ssh/id_ed25519 ]; then
-    ssh-add ~/.ssh/id_ed25519
-fi
-
 # load .env
 source .env
 
@@ -228,3 +222,25 @@ get_nodes() {
 
 # Direnv auto-allow
 direnv allow
+
+
+# =======================================================
+# ==                                                   ==
+# ==                  Conditional Logic                ==
+# ==                                                   ==
+# =======================================================
+
+# Add SSH key
+if [ -f ~/.ssh/id_rsa ]; then
+    ssh-add ~/.ssh/id_rsa
+elif [ -f ~/.ssh/id_ed25519 ]; then
+    ssh-add ~/.ssh/id_ed25519
+fi
+
+# activate virtual environment if it exists
+if [ -d ".venv" ]; then
+    venv
+fi
+
+# Check if Homebrew is installed
+check_and_install_homebrew

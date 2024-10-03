@@ -1,0 +1,40 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+  name: helix-ai-sh-1
+  namespace: flux-system
+spec:
+  interval: 30m
+  url: "https://github.com/Sinless777/Helix-AI"
+  ref:
+    branch: "master"
+  ignore: |
+    # exclude all
+    /*
+    # include kubernetes directory
+    !/Kubernetes
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: cluster
+  namespace: flux-system
+spec:
+  interval: 30m
+  path: ./Kubernetes/flux
+  prune: true
+  wait: false
+  sourceRef:
+    kind: GitRepository
+    name: helix-ai-sh-1
+  decryption:
+    provider: sops
+    secretRef:
+      name: sops-age
+  postBuild:
+    substituteFrom:
+      - kind: ConfigMap
+        name: cluster-settings
+      - kind: Secret
+        name: cluster-secrets
