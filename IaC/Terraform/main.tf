@@ -38,10 +38,10 @@ resource "proxmox_vm_qemu" "k8s-masters" {
   bootdisk = "scsi0"
 
   disk {
-    slot = 0
+    slot = "scsi0"
     size = "100G"
-    type = "scsi"
-    storage = "Group_3"
+    type = "disk"
+    storage = "Group_2"
   }
 
   network {
@@ -83,9 +83,9 @@ resource "proxmox_vm_qemu" "k8s-workers" {
   bootdisk = "scsi0"
 
   disk {
-    slot = 0
+    slot = "scsi0"
     size = "100G"
-    type = "scsi"
+    type = "disk"
     storage = "Group_3"
   }
 
