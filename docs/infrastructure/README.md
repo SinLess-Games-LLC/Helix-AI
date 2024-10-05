@@ -137,13 +137,13 @@ You have two different options for setting up your local workstation.
 3. Download debian cloud image
 
    ```sh
-   wget https://cloud.debian.org/images/cloud/buster/20210927-625/debian-11-generic-amd64-20210927-625.qcow2
+   wget wget https://cloud.debian.org/images/cloud/bookworm/20241004-1890/debian-12-generic-amd64-20241004-1890.qcow2
    ```
 
 4. Install qemu-guest-agent in the cloud image
 
    ```sh
-   virt-customize -a debian-11-generic-amd64-20210927-625.qcow2 --install qemu-guest-agent
+   virt-customize -a debian-12-generic-amd64-20241004-1890.qcow2 --install qemu-guest-agent
    ```
 
 5. Create VM Template
@@ -151,15 +151,16 @@ You have two different options for setting up your local workstation.
    _The `9001` is the VM ID, you can change this to any number that is not already in use._
 
    ```sh
-     qm create 9001 --name "debian-11-cloudinit-template" --memory 2048 --cores 2 --net0 virtio,bridge=vmbr0
-     qm importdisk 9003 debian-11-generic-amd64.qcow2 local-lvm
-     qm set 9001 --scsihw virtio-scsi-pci --scsi0 local-lvm:vm-9003-disk-0
-     qm set 9001 --boot c --bootdisk scsi0
-     qm set 9001 --ide2 local-lvm:cloudinit
-     qm set 9001 --serial0 socket --vga serial0
-     qm set 9001 --agent enabled=1
+     qm create 9000 --name "debian-12-cloudinit-template" --memory 2048 --cores 2 --net0 virtio,bridge=vmbr0
+     qm importdisk 9000 debian-12-generic-amd64-20241004-1890.qcow2 local-lvm
+     qm set 9000 --scsihw virtio-scsi-pci --scsi0 local-lvm:vm-9000-disk-0
+     qm set 9000 --boot c --bootdisk scsi0
+     qm set 9000 --ide2 local-lvm:cloudinit
+     qm set 9000 --serial0 socket --vga serial0
+     qm set 9000 --agent enabled=1
 
-     qm template 9001
+     qm template 9000
+     rm debian-12-generic-amd64-20241004-1890.qcow2
    ```
 
 6. Continue on to 🚀 [**Stage 6**](#-stage-6-create-vms)
@@ -210,7 +211,7 @@ You have two different options for setting up your local workstation.
 4. Verify Ansible can ping your nodes
 
    ```sh
-   task ansible:ping
+   task ansible:ping --group kubernetes
    ```
 
 5. Run the Ansible prepare playbook (nodes wil reboot when done)

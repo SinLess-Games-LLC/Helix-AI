@@ -8,6 +8,11 @@ version: '3'
 vars:
   SOPS_CONFIG_FILE: '{{.ROOT_DIR}}/.sops.yaml'
 
+includes:
+    sops:
+      aliases: ['sops', 's']
+      taskfile: ./.taskfiles/Sops/Taskfile.yaml
+
 tasks:
   age-keygen:
     desc: Initialize Age Key for Sops
@@ -34,7 +39,7 @@ tasks:
     preconditions:
       - { msg: 'Missing Sops config file', sh: 'test -f {{.SOPS_CONFIG_FILE}}' }
       - { msg: 'Missing Sops Age key file', sh: 'test -f {{.SOPS_AGE_FILE}}' }
-  
+
   decrypt:
     desc: Decrypt file with Sops
     cmds:

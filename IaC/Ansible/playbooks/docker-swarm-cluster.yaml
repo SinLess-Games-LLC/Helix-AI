@@ -1,0 +1,63 @@
+---
+- name: Docker Swarm Cluster Setup
+  hosts: docker
+  become: true
+  gather_facts: true
+
+  tasks:
+    - name: install Packages
+      ansible.builtin.include_tasks: tasks/install-packages.yaml
+
+    - name: network Configuration
+      ansible.builtin.include_tasks: tasks/network-configuration.yaml
+
+    # Install Docker on all nodes (master and worker)
+    - name: Install Docker
+      ansible.builtin.package:
+        name: docker
+        state: present
+
+    # Ensure Docker service is started and enabled
+    - name: Ensure Docker service is started and enabled
+      ansible.builtin.systemd:
+        name: docker
+        state: started
+        enabled: true
+
+# Step 1: Initialize Swarm on the first master node
+- name: Initialize Docker Swarm on Initial Master
+  hosts: docker:children:master[0]  # Only the first master in the list
+  become: true
+  tasks:
+    - name: Initialize Docker Swarm
+      ansible.builtin.command: docker swarm init --advertise-addr {{ ansible_host }}
+      register: swarm_init_output
+      changed_when: "'already part of a swarm' not in swarm_init_output.stderr"
+
+    - name: Get Swarm Join Token for Managers
+      ansible.builtin.command: docker swarm join-token manager -q
+      register: manager_join_token
+
+    - name: Get Swarm Join Token for Workers
+      ansible.builtin.command: docker swarm join-token worker -q
+      register: worker_join_token
+
+# Step 2: Join remaining masters to the swarm as managers
+- name: Join Remaining Masters to Swarm as Managers
+  hosts: docker:children:master[1:]  # All masters except the initial one
+  become: true
+  tasks:
+    - name: Join Docker Swarm as Manager
+      ansible.builtin.command: docker swarm join --token {{ hostvars['docker:children:master[0]'].manager_join_token.stdout }} {{ hostvars['docker:children:master[0]'].ansible_host }}:2377
+      register: swarm_join_output
+      changed_when: "'This node joined a swarm as a manager' in swarm_join_output.stdout"
+
+# Step 3: Join all worker nodes to the swarm as workers
+- name: Join Worker Nodes to Swarm
+  hosts: docker:children:worker
+  become: true
+  tasks:
+    - name: Join Docker Swarm as Worker
+      ansible.builtin.command: docker swarm join --token {{ hostvars['docker:children:master[0]'].worker_join_token.stdout }} {{ hostvars['docker:children:master[0]'].ansible_host }}:2377
+      register: swarm_join_output
+      changed_when: "'This node joined a swarm as a worker' in swarm_join_output.stdout"

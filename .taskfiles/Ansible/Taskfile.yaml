@@ -54,7 +54,9 @@ tasks:
   list:
     desc: List all the hosts
     deps: ['deps']
-    cmd: 'ansible kubernetes --inventory {{.ANSIBLE_INVENTORY_FILE}} --list-hosts'
+    cmd: 'ansible {{.group}} --inventory {{.ANSIBLE_INVENTORY_FILE}} --list-hosts'
+    requires:
+      vars: ['group']
     preconditions:
       - {
           msg: 'Missing Ansible inventory file',
@@ -64,14 +66,14 @@ tasks:
   ping:
     desc: Ping all the hosts
     deps: ['deps']
-    cmd: "ansible {{ .group }} --inventory {{.ANSIBLE_INVENTORY_FILE}} --one-line -m 'ping'"
+    cmd: "ansible {{.group}} --inventory {{.ANSIBLE_INVENTORY_FILE}} --one-line -m 'ping'"
+    requires:
+      vars: ['group']
     preconditions:
       - {
           msg: 'Missing Ansible inventory file',
           sh: 'test -f {{.ANSIBLE_INVENTORY_FILE}}',
         }
-    requires:
-      vars: ['group']
 
   uptime:
     desc: Uptime of all the hosts
@@ -93,25 +95,55 @@ tasks:
           sh: 'test -f {{.ANSIBLE_LINT_FILE}}',
         }
 
-  deploy:
-    desc: Deploy the cluster
+  install-docker:
+    desc: Install Docker
+    deps: ['deps']
+    cmd: 'ansible-playbook --inventory {{.ANSIBLE_INVENTORY_FILE}} {{.ANSIBLE_DIR}}/playbooks/docker-swarm-cluster.yaml'
+    preconditions:
+      - {
+          msg: 'Missing Ansible inventory file',
+          sh: 'test -f {{.ANSIBLE_INVENTORY_FILE}}',
+        }
+
+  install-kubernetes:
+    desc: Install Kubernetes
     deps: ['deps']
     cmds:
-      - echo "Starting deployment..."
-      - ./scripts/countdown.sh 5
-      - 'task ansible:ping group=pihole'
-      - ./scripts/countdown.sh 5
-      #- 'ansible-playbook --inventory {{.ANSIBLE_INVENTORY_FILE}} {{.ANSIBLE_DIR}}/playbooks/home-dns-installation.yaml {{.CLI_ARGS}}'
-      - echo "Home DNS is ready..."
-      - echo "Preparing cluster for installation..."
-      - ./scripts/countdown.sh 5
-      - 'task ansible:ping group=kubernetes'
-      #- 'ansible-playbook --inventory {{.ANSIBLE_INVENTORY_FILE}} {{.ANSIBLE_DIR}}/playbooks/cluster-prepare.yaml {{.CLI_ARGS}}'
-      - echo "Cluster is ready for installation..."
-      - ./scripts/countdown.sh 10
-      - 'ansible-playbook --inventory {{.ANSIBLE_INVENTORY_FILE}} {{.ANSIBLE_DIR}}/playbooks/cluster-installation.yaml {{.CLI_ARGS}}'
-      - echo Waiting for nodes to be ready...
-      - ./scripts/countdown.sh 100
-      - kubectl get nodes
-      - 'flux check --pre'
-      - 'task flux:bootstrap'
+      - 'ansible-playbook --inventory {{.ANSIBLE_INVENTORY_FILE}} {{.ANSIBLE_DIR}}/playbooks/cluster-prepare.yaml'
+      - 'ansible-playbook --inventory {{.ANSIBLE_INVENTORY_FILE}} {{.ANSIBLE_DIR}}/playbooks/cluster-installation.yaml'
+    preconditions:
+      - {
+          msg: 'Missing Ansible inventory file',
+          sh: 'test -f {{.ANSIBLE_INVENTORY_FILE}}',
+        }
+
+  install-pihole:
+    desc: Install Pi-hole
+    summary: |
+      Args:
+        playbook: Playbook to run (required)
+    prompt: Run Ansible playbook '{{.playbook}}'... continue?
+    deps: ['deps']
+    cmds:
+      - 'ansible-playbook --inventory {{.ANSIBLE_INVENTORY_FILE}} {{.ANSIBLE_DIR}}/playbooks/pihole-install.yaml {{.CLI_ARGS}}'
+    env:
+      pihole_admin_password: '{{.pihole_admin_password}}'
+      overwrite_setupvars: true
+      pihole_adlists:
+        - 'https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts'
+        - 'https://mirror1.malwaredomains.com/files/justdomains'
+        - 'http://sysctl.org/cameleon/hosts'
+        - 'https://zeustracker.abuse.ch/blocklist.php?download=domainblocklist'
+        - 'https://s3.amazonaws.com/lists.disconnect.me/simple_tracking.txt'
+        - 'https://s3.amazonaws.com/lists.disconnect.me/simple_ad.txt'
+        - 'https://raw.githubusercontent.com/blocklistproject/Lists/master/ads.txt'
+        - 'https://raw.githubusercontent.com/blocklistproject/Lists/master/abuse.txt'
+        - 'https://raw.githubusercontent.com/blocklistproject/Lists/master/drugs.txt'
+    requires:
+      vars: ['pihole_admin_password']
+    preconditions:
+      - {
+          msg: 'Missing Ansible inventory file',
+          sh: 'test -f {{.ANSIBLE_INVENTORY_FILE}}',
+        }
+

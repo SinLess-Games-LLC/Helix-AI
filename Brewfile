@@ -32,6 +32,7 @@ tap 'hashicorp/tap'            # HashiCorp tools like Terraform and Vault.
 
 # === Essential Development Tools ===
 brew 'terraform'               # Infrastructure as Code (IaC) tool for managing cloud resources.
+brew  'hashicorp/tap/packer'   # Tool for creating machine images for multiple platforms from a single source configuration.
 brew 'awscli'                  # Official Amazon Web Services CLI for managing AWS resources.
 brew 'azure-cli'               # Official Azure CLI for managing Microsoft Azure resources.
 brew 'kubernetes-cli'          # Command-line tool to interact with Kubernetes clusters.

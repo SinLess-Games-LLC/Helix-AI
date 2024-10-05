@@ -39,7 +39,7 @@
             url: "{{ item.address }}"
             return_content: no
           register: url_check
-          ignore_errors: yes
+          ignore_errors: true
           loop: "{{ modified_adlists }}"
           when: item.address is defined
 
@@ -62,7 +62,7 @@
             valid_adlists: "{{ valid_adlists + [{'address': item.address, 'enabled': item.enabled, 'comment': item.comment}] }}"
           loop: "{{ adlists_with_status }}"
           when: item.status == 200
-    
+
     - name: Install adlists | Clean adlists
       block:
         - name: Clean adlists | Convert Valid adlists to Clean Adlists
@@ -87,22 +87,22 @@
         - name: Clean adlists | Set clean_adlists to x_adlists
           set_fact:
             clean_adlists: "{{ x_adlists }}"
-          when: 
+          when:
             - x_adlists | length > 0
             - y_adlists | length == 0
 
         - name: Clean adlists | Set clean_adlists to y_adlists
           set_fact:
             clean_adlists: "{{ y_adlists }}"
-          when: 
+          when:
             - x_adlists | length == 0
             - y_adlists | length > 0
-    
+
     - name: Install aslists | Add to pihole
       block:
         - name: Add to pihole | Add adlists to pihole
           ansible.builtin.command: >
-            sudo sqlite3 /etc/pihole/gravity.db 
+            sudo sqlite3 /etc/pihole/gravity.db
             "INSERT OR IGNORE INTO adlist (address, enabled, comment) VALUES ('{{ item.address }}'', '{{ item.enabled }}'', '{{ item.comment }}');"
           loop: "{{ clean_adlists }}"
           when: clean_adlists | length > 0
@@ -116,7 +116,3 @@
         - name: Add to pihole | Update gravity
           ansible.builtin.command: pihole -g
           when: clean_adlists | length > 0
-
-          
-
-    
