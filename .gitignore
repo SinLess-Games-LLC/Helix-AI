@@ -115,7 +115,8 @@ testem.log
 .cache/
 
 # terraform cache directory
-/IaC/Terraform/.terraform
+IaC/Terraform/.terraform
+IaC/Terraform/terraform.tfstate.backup
 
 # =======================================================
 # ==                   Kubernetes Files                 ==
@@ -175,5 +176,3 @@ wiki/
 # =======================================================
 # ==                 End of .gitignore                  ==
 # =======================================================
-
-IaC/Terraform/terraform.tfstate.backup
