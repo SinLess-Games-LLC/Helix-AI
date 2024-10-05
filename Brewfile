@@ -40,28 +40,19 @@ brew 'kubectl'                 # Kubernetes command-line tool for cluster manage
 brew 'helm'                    # Kubernetes package manager for deploying and managing applications.
 
 # === Basics ===
-brew 'thefuck'                 # Correct misspelled commands in the terminal.
 brew 'fzf'                     # Command-line fuzzy finder for files, history, and more.
 brew 'lsd'                     # Enhanced file listing with colors and icons (replaces `ls`).
 brew 'diff-so-fancy'           # Improved diff output for better readability.
-brew 'bat'                     # A cat clone with syntax highlighting for code.
 brew 'zsh-autosuggestions'     # Zsh plugin for command suggestions.
 brew 'zsh-syntax-highlighting' # Syntax highlighting for the Zsh shell.
 brew 'direnv'                  # Environment switcher for loading project-specific environments.
 
 # === Monitoring and Performance ===
 brew 'gping'                   # Graphically enhanced ping tool for network diagnostics.
-brew 'speedtest-cli'           # Run Speedtest.net from the command line to measure internet speed.
-brew 'htop'                    # Interactive process viewer (better than `top`).
-brew 'glances'                 # Comprehensive system monitoring tool.
-brew 'ctop'                    # Real-time container monitoring for Docker and Kubernetes.
 
 # === Productivity ===
-brew 'autojump'                # Quickly navigate the filesystem based on usage.
-brew 'tree'                    # Display directory tree in the terminal.
 brew 'jq'                      # Command-line JSON processor.
-brew 'tldr'                    # Community-driven man pages with simplified examples.
-brew 'watch'                   # Periodically execute commands and display the output.
+brew 'yq'                      # Command-line YAML processor.
 
 # === Security and Encryption ===
 brew 'bcrypt'                  # Encryption utility using the Blowfish algorithm.
@@ -82,26 +73,14 @@ brew 'powerline-go'            # Patched fonts for Powerline, a statusline plugi
 # === Development Languages and SDKs ===
 brew 'python'                  # Python programming language.
 brew 'go'                      # Go programming language and compiler.
-brew 'node'                    # Node.js runtime for server-side JavaScript.
 brew 'nvm'                     # Node Version Manager to manage multiple Node.js versions.
-brew 'openjdk'                 # Java Development Kit (JDK) for Java development.
 brew "gcc"                     # GNU Compiler Collection for C, C++, and Fortran.
 
 # === Development Utilities ===
 brew 'git'                     # Version control system to track changes in source code.
 brew 'git-extras'              # Additional Git utilities like Git commits and rebasing.
 brew 'gh'                      # GitHub CLI for managing GitHub repositories.
-brew 'neovim'                  # Improved Vim text editor for code development.
-brew 'vim'                     # Classic Vim text editor.
+brew 'git-flow'                # Git extensions to provide high-level repository operations.
 brew 'wget'                    # Command-line utility for downloading files from the web.
 brew 'hub'                     # GitHub tool for the command-line to simplify GitHub interactions.
-brew 'scrcpy'                  # Display and control Android devices.
-brew 'lazygit'                 # Simple terminal UI for Git commands.
-brew 'lazydocker'              # Simple terminal UI for managing Docker containers.
-brew 'just'                    # Task runner for running commands in a project.
-brew 'task'                    # Task management tool for terminal-based task tracking.
-
-# === Network Tools ===
-brew 'ngrok'                   # Secure tunnels to localhost for testing webhooks.
-brew 'tmate'                   # Share terminal sessions over the internet for remote collaboration.
-brew 'asciinema'               # Record and share terminal sessions.
+brew 'go-task'                 # Task management tool for terminal-based task tracking.

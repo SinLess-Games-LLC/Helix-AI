@@ -19,7 +19,7 @@ tasks:
   yaml-to-json:
     desc: Convert YAML to JSON
     cmds:
-      - yq eval '.' {{.YAML_FILE}} -j > {{.VAR_FILE}}
+      - yq eval '.' {{.YAML_FILE}} -o=json > {{.VAR_FILE}}
 
   plan:
     desc: Generate Terraform execution plan
