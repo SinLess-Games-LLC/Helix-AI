@@ -1,6 +1,6 @@
 ansible==10.5.0
 ansible-lint==24.9.2
-ansible-creator==24.9.0
+ansible-creator==24.10.0
 email-validator==2.2.0
 cloudflare==3.1.0
 jmespath==1.0.1
